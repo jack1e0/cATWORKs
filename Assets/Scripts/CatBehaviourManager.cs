@@ -25,6 +25,7 @@ public class CatBehaviourManager : MonoBehaviour {
     private CatState currentState;
     private float timeSinceStateChange;
     private GameObject currCat;
+    // private float timer = 0;
 
     // Making a singleton class
     public static CatBehaviourManager instance;
@@ -45,6 +46,10 @@ public class CatBehaviourManager : MonoBehaviour {
         currCat = GetCat(currentState);
         StartCoroutine(ChangeStates());
     }
+
+    // private void Update() {
+    //     timer += 1;
+    // }
 
     private IEnumerator ChangeStates() {
         while (true) {
@@ -145,6 +150,11 @@ public class CatBehaviourManager : MonoBehaviour {
 
     public void study() {
         Debug.Log("reached");
-        Instantiate(studyPrefab, new Vector3(0, -2.8f, 0), Quaternion.identity);
+        StopCoroutine(FadeTransition(currCat, currCat));
+        GameObject studyCat;
+        studyCat = Instantiate(studyPrefab, new Vector3(0.5f, -0.7f, 0), Quaternion.identity);
+        
+        // yield return new WaitForSeconds(5);
+        // Destroy(studyCat);
     }
 }
