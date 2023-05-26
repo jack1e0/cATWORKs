@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -21,11 +22,15 @@ public class CatBehaviourManager : MonoBehaviour {
     [SerializeField] private GameObject studyPrefab;
     [SerializeField] private GameObject sleepPrefab;
     [SerializeField] private GameObject sitPrefab;
+    [Space(10)]
+
+    [Header("Buttons")]
+    [SerializeReference] private List<GameObject> buttons = new List<GameObject>();
 
     private CatState currentState;
     private float timeSinceStateChange;
     private GameObject currCat;
-    // private float timer = 0;
+    private Coroutine randomStateCoroutine;
 
     // Making a singleton class
     public static CatBehaviourManager instance;
@@ -44,29 +49,11 @@ public class CatBehaviourManager : MonoBehaviour {
 
         // Instantiate corresponding cat in scene
         currCat = GetCat(currentState);
-        StartCoroutine(ChangeStates());
-    }
-
-    // private void Update() {
-    //     timer += 1;
-    // }
-
-    private IEnumerator ChangeStates() {
-        while (true) {
-            timeSinceStateChange++;
-            yield return new WaitForSeconds(1);
-
-            if (timeSinceStateChange > GetStateDuration(currentState)) {
-                CatState nextState = GetNextRandomState(currentState);
-                Debug.Log(nextState);
-                TransitionToNextState(nextState);
-                timeSinceStateChange = 0;
-            }
-        }
+        randomStateCoroutine = StartCoroutine(RandomStateChange());
     }
 
     private CatState GetRandomState() {
-        int rand = Random.Range(0, 2);
+        int rand = UnityEngine.Random.Range(0, 2);
         switch (rand) {
             case 0:
                 return CatState.SLEEP;
@@ -83,18 +70,27 @@ public class CatBehaviourManager : MonoBehaviour {
                 return Instantiate(sleepPrefab, new Vector3(-1.05f, -2.8f, 0), Quaternion.identity);
             case CatState.SIT:
                 return Instantiate(sitPrefab, new Vector3(1.5f, -3f, 0), Quaternion.identity);
+            case CatState.STUDY:
+                return Instantiate(studyPrefab, new Vector3(0.5f, -0.7f, 0), Quaternion.identity);
             default:
                 return null;
         }
     }
 
-    // generate the next random state that is not the current state
-    private CatState GetNextRandomState(CatState excludeState) {
-        CatState state = excludeState;
-        while (state.Equals(excludeState)) {
-            state = GetRandomState();
+
+    private IEnumerator RandomStateChange() {
+        while (true) {
+            timeSinceStateChange++;
+            yield return new WaitForSeconds(1);
+
+            if (timeSinceStateChange > GetStateDuration(currentState)) {
+                CatState nextState = GetNextRandomState(currentState);
+                //Debug.Log(nextState);
+                yield return null;
+                TransitionToNextState(nextState);
+                timeSinceStateChange = 0;
+            }
         }
-        return state;
     }
 
     // returns how long a state should last in seconds (for testing, may not be real implementation)
@@ -110,6 +106,15 @@ public class CatBehaviourManager : MonoBehaviour {
             default:
                 return -1;
         }
+    }
+
+    // generate the next random state that is not the current state
+    private CatState GetNextRandomState(CatState excludeState) {
+        CatState state = excludeState;
+        while (state.Equals(excludeState)) {
+            state = GetRandomState();
+        }
+        return state;
     }
 
     private void TransitionToNextState(CatState nextState) {
@@ -148,13 +153,32 @@ public class CatBehaviourManager : MonoBehaviour {
         }
     }
 
-    public void study() {
-        Debug.Log("reached");
-        StopCoroutine(FadeTransition(currCat, currCat));
-        GameObject studyCat;
-        studyCat = Instantiate(studyPrefab, new Vector3(0.5f, -0.7f, 0), Quaternion.identity);
-        
-        // yield return new WaitForSeconds(5);
-        // Destroy(studyCat);
+    // Once Study() is triggered, 
+    public void StudyButton() {
+        ButtonControl(false);
+        StopCoroutine(randomStateCoroutine);
+        TransitionToNextState(CatState.STUDY);
+        Debug.Log("10 second study session started!");
+        StartCoroutine(Study(10));
+    }
+
+    private IEnumerator Study(float timeInSeconds) {
+        while (timeInSeconds >= 0) {
+            timeInSeconds--;
+            yield return new WaitForSeconds(1);
+        }
+
+        // Random behaviour resumes after studying
+        Debug.Log("Studying done!");
+        ButtonControl(true);
+        randomStateCoroutine = StartCoroutine(RandomStateChange());
+    }
+
+    // When studying, player should not be able to press any buttons
+    private void ButtonControl(bool active) {
+        foreach (GameObject obj in buttons) {
+            Button butt = obj.GetComponent<Button>();
+            butt.interactable = active;
+        }
     }
 }
