@@ -75,7 +75,7 @@ public class CatBehaviourManager : MonoBehaviour {
     private GameObject GetCat(CatState state) {
         switch (state) {
             case CatState.SLEEP:
-                return Instantiate(sleepPrefab, new Vector3(-1.17f, -2.4f, 0), Quaternion.identity);
+                return Instantiate(sleepPrefab, new Vector3(-1.05f, -2.8f, 0), Quaternion.identity);
             case CatState.SIT:
                 return Instantiate(sitPrefab, new Vector3(1.5f, -3f, 0), Quaternion.identity);
             default:
@@ -141,5 +141,10 @@ public class CatBehaviourManager : MonoBehaviour {
             img.color = color;
             yield return null;
         }
+    }
+
+    public void study() {
+        Debug.Log("reached");
+        Instantiate(studyPrefab, new Vector3(0, -2.8f, 0), Quaternion.identity);
     }
 }
