@@ -41,9 +41,18 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Room
+  - name: Background
     uniqueID: 1690500603
+    locked: 0
+  - name: Notebook
+    uniqueID: 1076240457
     locked: 0
   - name: Cats
     uniqueID: 2072785495
+    locked: 0
+  - name: Foreground
+    uniqueID: 160268381
+    locked: 0
+  - name: Buttons
+    uniqueID: 997974737
     locked: 0
