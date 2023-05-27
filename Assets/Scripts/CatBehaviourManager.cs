@@ -85,8 +85,6 @@ public class CatBehaviourManager : MonoBehaviour {
 
             if (timeSinceStateChange > GetStateDuration(currentState)) {
                 CatState nextState = GetNextRandomState(currentState);
-                //Debug.Log(nextState);
-                yield return null;
                 TransitionToNextState(nextState);
                 timeSinceStateChange = 0;
             }
@@ -118,58 +116,56 @@ public class CatBehaviourManager : MonoBehaviour {
     }
 
     private void TransitionToNextState(CatState nextState) {
-        StartCoroutine(FadeTransition(currCat, GetCat(nextState)));
+        StartCoroutine(FadeTransition(currCat, nextState));
         currentState = nextState;
     }
 
-    private IEnumerator FadeTransition(GameObject curr, GameObject next) {
+    private IEnumerator FadeTransition(GameObject curr, CatState nextState) {
+        if (curr != null) {
+            Image img = curr.GetComponent<Image>();
+            while (img.color.a > 0) {
+                Color color = img.color;
+                color.a -= 0.05f;
+                img.color = color;
+                yield return null;
+            }
+        }
+
+        // Destroy all visible cats in scene (just in case there are more than one)
+        GameObject[] activeCats = GameObject.FindGameObjectsWithTag("Cat");
+        foreach (GameObject cat in activeCats) {
+            Destroy(cat);
+        }
         // Set visibility of next to invisible first
+        GameObject next = GetCat(nextState);
+        currCat = next;
         Color nextColor = next.GetComponent<Image>().color;
         nextColor.a = 0;
         next.GetComponent<Image>().color = nextColor;
 
-        // Proceed to fade out curr
-        Image img = curr.GetComponent<Image>();
-        while (img.color.a > 0) {
-            Color color = img.color;
-            color.a -= 0.05f;
-            img.color = color;
-            yield return null;
-        }
-
         yield return new WaitForSeconds(0.8f);
-        Destroy(curr);
         StartCoroutine(FadeIn(next));
     }
 
     private IEnumerator FadeIn(GameObject next) {
-        currCat = next;
-        Image img = next.GetComponent<Image>();
-        while (img.color.a < 1) {
-            Color color = img.color;
-            color.a += 0.05f;
-            img.color = color;
-            yield return null;
+        if (next != null) {
+            Image img = next.GetComponent<Image>();
+            while (img.color.a < 1) {
+                Color color = img.color;
+                color.a += 0.05f;
+                img.color = color;
+                yield return null;
+            }
         }
     }
 
-    // Once Study() is triggered, 
-    public void StudyButton() {
-        ButtonControl(false);
+    public void ButtonPressBefore(CatState state) {
         StopCoroutine(randomStateCoroutine);
-        TransitionToNextState(CatState.STUDY);
-        Debug.Log("10 second study session started!");
-        StartCoroutine(Study(10));
+        TransitionToNextState(state);
+        ButtonControl(false);
     }
 
-    private IEnumerator Study(float timeInSeconds) {
-        while (timeInSeconds >= 0) {
-            timeInSeconds--;
-            yield return new WaitForSeconds(1);
-        }
-
-        // Random behaviour resumes after studying
-        Debug.Log("Studying done!");
+    public void ButtonPressAfter() {
         ButtonControl(true);
         randomStateCoroutine = StartCoroutine(RandomStateChange());
     }
