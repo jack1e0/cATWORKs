@@ -31,6 +31,7 @@ public class CatBehaviourManager : MonoBehaviour {
     private float timeSinceStateChange;
     private GameObject currCat;
     private Coroutine randomStateCoroutine;
+    public Text timer;
 
     // Making a singleton class
     public static CatBehaviourManager instance;
@@ -166,6 +167,25 @@ public class CatBehaviourManager : MonoBehaviour {
     }
 
     public void ButtonPressAfter() {
+        ButtonControl(true);
+        randomStateCoroutine = StartCoroutine(RandomStateChange());
+    }
+
+    public void FeedingButton() {
+        ButtonControl(false);
+        StopCoroutine(randomStateCoroutine);
+        TransitionToNextState(CatState.SIT);
+        Debug.Log("start eating!");
+        StartCoroutine(Eat(10));
+    }
+
+    private IEnumerator Eat(float timeInSeconds) {
+        while (timeInSeconds >= 0) {
+            timeInSeconds--;
+            yield return new WaitForSeconds(1);
+        }
+
+        Debug.Log("Eating done!");
         ButtonControl(true);
         randomStateCoroutine = StartCoroutine(RandomStateChange());
     }
