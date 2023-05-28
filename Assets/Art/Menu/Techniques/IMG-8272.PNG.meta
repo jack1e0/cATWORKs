@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 71ec30bd4f3e8ac449ad80f68c7a1a19
+guid: 7a2fdbd6629efa54d8840a0bda89ce25
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -117,13 +117,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: cat_0
+      name: IMG-8272_0
       rect:
         serializedVersion: 2
-        x: 635
-        y: 611
-        width: 189
-        height: 234
+        x: 197
+        y: 1456
+        width: 696
+        height: 299
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -131,20 +131,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 05eea5247d048be4a9f3458a677f7d71
-      internalID: 2087590395
+      spriteID: c584e31385096034ea34ecaa99488507
+      internalID: 1051651291
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cat_1
+      name: IMG-8272_1
       rect:
         serializedVersion: 2
-        x: 244
-        y: 138
-        width: 250
-        height: 235
+        x: 176
+        y: 1009
+        width: 796
+        height: 422
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -152,20 +152,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7959e83fe30a54b449ec5aee3ec29252
-      internalID: -960698334
+      spriteID: 3aad3001f47b3f249a4c32a05eebd389
+      internalID: 1572865320
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: cat_2
+      name: IMG-8272_2
       rect:
         serializedVersion: 2
-        x: 970
-        y: 356
-        width: 309
-        height: 214
+        x: 200
+        y: 486
+        width: 710
+        height: 441
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -173,8 +173,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2f82ea40af364ca47afe54606aef6adf
-      internalID: 1210483533
+      spriteID: 85c5ab6d92183a54b82570695af5908b
+      internalID: -1559416389
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: IMG-8272_3
+      rect:
+        serializedVersion: 2
+        x: 189
+        y: 154
+        width: 741
+        height: 267
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 731cc5cb97c98b348a6d6072c41877b9
+      internalID: -315190026
       vertices: []
       indices: 
       edges: []
@@ -190,9 +211,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      cat_0: 2087590395
-      cat_2: 1210483533
-      cat_1: -960698334
+      IMG-8272_2: -1559416389
+      IMG-8272_1: 1572865320
+      IMG-8272_3: -315190026
+      IMG-8272_0: 1051651291
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

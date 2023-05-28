@@ -6,12 +6,14 @@ using UnityEngine.UI;
 /// <summary>
 /// Attached to Notebook gameobject
 /// </summary>
-public class Study : MonoBehaviour {
+public class StudyScript : MonoBehaviour {
     public float studyDuration;
     private bool isStudying;
     private bool endStudying;
     private Animator animator;
     private Button button;
+
+    [SerializeField] private GameObject menuScreen;
 
     void Awake() {
         isStudying = false;
@@ -20,19 +22,27 @@ public class Study : MonoBehaviour {
     }
 
     private void Start() {
-        button.onClick.AddListener(StudySequence);
+        button.onClick.AddListener(MenuAppear);
+        menuScreen.SetActive(false);
     }
 
-    private void StudySequence() {
+    private void MenuAppear() {
         if (isStudying) {
             EndStudy();
         } else {
-            StartCoroutine(StudyCoroutine());
+            menuScreen.SetActive(true);
         }
+    }
+
+    public void StudySequence() {
+        string msg = "10s study session started!";
+        StartCoroutine(CatBehaviourManager.instance.DisplayNotifs(msg));
+        StartCoroutine(StudyCoroutine());
     }
 
     private IEnumerator StudyCoroutine() {
         isStudying = true;
+        menuScreen.SetActive(false);
         CatBehaviourManager.instance.ButtonPressBefore(CatState.STUDY);
         float timeInSeconds = studyDuration;
         while (timeInSeconds >= 0) {
@@ -41,19 +51,22 @@ public class Study : MonoBehaviour {
         }
 
         // Random behaviour resumes after studying
-        Debug.Log("Studying done!");
+        string msg = "Study session completed! Press button to claim catfood.";
+        StartCoroutine(CatBehaviourManager.instance.DisplayNotifs(msg));
         animator.SetBool("StudyFinish", true);
         button.interactable = true;
     }
 
     private void EndStudy() {
-        Debug.Log("Ended study session!");
-
         // Placeholder value for increase in catfood after a study session
-        CatfoodManager.instance.UpdateCatfoodCount(10);
+        CatfoodManager.instance.IncreaseCatfood(10);
 
         animator.SetBool("StudyFinish", false);
         isStudying = false;
         CatBehaviourManager.instance.ButtonPressAfter();
+    }
+
+    public void Back() {
+        menuScreen.SetActive(false);
     }
 }
