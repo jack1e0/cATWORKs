@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 71ec30bd4f3e8ac449ad80f68c7a1a19
+guid: f575bbbbc83e4fc41ba353976c0fca4e
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -117,13 +117,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: cat_0
+      name: fish_0
       rect:
         serializedVersion: 2
-        x: 635
-        y: 611
-        width: 189
-        height: 234
+        x: 1221
+        y: 1438
+        width: 95
+        height: 49
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -131,50 +131,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 05eea5247d048be4a9f3458a677f7d71
-      internalID: 2087590395
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: cat_1
-      rect:
-        serializedVersion: 2
-        x: 244
-        y: 138
-        width: 250
-        height: 235
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7959e83fe30a54b449ec5aee3ec29252
-      internalID: -960698334
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: cat_2
-      rect:
-        serializedVersion: 2
-        x: 970
-        y: 356
-        width: 309
-        height: 214
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2f82ea40af364ca47afe54606aef6adf
-      internalID: 1210483533
+      spriteID: 7e71e10db1d0b454eb21ecff3159aad2
+      internalID: 561276053
       vertices: []
       indices: 
       edges: []
@@ -190,9 +148,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      cat_0: 2087590395
-      cat_2: 1210483533
-      cat_1: -960698334
+      fish_0: 561276053
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
