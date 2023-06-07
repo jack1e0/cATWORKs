@@ -8,8 +8,6 @@ public class CamMovement : MonoBehaviour {
     private Vector3 mousePos;
     private float difference;
     private bool isDrag;
-    private bool atLeft;
-    private bool atRight;
 
     private void LateUpdate() {
         curr = camera.transform.position;
