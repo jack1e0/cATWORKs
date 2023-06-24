@@ -10,11 +10,8 @@ public class AlarmManager : MonoBehaviour {
     [SerializeField] private GameObject parent;
 
 
-    private void Awake() {
-
-    }
-
     public void AddAlarm() {
-        Instantiate(alarmUnit, Vector3.zero, Quaternion.identity, parent.transform);
+        GameObject newUnit = Instantiate(alarmUnit, parent.transform);
+        StartCoroutine(SizeFitter.instance.Expand(newUnit));
     }
 }

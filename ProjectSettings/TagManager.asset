@@ -8,6 +8,8 @@ TagManager:
   - Button
   - Catfood
   - Notifs
+  - Scroller
+  - Container
   layers:
   - Default
   - TransparentFX
