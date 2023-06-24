@@ -15,6 +15,8 @@ TagManager:
   - Technique2
   - Technique3
   - Technique4
+  - Unfilled
+  - Filled
   layers:
   - Default
   - TransparentFX

@@ -1367,6 +1367,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 111b517c4fabd7b42847f2e445b730a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  techniqueData: {fileID: 0}
 --- !u!1001 &1226754755
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1377,6 +1378,10 @@ PrefabInstance:
     - target: {fileID: 3680820063603104505, guid: 95188e4ac3e0b814ba529a2cbf4636e8, type: 3}
       propertyPath: m_text
       value: Time-Blocking
+      objectReference: {fileID: 0}
+    - target: {fileID: 3680820065261466076, guid: 95188e4ac3e0b814ba529a2cbf4636e8, type: 3}
+      propertyPath: m_Interactable
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3680820065261466076, guid: 95188e4ac3e0b814ba529a2cbf4636e8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -1613,6 +1618,10 @@ PrefabInstance:
       value: Eisenhower Matrix
       objectReference: {fileID: 0}
     - target: {fileID: 3680820065261466076, guid: 95188e4ac3e0b814ba529a2cbf4636e8, type: 3}
+      propertyPath: m_Interactable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3680820065261466076, guid: 95188e4ac3e0b814ba529a2cbf4636e8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 0
       objectReference: {fileID: 0}
@@ -1783,8 +1792,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -441, y: 839.5}
-  m_SizeDelta: {x: 198, y: 241}
+  m_AnchoredPosition: {x: -472.6, y: 880.28}
+  m_SizeDelta: {x: 134.8, y: 159.45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1453881746
 MonoBehaviour:

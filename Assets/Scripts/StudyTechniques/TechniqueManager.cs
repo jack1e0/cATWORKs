@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class TechniqueManager : MonoBehaviour {
 
     public static TechniqueManager instance;
-    public static TechniqueDetails techniqueData;
+    public TechniqueDetails techniqueData;
 
     private GameObject[] techniques;
 
@@ -31,22 +31,26 @@ public class TechniqueManager : MonoBehaviour {
         };
 
         techniques[0].GetComponent<Button>().onClick.AddListener(Custom);
-        techniques[0].GetComponent<Button>().onClick.AddListener(Pomodoro);
-        techniques[0].GetComponent<Button>().onClick.AddListener(Timeblocking);
-        techniques[0].GetComponent<Button>().onClick.AddListener(Eisenhower);
+        techniques[1].GetComponent<Button>().onClick.AddListener(Pomodoro);
+        techniques[2].GetComponent<Button>().onClick.AddListener(Timeblocking);
+        techniques[3].GetComponent<Button>().onClick.AddListener(Eisenhower);
     }
 
     public void Custom() {
-        CatBehaviourManager.instance.ButtonPressBefore(CatState.NONE);
-        SceneManager.LoadScene("StudySceneCustom");
-
         // Load respective scriptable object
         TechniqueDetails obj = Resources.Load<TechniqueDetails>("Custom");
         techniqueData = Instantiate(obj);
+
+        CatBehaviourManager.instance.ButtonPressBefore(CatState.NONE);
+        SceneManager.LoadScene("StudySceneCustom");
     }
 
     public void Pomodoro() {
+        TechniqueDetails obj = Resources.Load<TechniqueDetails>("Pomodoro");
+        techniqueData = Instantiate(obj);
 
+        CatBehaviourManager.instance.ButtonPressBefore(CatState.NONE);
+        SceneManager.LoadScene("PomodoroScene");
     }
 
     public void Timeblocking() {

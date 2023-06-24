@@ -47,7 +47,7 @@ public class CatBehaviourManager : MonoBehaviour {
             instance = this;
             DontDestroyOnLoad(this);
         } else {
-            Destroy(this);
+            Destroy(gameObject);
             instance = GameObject.FindGameObjectWithTag("Manager").GetComponent<CatBehaviourManager>();
         }
         instance.Instantiate();
@@ -98,12 +98,10 @@ public class CatBehaviourManager : MonoBehaviour {
 
         if (justStudied) {
             Debug.Log("HERE");
-            EndStudy();
+            StartCoroutine(EndStudy());
             justStudied = false;
         }
     }
-
-
 
     private CatState GetRandomState() {
         int rand = UnityEngine.Random.Range(0, 2);
@@ -245,11 +243,14 @@ public class CatBehaviourManager : MonoBehaviour {
         notifs.enabled = false;
     }
 
-    public void EndStudy() {
+    public IEnumerator EndStudy() {
         Debug.Log(CatfoodManager.instance);
         int catfoodEarned = CatfoodManager.instance.toChange;
         string msg = "Study session ended! " + catfoodEarned + " Catfood earned!";
         StartCoroutine(DisplayNotifs(msg));
+
+        // Wait for next frame so CatfoodManager finish Awake()
+        yield return null;
         CatfoodManager.instance.IncreaseCatfood(catfoodEarned);
         CatBehaviourManager.instance.ButtonPressAfter();
         Debug.Log("ENDED");

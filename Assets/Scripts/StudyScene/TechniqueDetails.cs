@@ -9,6 +9,5 @@ using UnityEngine.SceneManagement;
 public class TechniqueDetails : ScriptableObject {
     public string techniqueName;
     public float timeInMins;
-    public GameObject filled;
-    public GameObject unfilled;
+    public GameObject circularBar;
 }

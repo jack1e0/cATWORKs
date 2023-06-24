@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 56b5c3187bbfbfd44a9feaaa93a493f1, type: 3}
-  m_Name: Custom
+  m_Name: Pomodoro
   m_EditorClassIdentifier: 
-  techniqueName: Custom
-  timeInMins: 0
+  techniqueName: Pomodoro
+  timeInMins: 20
   circularBar: {fileID: 4179987551768645175, guid: f41c17e52c837044f9439e930a643957, type: 3}

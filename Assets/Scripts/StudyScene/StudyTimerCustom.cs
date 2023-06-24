@@ -6,11 +6,14 @@ using TMPro;
 using UnityEngine.SceneManagement;
 
 public class StudyTimerCustom : MonoBehaviour {
-    private float duration;
+
+    [SerializeField] private GameObject title;
     [SerializeField] private GameObject timeInput;
     [SerializeField] private GameObject studyCat;
     [SerializeField] private GameObject timeDisplay;
     [SerializeField] private GameObject timeFill;
+
+    private float duration;
     private TMP_Text timer;
     private Image fill;
     private Animator studyCatAnim;
@@ -19,11 +22,14 @@ public class StudyTimerCustom : MonoBehaviour {
     private int catfoodEarned;
 
     private void Awake() {
+        title.GetComponent<TMP_Text>().text = "Custom";
         studyCat.SetActive(false);
         timer = timeDisplay.GetComponent<TMP_Text>();
         fill = timeFill.GetComponent<Image>();
         studyCatAnim = studyCat.GetComponent<Animator>();
         studyCatButton = studyCat.GetComponent<Button>();
+
+        studyCatButton.onClick.AddListener(StudyCatTap);
     }
 
 
@@ -34,13 +40,15 @@ public class StudyTimerCustom : MonoBehaviour {
 
     // locking in user input and start study
     public void EnterInput() {
-        // timeInput.SetActive(false);
-        // studyCat.SetActive(true);
-        // studyCatButton.interactable = false;
-        // timer.text = duration.ToString();
-        // StartCoroutine(StartStudy());
-        catfoodEarned = CatfoodManager.instance.CalculateCatfood(1);
-        StudyCatTap();
+        timeInput.SetActive(false);
+        studyCat.SetActive(true);
+        studyCatButton.interactable = false;
+        timer.text = duration.ToString();
+        StartCoroutine(StartStudy());
+
+        // // Testing
+        // catfoodEarned = CatfoodManager.instance.CalculateCatfood(1);
+        // StudyCatTap();
     }
 
     private IEnumerator StartStudy() {
@@ -74,10 +82,7 @@ public class StudyTimerCustom : MonoBehaviour {
 
     private IEnumerator ChangeScene() {
         CatBehaviourManager.instance.justStudied = true;
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(0.5f);
         SceneManager.LoadScene("RoomScene");
     }
-
-
-
 }

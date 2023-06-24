@@ -47,8 +47,7 @@ public class CatfoodManager : MonoBehaviour {
     }
 
     public void IncreaseCatfood(int dif) {
-        int newCount = catfoodCount += dif;
-        catfoodCount = newCount;
+        catfoodCount += dif;
         catfoodText.text = catfoodCount.ToString("0");
     }
 
