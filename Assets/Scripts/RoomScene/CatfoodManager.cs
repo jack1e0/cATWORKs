@@ -21,16 +21,29 @@ public class CatfoodManager : MonoBehaviour {
         //     Destroy(instance.gameObject);
         // }
 
-        if (instance != null && instance != this) {
-            Debug.Log(instance.catfoodCount);
-            Destroy(this);
-            Destroy(this.gameObject);
-        } else {
-            instance = this;
-            catfoodText = GameObject.FindGameObjectWithTag("Catfood").GetComponent<TMP_Text>();
-            catfoodCount = int.Parse(catfoodText.text);
-        }
+        // if (instance != null && instance != this) {
+        //     Debug.Log(instance.catfoodCount);
+        //     Destroy(this);
+        //     Destroy(this.gameObject);
+        // } else {
+        //     instance = this;
+        //     catfoodText = GameObject.FindGameObjectWithTag("Catfood").GetComponent<TMP_Text>();
+        //     catfoodCount = int.Parse(catfoodText.text);
+        // }
 
+        if (instance == null) {
+            instance = this;
+            DontDestroyOnLoad(this);
+        } else {
+            Destroy(this);
+            instance = GameObject.FindGameObjectWithTag("Manager").GetComponent<CatfoodManager>();
+        }
+        instance.Instantiate();
+    }
+
+    public void Instantiate() {
+        catfoodText = GameObject.FindGameObjectWithTag("Catfood").GetComponent<TMP_Text>();
+        catfoodCount = int.Parse(catfoodText.text);
     }
 
     public void IncreaseCatfood(int dif) {
@@ -51,9 +64,10 @@ public class CatfoodManager : MonoBehaviour {
     }
 
     public int CalculateCatfood(float studyDuration) {
-        int earned = Mathf.CeilToInt(studyDuration / 6);
-        Debug.Log("catfood earned: " + Mathf.Max(2, earned));
+        int food = Mathf.CeilToInt(studyDuration / 6);
+        int earned = Mathf.Max(2, food);
+        Debug.Log("catfood earned: " + earned);
         toChange = earned;
-        return Mathf.Max(2, earned);
+        return earned;
     }
 }

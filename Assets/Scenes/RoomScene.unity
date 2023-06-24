@@ -1306,7 +1306,7 @@ GameObject:
   - component: {fileID: 1160994919}
   m_Layer: 0
   m_Name: Managers
-  m_TagString: Untagged
+  m_TagString: Manager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1379,6 +1379,10 @@ PrefabInstance:
       value: Time-Blocking
       objectReference: {fileID: 0}
     - target: {fileID: 3680820065261466076, guid: 95188e4ac3e0b814ba529a2cbf4636e8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3680820065261466076, guid: 95188e4ac3e0b814ba529a2cbf4636e8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 769213841}
@@ -1389,6 +1393,10 @@ PrefabInstance:
     - target: {fileID: 3680820065261466080, guid: 95188e4ac3e0b814ba529a2cbf4636e8, type: 3}
       propertyPath: m_Name
       value: Timeblocking
+      objectReference: {fileID: 0}
+    - target: {fileID: 3680820065261466080, guid: 95188e4ac3e0b814ba529a2cbf4636e8, type: 3}
+      propertyPath: m_TagString
+      value: Technique3
       objectReference: {fileID: 0}
     - target: {fileID: 3680820065261466081, guid: 95188e4ac3e0b814ba529a2cbf4636e8, type: 3}
       propertyPath: m_Pivot.x
@@ -1605,6 +1613,10 @@ PrefabInstance:
       value: Eisenhower Matrix
       objectReference: {fileID: 0}
     - target: {fileID: 3680820065261466076, guid: 95188e4ac3e0b814ba529a2cbf4636e8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3680820065261466076, guid: 95188e4ac3e0b814ba529a2cbf4636e8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 769213841}
@@ -1623,6 +1635,10 @@ PrefabInstance:
     - target: {fileID: 3680820065261466080, guid: 95188e4ac3e0b814ba529a2cbf4636e8, type: 3}
       propertyPath: m_Name
       value: Eisenhower
+      objectReference: {fileID: 0}
+    - target: {fileID: 3680820065261466080, guid: 95188e4ac3e0b814ba529a2cbf4636e8, type: 3}
+      propertyPath: m_TagString
+      value: Technique4
       objectReference: {fileID: 0}
     - target: {fileID: 3680820065261466081, guid: 95188e4ac3e0b814ba529a2cbf4636e8, type: 3}
       propertyPath: m_Pivot.x
@@ -2281,7 +2297,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6077d05227e1340c08a5999c7dc8f94a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timer: 10
   countdown: {fileID: 1032953448}
   timerScreen: {fileID: 2104651131}
 --- !u!1 &1614267612
@@ -2736,6 +2751,10 @@ PrefabInstance:
       value: Customize
       objectReference: {fileID: 0}
     - target: {fileID: 3680820065261466076, guid: 95188e4ac3e0b814ba529a2cbf4636e8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3680820065261466076, guid: 95188e4ac3e0b814ba529a2cbf4636e8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1160994919}
@@ -2750,6 +2769,10 @@ PrefabInstance:
     - target: {fileID: 3680820065261466080, guid: 95188e4ac3e0b814ba529a2cbf4636e8, type: 3}
       propertyPath: m_Name
       value: Customize
+      objectReference: {fileID: 0}
+    - target: {fileID: 3680820065261466080, guid: 95188e4ac3e0b814ba529a2cbf4636e8, type: 3}
+      propertyPath: m_TagString
+      value: Technique1
       objectReference: {fileID: 0}
     - target: {fileID: 3680820065261466081, guid: 95188e4ac3e0b814ba529a2cbf4636e8, type: 3}
       propertyPath: m_Pivot.x
@@ -3065,6 +3088,10 @@ PrefabInstance:
       value: Pomodoro
       objectReference: {fileID: 0}
     - target: {fileID: 3680820065261466076, guid: 95188e4ac3e0b814ba529a2cbf4636e8, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3680820065261466076, guid: 95188e4ac3e0b814ba529a2cbf4636e8, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 769213841}
@@ -3075,6 +3102,10 @@ PrefabInstance:
     - target: {fileID: 3680820065261466080, guid: 95188e4ac3e0b814ba529a2cbf4636e8, type: 3}
       propertyPath: m_Name
       value: Pomodoro
+      objectReference: {fileID: 0}
+    - target: {fileID: 3680820065261466080, guid: 95188e4ac3e0b814ba529a2cbf4636e8, type: 3}
+      propertyPath: m_TagString
+      value: Technique2
       objectReference: {fileID: 0}
     - target: {fileID: 3680820065261466081, guid: 95188e4ac3e0b814ba529a2cbf4636e8, type: 3}
       propertyPath: m_Pivot.x

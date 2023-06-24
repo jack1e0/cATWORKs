@@ -14,4 +14,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/StudySceneCustom.unity
     guid: 0d8ac98f645a21643a7bc021b28e842e
+  - enabled: 1
+    path: Assets/Scenes/AlarmScene.unity
+    guid: 02500316bf6a2994f9443fda7f6865ee
   m_configObjects: {}

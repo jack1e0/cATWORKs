@@ -5,11 +5,16 @@ TagManager:
   serializedVersion: 2
   tags:
   - Cat
-  - Button
   - Catfood
   - Notifs
   - Scroller
   - Container
+  - Manager
+  - Button
+  - Technique1
+  - Technique2
+  - Technique3
+  - Technique4
   layers:
   - Default
   - TransparentFX

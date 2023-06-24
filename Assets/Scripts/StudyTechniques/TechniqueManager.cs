@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class TechniqueManager : MonoBehaviour {
@@ -8,30 +9,52 @@ public class TechniqueManager : MonoBehaviour {
     public static TechniqueManager instance;
     public static TechniqueDetails techniqueData;
 
+    private GameObject[] techniques;
+
     private void Awake() {
-        DontDestroyOnLoad(this);
-
-        // if (instance == null) {
-        //     instance = this;
-        // } else { // if there is already another previous instance of manager, keep that.
-        //     instance = this;
-        //     Destroy(instance.gameObject);
-        // }
-
-        if (instance != null && instance != this) {
-            Destroy(this);
-        } else {
+        if (instance == null) {
             instance = this;
+            DontDestroyOnLoad(this);
+        } else {
+            Destroy(this);
+            instance = GameObject.FindGameObjectWithTag("Manager").GetComponent<TechniqueManager>();
         }
+        instance.Instantiate();
     }
 
-    public void CustomStudySequence() {
+    public void Instantiate() {
+        techniques = new GameObject[4] {
+            GameObject.FindGameObjectWithTag("Technique1"),
+            GameObject.FindGameObjectWithTag("Technique2"),
+            GameObject.FindGameObjectWithTag("Technique3"),
+            GameObject.FindGameObjectWithTag("Technique4")
+        };
+
+        techniques[0].GetComponent<Button>().onClick.AddListener(Custom);
+        techniques[0].GetComponent<Button>().onClick.AddListener(Pomodoro);
+        techniques[0].GetComponent<Button>().onClick.AddListener(Timeblocking);
+        techniques[0].GetComponent<Button>().onClick.AddListener(Eisenhower);
+    }
+
+    public void Custom() {
         CatBehaviourManager.instance.ButtonPressBefore(CatState.NONE);
         SceneManager.LoadScene("StudySceneCustom");
 
         // Load respective scriptable object
         TechniqueDetails obj = Resources.Load<TechniqueDetails>("Custom");
         techniqueData = Instantiate(obj);
+    }
+
+    public void Pomodoro() {
+
+    }
+
+    public void Timeblocking() {
+
+    }
+
+    public void Eisenhower() {
+
     }
 
     // private IEnumerator StudyCoroutine() {
