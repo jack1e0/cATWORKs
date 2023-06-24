@@ -2,20 +2,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Attached to Notebook gameobject
+/// 
+/// Study mechanics:
+/// 
+/// When study button pressed, brings users to techniques menu
+/// Clicking on each technique brings user to unique interface (or same?) that displays respective info and timings. 
+/// and a clock to visually display timing separation. and a Start button.
+/// Some techniques require user input (can be postoned to later)
+/// customize --> periodic alternating study time and break time? 
+/// 
+/// Once Start is pressed, brings user to another page, with cat studying at desk on a blank background, and clock running on screen.
+/// phone access is restricted --> when user press home/back button, popup will show --> "are you sure you wna quit? catfood will be lost"
+///
+/// Whenever break, cat will start dancing? "Break" button appears for players to indicate when they are on break. then clock continues to run.
+/// Then when its time to study again, cat will be idle? "Study" button appear for players to indicate when they start studying. then clock continues.
+/// When study is over, cat dances and confetti begins and "Tap to claim" button pops up
+/// 
+/// Play animation of gained catfood and coins going into the total count --> like hayday 
+/// 
 /// </summary>
 public class StudyScript : MonoBehaviour {
-    public float studyDuration;
-    private bool isStudying;
-    private bool endStudying;
-    private Animator animator;
-    private Button button;
+    public static StudyScript instance;
+    public bool isStudying;
+    [HideInInspector] public Animator animator;
+    [HideInInspector] public Button button;
 
     [SerializeField] private GameObject menuScreen;
 
     void Awake() {
+        if (instance == null) {
+            instance = this;
+        }
+
         isStudying = false;
         animator = gameObject.GetComponent<Animator>();
         button = gameObject.GetComponent<Button>();
@@ -27,46 +49,15 @@ public class StudyScript : MonoBehaviour {
     }
 
     private void MenuAppear() {
-        if (isStudying) {
-            EndStudy();
-        } else {
-            menuScreen.SetActive(true);
-        }
+        menuScreen.SetActive(true);
     }
 
-    public void StudySequence() {
-        string msg = "10s study session started!";
-        StartCoroutine(CatBehaviourManager.instance.DisplayNotifs(msg));
-        StartCoroutine(StudyCoroutine());
-    }
-
-    private IEnumerator StudyCoroutine() {
-        isStudying = true;
-        menuScreen.SetActive(false);
-        CatBehaviourManager.instance.ButtonPressBefore(CatState.STUDY);
-        float timeInSeconds = studyDuration;
-        while (timeInSeconds >= 0) {
-            timeInSeconds--;
-            yield return new WaitForSeconds(1);
-        }
-
-        // Random behaviour resumes after studying
-        string msg = "Study session completed! Press button to claim catfood.";
-        StartCoroutine(CatBehaviourManager.instance.DisplayNotifs(msg));
-        animator.SetBool("StudyFinish", true);
-        button.interactable = true;
-    }
-
-    private void EndStudy() {
-        // Placeholder value for increase in catfood after a study session
-        CatfoodManager.instance.IncreaseCatfood(10);
-
-        animator.SetBool("StudyFinish", false);
-        isStudying = false;
-        CatBehaviourManager.instance.ButtonPressAfter();
-    }
-
+    // Menu functions:
     public void Back() {
         menuScreen.SetActive(false);
+    }
+
+    public void LoadPomodoro() {
+        SceneManager.LoadScene("PomodoroScene");
     }
 }

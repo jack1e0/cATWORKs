@@ -9,13 +9,28 @@ public class CatfoodManager : MonoBehaviour {
     public static CatfoodManager instance;
     private TMP_Text catfoodText;
     private int catfoodCount;
+    public int toChange;
 
     void Awake() {
-        if (instance == null) {
+        DontDestroyOnLoad(this);
+
+        // if (instance == null) {
+        //     instance = this;
+        // } else { // if there is already another previous instance of manager, keep that.
+        //     instance = this;
+        //     Destroy(instance.gameObject);
+        // }
+
+        if (instance != null && instance != this) {
+            Debug.Log(instance.catfoodCount);
+            Destroy(this);
+            Destroy(this.gameObject);
+        } else {
             instance = this;
+            catfoodText = GameObject.FindGameObjectWithTag("Catfood").GetComponent<TMP_Text>();
+            catfoodCount = int.Parse(catfoodText.text);
         }
-        catfoodText = gameObject.GetComponent<TMP_Text>();
-        catfoodCount = int.Parse(catfoodText.text);
+
     }
 
     public void IncreaseCatfood(int dif) {
@@ -33,5 +48,12 @@ public class CatfoodManager : MonoBehaviour {
         } else {
             return false;
         }
+    }
+
+    public int CalculateCatfood(float studyDuration) {
+        int earned = Mathf.CeilToInt(studyDuration / 6);
+        Debug.Log("catfood earned: " + Mathf.Max(2, earned));
+        toChange = earned;
+        return Mathf.Max(2, earned);
     }
 }

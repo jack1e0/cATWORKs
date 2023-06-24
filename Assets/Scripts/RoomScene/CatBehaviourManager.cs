@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public enum CatState {
     NONE,
@@ -26,27 +27,33 @@ public class CatBehaviourManager : MonoBehaviour {
     [SerializeField] private GameObject sitPrefab;
     [Space(10)]
 
-    [Header("Buttons")]
-    [SerializeReference] private List<GameObject> buttons = new List<GameObject>();
-    [Space(10)]
+    private GameObject[] buttons;
 
-    [SerializeField] private TMP_Text notifs;
+    private TMP_Text notifs;
 
     private CatState currentState;
     private float timeSinceStateChange;
     private GameObject currCat;
     private Coroutine randomStateCoroutine;
 
+    public bool justStudied;
+
     // Making a singleton class
     public static CatBehaviourManager instance;
 
     void Awake() {
+
         if (instance == null) {
             instance = this;
+            DontDestroyOnLoad(this);
+        } else {
+            Destroy(this);
+            //instance = this;
+            return;
         }
-    }
+        buttons = GameObject.FindGameObjectsWithTag("Button");
+        notifs = GameObject.FindGameObjectWithTag("Notifs").GetComponent<TMP_Text>();
 
-    void Start() {
         notifs.enabled = false;
         timeSinceStateChange = 0;
 
@@ -56,7 +63,47 @@ public class CatBehaviourManager : MonoBehaviour {
         // Instantiate corresponding cat in scene
         currCat = GetCat(currentState);
         randomStateCoroutine = StartCoroutine(RandomStateChange());
+        Debug.Log("started random state change");
+
+        Debug.Log(justStudied);
+        if (justStudied) {
+            Debug.Log("HERE");
+            StartCoroutine(EndStudy());
+            justStudied = false;
+        }
+
+
+        // if (instance != null && instance != this) {
+        //     Destroy(this);
+        //     return;
+        // } else if (instance == null) {
+        //     instance = this;
+        //     DontDestroyOnLoad(this);
+        // }
+
+        // buttons = GameObject.FindGameObjectsWithTag("Button");
+        // notifs = GameObject.FindGameObjectWithTag("Notifs").GetComponent<TMP_Text>();
+
+        // notifs.enabled = false;
+        // timeSinceStateChange = 0;
+
+        // // TODO: instead of setting a random state upon start, possible to keep track of state that scene is previously left off at
+        // currentState = GetRandomState();
+
+        // // Instantiate corresponding cat in scene
+        // currCat = GetCat(currentState);
+        // randomStateCoroutine = StartCoroutine(RandomStateChange());
+        // Debug.Log("started random state change");
+
+        // Debug.Log(justStudied);
+        // if (justStudied) {
+        //     Debug.Log("HERE");
+        //     StartCoroutine(EndStudy());
+        //     justStudied = false;
+        // }
     }
+
+
 
     private CatState GetRandomState() {
         int rand = UnityEngine.Random.Range(0, 2);
@@ -124,8 +171,12 @@ public class CatBehaviourManager : MonoBehaviour {
     }
 
     private void TransitionToNextState(CatState nextState) {
-        StartCoroutine(FadeTransition(currCat, nextState));
-        currentState = nextState;
+        if (nextState == CatState.NONE) {
+            currCat.SetActive(false);
+        } else {
+            StartCoroutine(FadeTransition(currCat, nextState));
+            currentState = nextState;
+        }
     }
 
     private IEnumerator FadeTransition(GameObject curr, CatState nextState) {
@@ -174,6 +225,7 @@ public class CatBehaviourManager : MonoBehaviour {
     }
 
     public void ButtonPressAfter() {
+        currCat.SetActive(true);
         ButtonControl(true);
         randomStateCoroutine = StartCoroutine(RandomStateChange());
     }
@@ -189,7 +241,20 @@ public class CatBehaviourManager : MonoBehaviour {
     public IEnumerator DisplayNotifs(string str) {
         notifs.enabled = true;
         notifs.text = str;
+        Debug.Log(str);
         yield return new WaitForSeconds(3);
         notifs.enabled = false;
     }
+
+    public IEnumerator EndStudy() {
+        Debug.Log(CatfoodManager.instance);
+        int catfoodEarned = CatfoodManager.instance.toChange;
+        yield return new WaitForSeconds(0.5f);
+        string msg = "Study session ended! " + catfoodEarned + " Catfood earned!";
+        DisplayNotifs(msg);
+        CatfoodManager.instance.IncreaseCatfood(catfoodEarned);
+        CatBehaviourManager.instance.ButtonPressAfter();
+        Debug.Log("ENDED");
+    }
+
 }
