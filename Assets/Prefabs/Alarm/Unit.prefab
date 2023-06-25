@@ -734,6 +734,7 @@ MonoBehaviour:
   above: {fileID: 7442283912343342991}
   below: {fileID: 3681649625565479841}
   threshold: 15
+  moveForce: 0.2
 --- !u!1 &5919781880035058806
 GameObject:
   m_ObjectHideFlags: 0

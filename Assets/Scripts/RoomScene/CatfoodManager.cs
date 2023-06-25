@@ -62,7 +62,7 @@ public class CatfoodManager : MonoBehaviour {
     }
 
     public int CalculateCatfood(float studyDuration) {
-        int food = Mathf.CeilToInt(studyDuration / 6);
+        int food = Mathf.CeilToInt(studyDuration / 2);
         int earned = Mathf.Max(2, food);
         Debug.Log("catfood earned: " + earned);
         toChange = earned;

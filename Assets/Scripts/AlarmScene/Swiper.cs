@@ -14,6 +14,7 @@ public class Swiper : MonoBehaviour, IDragHandler {
     [SerializeField] private GameObject below;
 
     [SerializeField] private float threshold = 10f;
+    [SerializeField] private float moveForce = 0.1f;
     private bool isDeleting;
 
     private void Start() {
@@ -49,7 +50,7 @@ public class Swiper : MonoBehaviour, IDragHandler {
         float i = 0;
         while (i < 1) {
             obj.transform.localPosition = Vector3.Lerp(currPos, newPos, i);
-            i += 0.05f;
+            i += moveForce;
             yield return null;
         }
 
@@ -57,8 +58,6 @@ public class Swiper : MonoBehaviour, IDragHandler {
     }
 
     public void Delete() {
-        float height = gameObject.GetComponent<RectTransform>().rect.height;
-        VerticalLayoutGroup.Destroy(gameObject);
-        StartCoroutine(SizeFitter.instance.Contract(height));
+        AlarmManager.instance.DeleteAlarm(gameObject);
     }
 }

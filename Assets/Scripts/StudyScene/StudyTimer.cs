@@ -11,6 +11,7 @@ public class StudyTimer : MonoBehaviour {
     [SerializeField] private GameObject timeDisplay;
     private GameObject timeFill;
     [SerializeField] private GameObject parent;
+    [SerializeField] private GameObject skip;
 
     private float duration;
     private TMP_Text timer;
@@ -19,8 +20,10 @@ public class StudyTimer : MonoBehaviour {
     private Button studyCatButton;
 
     private int catfoodEarned;
+    private Coroutine runningCoroutine;
 
     private void Awake() {
+        skip.GetComponent<Button>().onClick.AddListener(Skip);
         title.GetComponent<TMP_Text>().text = TechniqueManager.instance.techniqueData.techniqueName;
         duration = TechniqueManager.instance.techniqueData.timeInMins;
         timeFill = Instantiate(TechniqueManager.instance.techniqueData.circularBar, parent.transform);
@@ -33,7 +36,7 @@ public class StudyTimer : MonoBehaviour {
         studyCatButton.interactable = false;
 
         studyCatButton.onClick.AddListener(StudyCatTap);
-        StartCoroutine(StartStudy());
+        runningCoroutine = StartCoroutine(StartStudy());
     }
 
     private IEnumerator StartStudy() {
@@ -69,5 +72,10 @@ public class StudyTimer : MonoBehaviour {
         CatBehaviourManager.instance.justStudied = true;
         yield return new WaitForSeconds(0.5f);
         SceneManager.LoadScene("RoomScene");
+    }
+
+    public void Skip() {
+        StopCoroutine(runningCoroutine);
+        FinishStudy();
     }
 }

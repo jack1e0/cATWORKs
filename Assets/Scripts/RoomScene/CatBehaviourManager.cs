@@ -89,17 +89,20 @@ public class CatBehaviourManager : MonoBehaviour {
         notifs.enabled = false;
         timeSinceStateChange = 0;
 
-        currentState = GetRandomState();
+        if (SceneManager.GetActiveScene().name == "RoomScene") {
+            Debug.Log("here");
+            currentState = GetRandomState();
 
-        // Instantiate corresponding cat in scene
-        currCat = GetCat(currentState);
-        randomStateCoroutine = StartCoroutine(RandomStateChange());
-        Debug.Log("started random state change");
+            // Instantiate corresponding cat in scene
+            currCat = GetCat(currentState);
+            randomStateCoroutine = StartCoroutine(RandomStateChange());
+            Debug.Log("started random state change");
 
-        if (justStudied) {
-            Debug.Log("HERE");
-            StartCoroutine(EndStudy());
-            justStudied = false;
+            if (justStudied) {
+                Debug.Log("HERE");
+                StartCoroutine(EndStudy());
+                justStudied = false;
+            }
         }
     }
 

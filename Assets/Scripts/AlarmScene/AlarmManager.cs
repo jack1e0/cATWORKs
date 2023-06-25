@@ -74,6 +74,15 @@ public class AlarmManager : MonoBehaviour {
         //SetAlarm("hihi", 2, 40);
     }
 
+    public void DeleteAlarm(GameObject alarm) {
+        float height = alarm.GetComponent<RectTransform>().rect.height;
+        VerticalLayoutGroup.Destroy(alarm);
+        StartCoroutine(SizeFitter.instance.Contract(height));
+
+        // TODO: removing specific alarm
+        alarms.RemoveAt(0);
+    }
+
     public void Back() {
         SceneManager.LoadScene("RoomScene");
     }
