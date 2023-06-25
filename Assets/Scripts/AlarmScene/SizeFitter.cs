@@ -6,13 +6,13 @@ using UnityEngine.UI;
 public class SizeFitter : MonoBehaviour {
     public static SizeFitter instance;
 
-    [SerializeField] private GameObject container;
+    private GameObject container;
     private RectTransform containerRect;
 
-    [SerializeField] private GameObject scroller;
+    private GameObject scroller;
     private ScrollRect scrollrect;
 
-    [SerializeField] private GameObject placeholder;
+    private GameObject placeholder;
     private RectTransform placeholderRect;
 
     private RectTransform rect;
@@ -20,17 +20,26 @@ public class SizeFitter : MonoBehaviour {
     private void Awake() {
         if (instance == null) {
             instance = this;
+            DontDestroyOnLoad(this);
+        } else {
+            Destroy(this);
+            instance = GameObject.FindGameObjectWithTag("Parent").GetComponent<SizeFitter>();
         }
 
+        instance.Instantiate();
+    }
+
+    public void Instantiate() {
         rect = GetComponent<RectTransform>();
+        container = GameObject.FindGameObjectWithTag("Container");
         containerRect = container.GetComponent<RectTransform>();
+        scroller = GameObject.FindGameObjectWithTag("Scroller");
         scrollrect = scroller.GetComponent<ScrollRect>();
+        placeholder = GameObject.FindGameObjectWithTag("Placeholder");
         placeholderRect = placeholder.GetComponent<RectTransform>();
     }
 
-    public IEnumerator Expand(GameObject unit) {
-        float height = unit.GetComponent<RectTransform>().rect.height;
-
+    public IEnumerator Expand(float height) {
         if (placeholderRect.sizeDelta.y > height) {
             placeholderRect.sizeDelta = new Vector2(placeholderRect.sizeDelta.x, placeholderRect.sizeDelta.y - height);
         }

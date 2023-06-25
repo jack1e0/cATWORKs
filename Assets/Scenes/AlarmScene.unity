@@ -392,7 +392,7 @@ GameObject:
   - component: {fileID: 578678404}
   m_Layer: 5
   m_Name: Placeholder
-  m_TagString: Untagged
+  m_TagString: Placeholder
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -804,7 +804,7 @@ GameObject:
   - component: {fileID: 974810684}
   m_Layer: 0
   m_Name: Manager
-  m_TagString: Untagged
+  m_TagString: AlarmManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -837,7 +837,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   alarmUnit: {fileID: 5890504080357921265, guid: 6bbbaaacc0d45e8409552f0629b5ebe9, type: 3}
-  parent: {fileID: 1841661307}
 --- !u!1 &1177461441
 GameObject:
   m_ObjectHideFlags: 0
@@ -854,7 +853,7 @@ GameObject:
   - component: {fileID: 1177461446}
   m_Layer: 0
   m_Name: Circle
-  m_TagString: Untagged
+  m_TagString: Button
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -961,19 +960,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1177461443}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 974810684}
-        m_TargetAssemblyTypeName: AlarmManager, Assembly-CSharp
-        m_MethodName: AddAlarm
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1177461446
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1188,7 +1175,7 @@ GameObject:
   - component: {fileID: 1708048990}
   m_Layer: 5
   m_Name: Back
-  m_TagString: Untagged
+  m_TagString: Back
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1294,19 +1281,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1708048988}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 974810684}
-        m_TargetAssemblyTypeName: AlarmManager, Assembly-CSharp
-        m_MethodName: Back
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &1729670072
 GameObject:
   m_ObjectHideFlags: 0
@@ -1360,7 +1335,7 @@ GameObject:
   - component: {fileID: 1841661314}
   m_Layer: 5
   m_Name: Content
-  m_TagString: Untagged
+  m_TagString: Parent
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1461,9 +1436,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 875d9bd03592994449f08ce0a5430397, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  container: {fileID: 803613713}
-  scroller: {fileID: 693053160}
-  placeholder: {fileID: 578678402}
 --- !u!114 &1841661314
 MonoBehaviour:
   m_ObjectHideFlags: 0

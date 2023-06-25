@@ -32,6 +32,7 @@ public class StudyScript : MonoBehaviour {
     [HideInInspector] public Button button;
 
     [SerializeField] private GameObject menuScreen;
+    [SerializeField] private GameObject closeButton;
 
     void Awake() {
         if (instance == null) {
@@ -41,23 +42,19 @@ public class StudyScript : MonoBehaviour {
         isStudying = false;
         animator = gameObject.GetComponent<Animator>();
         button = gameObject.GetComponent<Button>();
-    }
 
-    private void Start() {
         button.onClick.AddListener(MenuAppear);
+        closeButton.GetComponent<Button>().onClick.AddListener(Back);
+
         menuScreen.SetActive(false);
     }
 
     private void MenuAppear() {
         menuScreen.SetActive(true);
+        TechniqueManager.instance.Instantiate();
     }
 
-    // Menu functions:
     public void Back() {
         menuScreen.SetActive(false);
-    }
-
-    public void LoadPomodoro() {
-        SceneManager.LoadScene("PomodoroScene");
     }
 }

@@ -17,6 +17,10 @@ TagManager:
   - Technique4
   - Unfilled
   - Filled
+  - AlarmManager
+  - Parent
+  - Placeholder
+  - Back
   layers:
   - Default
   - TransparentFX

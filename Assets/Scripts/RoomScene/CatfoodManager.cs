@@ -12,7 +12,6 @@ public class CatfoodManager : MonoBehaviour {
     public int toChange;
 
     void Awake() {
-        DontDestroyOnLoad(this);
 
         // if (instance == null) {
         //     instance = this;

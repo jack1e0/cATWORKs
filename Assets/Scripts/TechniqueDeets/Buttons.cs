@@ -4,9 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class StartButton : MonoBehaviour {
-    // Start is called before the first frame update
-    void Start() {
+public class Buttons : MonoBehaviour {
+    void Awake() {
         gameObject.GetComponent<Button>().onClick.AddListener(StartTechnique);
     }
 

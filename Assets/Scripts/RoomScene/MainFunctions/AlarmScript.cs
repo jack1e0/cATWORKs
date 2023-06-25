@@ -31,10 +31,10 @@ public class AlarmScript : MonoBehaviour {
         button = gameObject.GetComponent<Button>();
         timerScreen.SetActive(false);
 
-        button.onClick.AddListener(StartAlarm);
+        button.onClick.AddListener(AlarmScene);
     }
 
-    public void StartAlarm() {
+    public void AlarmScene() {
         CatBehaviourManager.instance.ButtonPressBefore(CatState.NONE);
         SceneManager.LoadScene("AlarmScene");
     }

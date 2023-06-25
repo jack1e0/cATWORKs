@@ -19,7 +19,6 @@ public class TechniqueManager : MonoBehaviour {
             Destroy(this);
             instance = GameObject.FindGameObjectWithTag("Manager").GetComponent<TechniqueManager>();
         }
-        instance.Instantiate();
     }
 
     public void Instantiate() {
