@@ -273,9 +273,8 @@ public class CatBehaviourManager : MonoBehaviour {
         // Wait for next frame so CatfoodManager finish Awake()
         yield return null;
         CatfoodManager.instance.IncreaseCatfood(catfoodEarned);
+
+        StatsManager.instance.AddXP(catfoodEarned);
         Debug.Log("ENDED");
     }
-
-
-
 }
