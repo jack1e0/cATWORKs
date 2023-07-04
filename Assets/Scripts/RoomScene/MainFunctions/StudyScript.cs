@@ -50,11 +50,13 @@ public class StudyScript : MonoBehaviour {
     }
 
     private void MenuAppear() {
+        CatBehaviourManager.instance.ButtonPressBefore(CatState.NONE);
         menuScreen.SetActive(true);
         TechniqueManager.instance.Instantiate();
     }
 
     public void Back() {
+        CatBehaviourManager.instance.ButtonPressAfter();
         menuScreen.SetActive(false);
     }
 }

@@ -40,7 +40,6 @@ public class TechniqueManager : MonoBehaviour {
         TechniqueDetails obj = Resources.Load<TechniqueDetails>("Custom");
         techniqueData = Instantiate(obj);
 
-        CatBehaviourManager.instance.ButtonPressBefore(CatState.NONE);
         SceneManager.LoadScene("StudySceneCustom");
     }
 
@@ -48,7 +47,6 @@ public class TechniqueManager : MonoBehaviour {
         TechniqueDetails obj = Resources.Load<TechniqueDetails>("Pomodoro");
         techniqueData = Instantiate(obj);
 
-        CatBehaviourManager.instance.ButtonPressBefore(CatState.NONE);
         SceneManager.LoadScene("PomodoroScene");
     }
 

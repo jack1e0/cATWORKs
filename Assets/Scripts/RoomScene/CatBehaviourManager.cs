@@ -83,6 +83,7 @@ public class CatBehaviourManager : MonoBehaviour {
     }
 
     public void Instantiate() {
+        randomStateCoroutine = null;
         buttons = GameObject.FindGameObjectsWithTag("Button");
         notifs = GameObject.FindGameObjectWithTag("Notifs").GetComponent<TMP_Text>();
 
@@ -102,6 +103,10 @@ public class CatBehaviourManager : MonoBehaviour {
                 Debug.Log("HERE");
                 StartCoroutine(EndStudy());
                 justStudied = false;
+            }
+        } else {
+            if (randomStateCoroutine != null) {
+                StopCoroutine(randomStateCoroutine);
             }
         }
     }
@@ -258,5 +263,7 @@ public class CatBehaviourManager : MonoBehaviour {
         CatBehaviourManager.instance.ButtonPressAfter();
         Debug.Log("ENDED");
     }
+
+
 
 }
