@@ -94,6 +94,7 @@ public class StudyTimerCustom : MonoBehaviour {
 
     public void Skip() {
         StopCoroutine(runningCoroutine);
+        duration = -1;
         FinishStudy();
     }
 }

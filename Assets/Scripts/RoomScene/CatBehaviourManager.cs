@@ -50,7 +50,6 @@ public class CatBehaviourManager : MonoBehaviour {
             Destroy(gameObject);
             instance = GameObject.FindGameObjectWithTag("Manager").GetComponent<CatBehaviourManager>();
         }
-        instance.Instantiate();
 
         // if (instance != null && instance != this) {
         //     Destroy(this);
@@ -82,16 +81,24 @@ public class CatBehaviourManager : MonoBehaviour {
         // }
     }
 
-    public void Instantiate() {
-        randomStateCoroutine = null;
-        buttons = GameObject.FindGameObjectsWithTag("Button");
-        notifs = GameObject.FindGameObjectWithTag("Notifs").GetComponent<TMP_Text>();
+    private void OnEnable() {
+        Debug.Log("Instantiating catbehaviour");
+        SceneManager.sceneLoaded += Instantiate;
+    }
 
-        notifs.enabled = false;
-        timeSinceStateChange = 0;
+    private void OnDisable() {
+        SceneManager.sceneLoaded -= Instantiate;
+    }
 
-        if (SceneManager.GetActiveScene().name == "RoomScene") {
+    public void Instantiate(Scene scene, LoadSceneMode mode) {
+        if (scene.name == "RoomScene") {
             Debug.Log("here");
+            randomStateCoroutine = null;
+            buttons = GameObject.FindGameObjectsWithTag("Button");
+            notifs = GameObject.FindGameObjectWithTag("Notifs").GetComponent<TMP_Text>();
+
+            notifs.enabled = false;
+            timeSinceStateChange = 0;
             currentState = GetRandomState();
 
             // Instantiate corresponding cat in scene
@@ -105,9 +112,8 @@ public class CatBehaviourManager : MonoBehaviour {
                 justStudied = false;
             }
         } else {
-            if (randomStateCoroutine != null) {
-                StopCoroutine(randomStateCoroutine);
-            }
+            StopAllCoroutines();
+            randomStateCoroutine = null;
         }
     }
 

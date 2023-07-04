@@ -103,6 +103,8 @@ public class AlarmManager : MonoBehaviour {
         addScreen.SetActive(false);
         hourInput.GetComponent<TMP_InputField>().text = string.Empty;
         minInput.GetComponent<TMP_InputField>().text = string.Empty;
+        this.hour = 0;
+        this.min = 0;
     }
 
     public void ConfirmAlarm() {
@@ -115,6 +117,8 @@ public class AlarmManager : MonoBehaviour {
         addScreen.SetActive(false);
         hourInput.GetComponent<TMP_InputField>().text = string.Empty;
         minInput.GetComponent<TMP_InputField>().text = string.Empty;
+        this.hour = 0;
+        this.min = 0;
         //SetAlarm("hihi", 2, 40);
     }
 

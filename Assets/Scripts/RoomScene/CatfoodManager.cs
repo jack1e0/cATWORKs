@@ -8,7 +8,7 @@ public class CatfoodManager : MonoBehaviour {
 
     public static CatfoodManager instance;
     private TMP_Text catfoodText;
-    private int catfoodCount;
+    private static int catfoodCount;
     public int toChange;
 
     void Awake() {
@@ -41,8 +41,10 @@ public class CatfoodManager : MonoBehaviour {
     }
 
     public void Instantiate() {
+        Debug.Log("Instantiating catfood count");
         catfoodText = GameObject.FindGameObjectWithTag("Catfood").GetComponent<TMP_Text>();
-        catfoodCount = int.Parse(catfoodText.text);
+        // catfoodCount = int.Parse(catfoodText.text);
+        catfoodText.text = catfoodCount.ToString("0");
     }
 
     public void IncreaseCatfood(int dif) {
@@ -62,6 +64,9 @@ public class CatfoodManager : MonoBehaviour {
     }
 
     public int CalculateCatfood(float studyDuration) {
+        if (studyDuration < 0) {
+            return 0;
+        }
         int food = Mathf.CeilToInt(studyDuration / 2);
         int earned = Mathf.Max(2, food);
         Debug.Log("catfood earned: " + earned);
