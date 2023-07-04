@@ -21,7 +21,7 @@ public class FeedingScript : MonoBehaviour {
     }
 
     public void StartEat() {
-        bool canFeed = CatfoodManager.instance.DecreaseCatfood(10);
+        bool canFeed = CatfoodManager.instance.DecreaseCatfood(1);
         if (!canFeed) {
             string msg = "Catfood insufficient! Study to earn more.";
             StartCoroutine(CatBehaviourManager.instance.DisplayNotifs(msg));

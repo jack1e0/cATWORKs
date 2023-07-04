@@ -44,6 +44,9 @@ public class CatfoodManager : MonoBehaviour {
         Debug.Log("Instantiating catfood count");
         catfoodText = GameObject.FindGameObjectWithTag("Catfood").GetComponent<TMP_Text>();
         // catfoodCount = int.Parse(catfoodText.text);
+        if (catfoodCount == 0) { // FOR TESTING
+            catfoodCount = 10;
+        }
         catfoodText.text = catfoodCount.ToString("0");
     }
 

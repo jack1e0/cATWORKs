@@ -82,7 +82,6 @@ public class CatBehaviourManager : MonoBehaviour {
     }
 
     private void OnEnable() {
-        Debug.Log("Instantiating catbehaviour");
         SceneManager.sceneLoaded += Instantiate;
     }
 
@@ -92,7 +91,8 @@ public class CatBehaviourManager : MonoBehaviour {
 
     public void Instantiate(Scene scene, LoadSceneMode mode) {
         if (scene.name == "RoomScene") {
-            Debug.Log("here");
+            Debug.Log("enter room scene!!");
+            StopAllCoroutines();
             randomStateCoroutine = null;
             buttons = GameObject.FindGameObjectsWithTag("Button");
             notifs = GameObject.FindGameObjectWithTag("Notifs").GetComponent<TMP_Text>();
@@ -112,6 +112,7 @@ public class CatBehaviourManager : MonoBehaviour {
                 justStudied = false;
             }
         } else {
+            Debug.Log("exit room scene");
             StopAllCoroutines();
             randomStateCoroutine = null;
         }
@@ -163,10 +164,12 @@ public class CatBehaviourManager : MonoBehaviour {
     private float GetStateDuration(CatState state) {
         switch (state) {
             case CatState.SLEEP:
-                return UnityEngine.Random.Range(10, 20);
+                // return UnityEngine.Random.Range(10, 20);
+                return 10;
             //return 5;
             case CatState.SIT:
-                return UnityEngine.Random.Range(5, 10);
+                //return UnityEngine.Random.Range(5, 10);
+                return 5;
             //return 5;
             default:
                 return -1;
@@ -200,13 +203,16 @@ public class CatBehaviourManager : MonoBehaviour {
                 img.color = color;
                 yield return null;
             }
+            GameObject temp = currCat;
+            currCat = null;
+            Destroy(temp);
         }
 
-        // Destroy all visible cats in scene (just in case there are more than one)
-        GameObject[] activeCats = GameObject.FindGameObjectsWithTag("Cat");
-        foreach (GameObject cat in activeCats) {
-            Destroy(cat);
-        }
+        // // Destroy all visible cats in scene (just in case there are more than one)
+        // GameObject[] activeCats = GameObject.FindGameObjectsWithTag("Cat");
+        // foreach (GameObject cat in activeCats) {
+        //     Destroy(cat);
+        // }
         // Set visibility of next to invisible first
         GameObject next = GetCat(nextState);
         currCat = next;
@@ -232,6 +238,7 @@ public class CatBehaviourManager : MonoBehaviour {
 
     public void ButtonPressBefore(CatState state) {
         StopCoroutine(randomStateCoroutine);
+        randomStateCoroutine = null;
         TransitionToNextState(state);
         ButtonControl(false);
     }
@@ -266,7 +273,6 @@ public class CatBehaviourManager : MonoBehaviour {
         // Wait for next frame so CatfoodManager finish Awake()
         yield return null;
         CatfoodManager.instance.IncreaseCatfood(catfoodEarned);
-        CatBehaviourManager.instance.ButtonPressAfter();
         Debug.Log("ENDED");
     }
 
