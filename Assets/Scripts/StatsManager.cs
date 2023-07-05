@@ -8,8 +8,12 @@ public class StatsManager : MonoBehaviour {
     public delegate void XPChangeHandler(int amt);
     public event XPChangeHandler OnXPChange;
 
-    public delegate void FoodChangeHandler(int amt);
-    public event FoodChangeHandler onFoodChange;
+    public delegate void HappyChangeHandler(int amt);
+    public event HappyChangeHandler onHappyChange;
+
+    public int currXP;
+    public int currHappy;
+    public int currLvl;
 
     private void Awake() {
         if (instance == null) {
@@ -25,7 +29,13 @@ public class StatsManager : MonoBehaviour {
         OnXPChange?.Invoke(amt);
     }
 
-    public void ChangeFood(int amt) {
-        onFoodChange?.Invoke(amt);
+    public void ChangeHappy(int amt) {
+        onHappyChange?.Invoke(amt);
+    }
+
+    public void SetStats(int currXP, int currHappy, int currLvl) {
+        this.currXP = currXP;
+        this.currHappy = currHappy;
+        this.currLvl = currLvl;
     }
 }

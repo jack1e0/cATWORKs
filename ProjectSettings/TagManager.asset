@@ -21,6 +21,8 @@ TagManager:
   - Parent
   - Placeholder
   - Back
+  - XPFill
+  - HappyFill
   layers:
   - Default
   - TransparentFX
