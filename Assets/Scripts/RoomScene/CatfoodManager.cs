@@ -9,7 +9,8 @@ public class CatfoodManager : MonoBehaviour {
     public static CatfoodManager instance;
     private TMP_Text catfoodText;
     private static int catfoodCount;
-    public int toChange;
+    public int earnedCatfood;
+    public int earnedXP;
 
     void Awake() {
 
@@ -73,7 +74,16 @@ public class CatfoodManager : MonoBehaviour {
         int food = Mathf.CeilToInt(studyDuration / 2);
         int earned = Mathf.Max(2, food);
         Debug.Log("catfood earned: " + earned);
-        toChange = earned;
+        earnedCatfood = earned;
         return earned;
+    }
+
+    public int CalculateXP(float studyDuration) {
+        if (studyDuration < 0) {
+            return 0;
+        }
+        earnedXP = Mathf.CeilToInt(studyDuration * 1.2f);
+        Debug.Log("XP earned: " + earnedXP);
+        return earnedXP;
     }
 }

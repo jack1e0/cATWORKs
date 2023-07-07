@@ -266,15 +266,17 @@ public class CatBehaviourManager : MonoBehaviour {
 
     public IEnumerator EndStudy() {
         Debug.Log(CatfoodManager.instance);
-        int catfoodEarned = CatfoodManager.instance.toChange;
-        string msg = "Study session ended! " + catfoodEarned + " Catfood earned!";
+        int catfoodEarned = CatfoodManager.instance.earnedCatfood;
+        int xpEarned = CatfoodManager.instance.earnedXP;
+
+        string msg = $"Study session ended!\n+{catfoodEarned} catfood, +{xpEarned} XP";
         StartCoroutine(DisplayNotifs(msg));
 
         // Wait for next frame so CatfoodManager finish Awake()
         yield return null;
         CatfoodManager.instance.IncreaseCatfood(catfoodEarned);
+        StatsManager.instance.AddXP(xpEarned);
 
-        StatsManager.instance.AddXP(catfoodEarned);
         Debug.Log("ENDED");
     }
 }

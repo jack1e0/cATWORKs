@@ -79,7 +79,8 @@ public class StudyTimerCustom : MonoBehaviour {
     private void FinishStudy() {
         studyCatAnim.SetBool("StudyFinish", true);
         studyCatButton.interactable = true;
-        catfoodEarned = CatfoodManager.instance.CalculateCatfood(duration);
+        CatfoodManager.instance.CalculateCatfood(duration);
+        CatfoodManager.instance.CalculateXP(duration);
     }
 
     public void StudyCatTap() {

@@ -457,7 +457,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -1123,7 +1123,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 1, g: 1, b: 1, a: 1}
@@ -1321,6 +1321,8 @@ MonoBehaviour:
   currLvl: 1
   currHappy: 0
   maxHappy: 20
+  reward: 0
+  textDisplay: {fileID: 0}
 --- !u!1 &980992681
 GameObject:
   m_ObjectHideFlags: 0
@@ -1595,7 +1597,6 @@ GameObject:
   - component: {fileID: 1160994916}
   - component: {fileID: 1160994918}
   - component: {fileID: 1160994919}
-  - component: {fileID: 1160994921}
   - component: {fileID: 1160994920}
   m_Layer: 0
   m_Name: Managers
@@ -1676,26 +1677,6 @@ MonoBehaviour:
   currXP: 0
   currHappy: 0
   currLvl: 1
---- !u!114 &1160994921
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1160994915}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c85d217715e9fa64c86365407cb8e418, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  XPFill: {fileID: 0}
-  lvlText: {fileID: 0}
-  happyFill: {fileID: 0}
-  currXP: 0
-  maxXP: 20
-  currLvl: 1
-  currHappy: 0
-  maxHappy: 0
 --- !u!1001 &1226754755
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2703,7 +2684,7 @@ MonoBehaviour:
     m_SelectOnDown: {fileID: 0}
     m_SelectOnLeft: {fileID: 0}
     m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
+  m_Transition: 0
   m_Colors:
     m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
@@ -2985,8 +2966,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 450}
-  m_SizeDelta: {x: 972.1, y: 526.4}
+  m_AnchoredPosition: {x: 0, y: 410.78}
+  m_SizeDelta: {x: 874.82, y: 447.95}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1640015778
 MonoBehaviour:
