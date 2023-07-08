@@ -47,6 +47,7 @@ public class FeedingScript : MonoBehaviour {
 
         catfood.SetActive(false);
         Debug.Log("Eating done!");
+        CatMeow.instance.Meow();
 
         StatsManager.instance.ChangeHappy(5);
         CatBehaviourManager.instance.ButtonPressAfter();

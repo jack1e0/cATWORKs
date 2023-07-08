@@ -14,7 +14,11 @@ public class StudyTimerCustom : MonoBehaviour {
     [SerializeField] private GameObject timeFill;
     [SerializeField] private GameObject skip;
 
+    [SerializeField] private GameObject popUp;
+
     private float duration;
+    private float durationLeftInSecs;
+    private float totalDuration;
     private TMP_Text timer;
     private Image fill;
     private Animator studyCatAnim;
@@ -26,6 +30,7 @@ public class StudyTimerCustom : MonoBehaviour {
     private void Awake() {
         skip.GetComponent<Button>().onClick.AddListener(Skip);
         skip.SetActive(false);
+        popUp.SetActive(false);
 
         title.GetComponent<TMP_Text>().text = "Custom";
         studyCat.SetActive(false);
@@ -49,6 +54,9 @@ public class StudyTimerCustom : MonoBehaviour {
         studyCat.SetActive(true);
         studyCatButton.interactable = false;
         timer.text = duration.ToString();
+        durationLeftInSecs = duration * 60f;
+        totalDuration = duration;
+
         runningCoroutine = StartCoroutine(StartStudy());
         skip.SetActive(true);
 
@@ -68,8 +76,9 @@ public class StudyTimerCustom : MonoBehaviour {
                 timer.text = $"{Mathf.Floor(tempDuration / 60f)}:{tempDuration % 60:00}";
             }
 
-            fill.fillAmount = Mathf.InverseLerp(duration * 60f, 0, tempDuration);
+            fill.fillAmount = Mathf.InverseLerp(totalDuration * 60f, 0, tempDuration);
             tempDuration--;
+            durationLeftInSecs--;
             yield return new WaitForSeconds(1f);
         }
 
@@ -95,7 +104,19 @@ public class StudyTimerCustom : MonoBehaviour {
 
     public void Skip() {
         StopCoroutine(runningCoroutine);
+        popUp.SetActive(true);
+    }
+
+    public void Leave() {
+        popUp.SetActive(false);
         duration = -1;
         FinishStudy();
+    }
+
+    public void Back() {
+        popUp.SetActive(false);
+        duration = durationLeftInSecs / 60f;
+        Debug.Log("duration: " + duration);
+        runningCoroutine = StartCoroutine(StartStudy());
     }
 }

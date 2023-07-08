@@ -31,7 +31,7 @@ public class CatBehaviourManager : MonoBehaviour {
 
     private TMP_Text notifs;
 
-    private CatState currentState;
+    public CatState currentState;
     private float timeSinceStateChange;
     private GameObject currCat;
     private Coroutine randomStateCoroutine;
@@ -276,6 +276,7 @@ public class CatBehaviourManager : MonoBehaviour {
         yield return null;
         CatfoodManager.instance.IncreaseCatfood(catfoodEarned);
         StatsManager.instance.AddXP(xpEarned);
+        CatMeow.instance.Meow();
 
         Debug.Log("ENDED");
     }

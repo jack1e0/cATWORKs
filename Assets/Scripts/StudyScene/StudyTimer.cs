@@ -13,7 +13,11 @@ public class StudyTimer : MonoBehaviour {
     [SerializeField] private GameObject parent;
     [SerializeField] private GameObject skip;
 
+    [SerializeField] private GameObject popUp;
+
     private float duration;
+    private float durationLeftInSecs;
+    private float totalDuration;
     private TMP_Text timer;
     private Image fill;
     private Animator studyCatAnim;
@@ -26,6 +30,8 @@ public class StudyTimer : MonoBehaviour {
         skip.GetComponent<Button>().onClick.AddListener(Skip);
         title.GetComponent<TMP_Text>().text = TechniqueManager.instance.techniqueData.techniqueName;
         duration = TechniqueManager.instance.techniqueData.timeInMins;
+        durationLeftInSecs = duration * 60f;
+        totalDuration = duration;
         timeFill = Instantiate(TechniqueManager.instance.techniqueData.circularBar, parent.transform);
 
         timer = timeDisplay.GetComponent<TMP_Text>();
@@ -50,7 +56,7 @@ public class StudyTimer : MonoBehaviour {
                 timer.text = $"{Mathf.Floor(tempDuration / 60f)}:{tempDuration % 60:00}";
             }
 
-            fill.fillAmount = Mathf.InverseLerp(duration * 60f, 0, tempDuration);
+            fill.fillAmount = Mathf.InverseLerp(totalDuration * 60f, 0, tempDuration);
             tempDuration--;
             yield return new WaitForSeconds(1f);
         }
@@ -77,7 +83,19 @@ public class StudyTimer : MonoBehaviour {
 
     public void Skip() {
         StopCoroutine(runningCoroutine);
+        popUp.SetActive(true);
+    }
+
+    public void Leave() {
+        popUp.SetActive(false);
         duration = -1;
         FinishStudy();
+    }
+
+    public void Back() {
+        popUp.SetActive(false);
+        duration = durationLeftInSecs / 60f;
+        Debug.Log("duration: " + duration);
+        runningCoroutine = StartCoroutine(StartStudy());
     }
 }
