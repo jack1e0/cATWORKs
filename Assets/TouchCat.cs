@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class TouchCat : MonoBehaviour, IPointerDownHandler {
+public class TouchCat : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
 
     public void OnPointerDown(PointerEventData eventData) {
         Debug.Log("PRESSED");
@@ -20,4 +21,7 @@ public class TouchCat : MonoBehaviour, IPointerDownHandler {
         }
     }
 
+    public void OnPointerUp(PointerEventData eventData) {
+        throw new System.NotImplementedException();
+    }
 }

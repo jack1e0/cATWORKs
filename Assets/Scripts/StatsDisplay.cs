@@ -42,6 +42,8 @@ public class StatsDisplay : MonoBehaviour {
         if (currXP + amt < maxXP) {
             currXP += amt;
         }
+
+        StatsManager.instance.currXP = this.currXP;
     }
 
     private void HandleHappyChange(int amt) {
@@ -55,6 +57,8 @@ public class StatsDisplay : MonoBehaviour {
                 currHappy += amt;
             }
         }
+
+        StatsManager.instance.currHappy = this.currHappy;
     }
 
     IEnumerator ChangeFill(Image fill, float init, float amt, float max) {
