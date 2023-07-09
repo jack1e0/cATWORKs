@@ -6,19 +6,23 @@ using TMPro;
 using UnityEngine.SceneManagement;
 
 public class StudyTimer : MonoBehaviour {
-    [SerializeField] private GameObject title;
+    [SerializeField] private GameObject screen;
+    [SerializeField] private TMP_Text title;
     [SerializeField] private GameObject studyCat;
-    [SerializeField] private GameObject timeDisplay;
+    [SerializeField] private TMP_Text timer;
     private GameObject timeFill;
     [SerializeField] private GameObject parent;
+    private GameObject timeline;
     [SerializeField] private GameObject skip;
-
     [SerializeField] private GameObject popUp;
 
+    private string studyName;
+    private float[] studyStages;
+    private int currStage;
     private float duration;
     private float durationLeftInSecs;
     private float totalDuration;
-    private TMP_Text timer;
+    private float durationStudied;
     private Image fill;
     private Animator studyCatAnim;
     private Button studyCatButton;
@@ -27,25 +31,46 @@ public class StudyTimer : MonoBehaviour {
     private Coroutine runningCoroutine;
 
     private void Awake() {
+        popUp.SetActive(false);
+        currStage = 0;
+        durationStudied = 0;
         skip.GetComponent<Button>().onClick.AddListener(Skip);
-        title.GetComponent<TMP_Text>().text = TechniqueManager.instance.techniqueData.techniqueName;
-        duration = TechniqueManager.instance.techniqueData.timeInMins;
-        durationLeftInSecs = duration * 60f;
-        totalDuration = duration;
-        timeFill = Instantiate(TechniqueManager.instance.techniqueData.circularBar, parent.transform);
-
-        timer = timeDisplay.GetComponent<TMP_Text>();
-        fill = GameObject.FindGameObjectWithTag("Filled").GetComponent<Image>();
+        studyName = TechniqueManager.instance.techniqueData.techniqueName;
+        studyStages = TechniqueManager.instance.techniqueData.studyStages;
 
         studyCatAnim = studyCat.GetComponent<Animator>();
         studyCatButton = studyCat.GetComponent<Button>();
-        studyCatButton.interactable = false;
 
         studyCatButton.onClick.AddListener(StudyCatTap);
-        runningCoroutine = StartCoroutine(StartStudy());
+
+        timeFill = Instantiate(TechniqueManager.instance.techniqueData.circularBar, parent.transform);
+        fill = GameObject.FindGameObjectWithTag("Filled").GetComponent<Image>();
+
+        timeline = Instantiate(TechniqueManager.instance.techniqueData.timeLine, screen.transform);
+        InstantiateTimer(this.currStage);
+        runningCoroutine = StartCoroutine(StartTiming());
     }
 
-    private IEnumerator StartStudy() {
+    private void InstantiateTimer(int currStage) {
+        duration = studyStages[currStage];
+        durationLeftInSecs = duration * 60f;
+        totalDuration = duration;
+
+        if (currStage % 2 != 0) { // if break time
+            title.text = "Break!";
+            fill.color = Color.magenta;
+            timer.color = Color.magenta;
+        } else {
+            title.text = studyName;
+            fill.color = Color.black;
+            timer.color = Color.black;
+        }
+
+        studyCatButton.interactable = false;
+        studyCatAnim.SetBool("StudyFinish", false);
+    }
+
+    private IEnumerator StartTiming() {
         float tempDuration = duration * 60f;
         while (tempDuration >= 0) {
             float minutes = Mathf.Floor(tempDuration / 60f);
@@ -58,24 +83,39 @@ public class StudyTimer : MonoBehaviour {
 
             fill.fillAmount = Mathf.InverseLerp(totalDuration * 60f, 0, tempDuration);
             tempDuration--;
+            durationLeftInSecs--;
+
+            if (currStage % 2 == 0) { // if not break time
+                durationStudied++;
+            }
             yield return new WaitForSeconds(1f);
         }
-
-        FinishStudy();
+        StageEnd();
     }
 
-    private void FinishStudy() {
+    private void StageEnd() {
+        currStage++;
         studyCatAnim.SetBool("StudyFinish", true);
         studyCatButton.interactable = true;
-        CatfoodManager.instance.CalculateCatfood(duration);
-        CatfoodManager.instance.CalculateXP(duration);
     }
 
     public void StudyCatTap() {
-        StartCoroutine(ChangeScene());
+        if (currStage <= studyStages.Length - 1) {
+            NextStage();
+        } else {
+            StartCoroutine(ChangeScene());
+        }
+    }
+
+    private void NextStage() {
+        InstantiateTimer(this.currStage);
+        timeline.GetComponent<ShiftStudyStage>().ShiftIndicator();
+        runningCoroutine = StartCoroutine(StartTiming());
     }
 
     private IEnumerator ChangeScene() {
+        CatfoodManager.instance.CalculateCatfood(durationStudied / 60f);
+        CatfoodManager.instance.CalculateXP(durationStudied / 60f);
         CatBehaviourManager.instance.justStudied = true;
         yield return new WaitForSeconds(0.5f);
         SceneManager.LoadScene("RoomScene");
@@ -89,13 +129,13 @@ public class StudyTimer : MonoBehaviour {
     public void Leave() {
         popUp.SetActive(false);
         duration = -1;
-        FinishStudy();
+        StageEnd();
     }
 
     public void Back() {
         popUp.SetActive(false);
         duration = durationLeftInSecs / 60f;
         Debug.Log("duration: " + duration);
-        runningCoroutine = StartCoroutine(StartStudy());
+        runningCoroutine = StartCoroutine(StartTiming());
     }
 }

@@ -13,5 +13,11 @@ MonoBehaviour:
   m_Name: Pomodoro
   m_EditorClassIdentifier: 
   techniqueName: Pomodoro
-  timeInMins: 20
   circularBar: {fileID: 4179987551768645175, guid: f41c17e52c837044f9439e930a643957, type: 3}
+  timeLine: {fileID: 8256060263883257415, guid: 995e104e5a9867248826fc94bc5f54e2, type: 3}
+  studyStages:
+  - 25
+  - 5
+  - 25
+  - 5
+  - 25

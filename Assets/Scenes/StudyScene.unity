@@ -167,9 +167,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc7d9a8e7b94eb74da033e61fcd5eb8d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  title: {fileID: 1172741517}
+  screen: {fileID: 705883797}
+  title: {fileID: 1172741519}
   studyCat: {fileID: 233761314}
-  timeDisplay: {fileID: 1073406733}
+  timer: {fileID: 1073406735}
   parent: {fileID: 1960182613}
   skip: {fileID: 3470921689977078093}
   popUp: {fileID: 216151383}
@@ -428,8 +429,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -321}
-  m_SizeDelta: {x: 777.67, y: 798.42}
+  m_AnchoredPosition: {x: 0, y: -395.12}
+  m_SizeDelta: {x: 685.24, y: 650.17}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &233761316
 MonoBehaviour:
@@ -1426,7 +1427,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Name
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1561,7 +1562,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Leave
+  m_text: Skip
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1696,7 +1697,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Are you sure? All your rewards will be lost!
+  m_text: Are you sure? Your remaining rewards for this stage will be lost!
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
