@@ -8,6 +8,7 @@ public class AlarmSetter : MonoBehaviour {
     [SerializeField] private GameObject time;
     [SerializeField] private GameObject repeat;
 
+    public int notifID;
     private TMP_Text timeText;
     private TMP_Text repeatText;
 
@@ -16,9 +17,10 @@ public class AlarmSetter : MonoBehaviour {
         repeatText = repeat.GetComponent<TMP_Text>();
     }
 
-    public void SetValues(int timing, string repeat) {
-        timeText.text = FormatTime(timing);
-        repeatText.text = repeat;
+    public void SetValues(int notifID, int timing, string repeat) {
+        this.notifID = notifID;
+        this.timeText.text = FormatTime(timing);
+        this.repeatText.text = repeat;
     }
 
     private string FormatTime(int timing) {

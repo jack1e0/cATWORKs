@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,16 +6,10 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
 using TMPro;
+using Unity.Notifications.Android;
 
 public class AlarmManager : MonoBehaviour {
-    // TODO: implement alarm setter
-    // [SerializeField] private GameObject alarmSetterPage;
-
-
-    // const string ACTION_SET_ALARM = "android.intent.action.SET_ALARM";
-    // const string EXTRA_HOUR = "android.intent.extra.alarm.HOUR";
-    // const string EXTRA_MINUTES = "android.intent.extra.alarm.MINUTES";
-    // const string EXTRA_MESSAGE = "android.intent.extra.alarm.MESSAGE";
+    private Dictionary<int, int[]> alarmDict; // a mapping of notif id to its time and repeats
 
     private GameObject addButton;
     private GameObject backButton;
@@ -29,7 +24,6 @@ public class AlarmManager : MonoBehaviour {
     [SerializeField] private GameObject minInput;
 
     private GameObject parent;
-    private List<GameObject> alarms;
 
     private bool isPopUpActive;
     private int hour;
@@ -40,7 +34,7 @@ public class AlarmManager : MonoBehaviour {
     private void Awake() {
         if (instance == null) {
             instance = this;
-            alarms = new List<GameObject>();
+            alarmDict = new Dictionary<int, int[]>();
             //DontDestroyOnLoad(this);
         }
         // else {
@@ -61,14 +55,33 @@ public class AlarmManager : MonoBehaviour {
         parent = GameObject.FindGameObjectWithTag("Parent");
 
         float heights = 0;
-        foreach (GameObject alarm in alarms) {
-            Instantiate(alarm, parent.transform);
+        foreach (KeyValuePair<int, int[]> keyValue in alarmDict) {
+            GameObject newUnit = Instantiate(alarmUnit, parent.transform);
+            newUnit.GetComponent<AlarmSetter>().SetValues(keyValue.Key, keyValue.Value[0], keyValue.Value[1] == 0
+                                                                                         ? "Everyday"
+                                                                                         : keyValue.Value[1] == 1
+                                                                                         ? "Every weekday"
+                                                                                         : keyValue.Value[1] == 2
+                                                                                         ? "Every weekend"
+                                                                                         : "None"
+                                                         );
 
-            heights += alarm.GetComponent<RectTransform>().rect.height;
+            heights += newUnit.GetComponent<RectTransform>().rect.height;
         }
 
         await WaitFrame();
         StartCoroutine(SizeFitter.instance.Expand(heights));
+    }
+
+    private void Start() {
+        // Creating Android Notification Channel to send messages through
+        var channel = new AndroidNotificationChannel() {
+            Id = "channel_id",
+            Name = "Alarm Channel",
+            Importance = Importance.Default,
+            Description = "Alarm notifications",
+        };
+        AndroidNotificationCenter.RegisterNotificationChannel(channel);
     }
 
     // Wait after sizefitter awakes
@@ -85,12 +98,12 @@ public class AlarmManager : MonoBehaviour {
     }
 
     public void DeleteAlarm(GameObject alarm) {
+        int deletedID = alarm.GetComponent<AlarmSetter>().notifID;
+        alarmDict.Remove(deletedID);
+
         float height = alarm.GetComponent<RectTransform>().rect.height;
         VerticalLayoutGroup.Destroy(alarm);
         StartCoroutine(SizeFitter.instance.Contract(height));
-
-        // TODO: removing specific alarm
-        alarms.RemoveAt(0);
     }
 
     public void Back() {
@@ -109,11 +122,21 @@ public class AlarmManager : MonoBehaviour {
 
     public void ConfirmAlarm() {
         GameObject newUnit = Instantiate(alarmUnit, parent.transform);
-        newUnit.GetComponent<AlarmSetter>().SetValues(CalcTime(), repeat);
+        int time = CalcTime();
+        int notifID = ScheduleNotification(time);
 
-        alarms.Add(alarmUnit);
+        newUnit.GetComponent<AlarmSetter>().SetValues(notifID, time, this.repeat);
+        alarmDict.Add(notifID, new int[2] {time, repeat == "Everyday"
+                                    ? 0
+                                    : repeat == "Every weekday"
+                                    ? 1
+                                    : repeat == "Every weekend"
+                                    ? 2
+                                    : 3 });
+
         float height = newUnit.GetComponent<RectTransform>().rect.height;
         StartCoroutine(SizeFitter.instance.Expand(height));
+
         addScreen.SetActive(false);
         hourInput.GetComponent<TMP_InputField>().text = string.Empty;
         minInput.GetComponent<TMP_InputField>().text = string.Empty;
@@ -121,6 +144,26 @@ public class AlarmManager : MonoBehaviour {
         this.min = 0;
         //SetAlarm("hihi", 2, 40);
     }
+
+
+    private int ScheduleNotification(int time) { // time in 24h
+        var notification = new AndroidNotification();
+        notification.Title = "Psst..";
+        notification.Text = "Time to study!";
+
+        DateTime dateVal = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, (time - time % 100) / 100, time % 100, 0);
+        if (repeat == "None") {
+            notification.FireTime = dateVal;
+        } else if (repeat == "Everyday") {
+            notification.FireTime = dateVal;
+            notification.RepeatInterval = new System.TimeSpan(1, 0, 0, 0);
+        }
+
+
+        return AndroidNotificationCenter.SendNotification(notification, "channel_id");
+    }
+
+    // Managing user input while setting time
 
     public void ReadHours(string hours) {
         int value;
@@ -147,6 +190,9 @@ public class AlarmManager : MonoBehaviour {
         Debug.Log("TIME:" + time);
         return time;
     }
+
+
+    // Popup methods:
 
     public void ShowPopUp() {
         StartCoroutine(Slide(0));
@@ -200,27 +246,4 @@ public class AlarmManager : MonoBehaviour {
         HidePopUp();
     }
 
-    // public void OnPointerDown(PointerEventData eventData) {
-    //     Debug.Log("pressed but");
-    //     if (isPopUpActive) {
-    //         Debug.Log("PRESSED");
-    //         HidePopUp();
-    //     }
-    // }
-
-    // private void SetAlarm(string msg, int hour, int minutes) {
-    //     AndroidJavaObject intentAJO = new AndroidJavaObject("android.content.Intent", ACTION_SET_ALARM);
-    //     intentAJO
-    //         .Call<AndroidJavaObject>("putEXTRA", EXTRA_MESSAGE, msg)
-    //         .Call<AndroidJavaObject>("putEXTRA", EXTRA_HOUR, hour)
-    //         .Call<AndroidJavaObject>("putEXTRA", EXTRA_MINUTES, minutes);
-
-    //     GetUnityActivity().Call("startActivity", intentAJO);
-    // }
-
-    // private AndroidJavaObject GetUnityActivity() {
-    //     using (var unityPlayer = new AndroidJavaClass("com.unity2d.player.UnityPlayer")) {
-    //         return unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
-    //     }
-    // }
 }
