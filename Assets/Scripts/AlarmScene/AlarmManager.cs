@@ -18,14 +18,14 @@ public class AlarmManager : MonoBehaviour {
     [SerializeField] private GameObject alarmUnit;
     [SerializeField] private GameObject addScreen;
     [SerializeField] private GameObject blocker;
-    [SerializeField] private GameObject popUp;
+    [SerializeField] private GameObject repeatPopUp;
+    [SerializeField] private GameObject customPopUp;
     [SerializeField] private TMP_Text repeatPlaceholder;
     [SerializeField] private GameObject hourInput;
     [SerializeField] private GameObject minInput;
 
     private GameObject parent;
 
-    private bool isPopUpActive;
     private int hour;
     private int min;
     private int time;
@@ -157,9 +157,9 @@ public class AlarmManager : MonoBehaviour {
         } else if (repeat == "Everyday") {
             notification.FireTime = dateVal;
             notification.RepeatInterval = new System.TimeSpan(1, 0, 0, 0);
+        } else if (repeat == "Every weekday") {
+
         }
-
-
         return AndroidNotificationCenter.SendNotification(notification, "channel_id");
     }
 
@@ -194,26 +194,38 @@ public class AlarmManager : MonoBehaviour {
 
     // Popup methods:
 
-    public void ShowPopUp() {
-        StartCoroutine(Slide(0));
+    public void ShowRepeatPopUp() {
+        StartCoroutine(Slide(repeatPopUp, 0));
         blocker.SetActive(true);
-        isPopUpActive = true;
     }
 
-    private void HidePopUp() {
-        StartCoroutine(Slide(1));
+    private void HideRepeatPopUp() {
+        StartCoroutine(Slide(repeatPopUp, 1));
+    }
+
+    private void ShowCustompPopUp() {
+        StartCoroutine(Slide(customPopUp, 0));
+    }
+
+    private void HideCustomPopUp() {
+        StartCoroutine(Slide(customPopUp, 1));
         blocker.SetActive(false);
-        isPopUpActive = false;
     }
 
-    IEnumerator Slide(int upOrDown) {
+    IEnumerator Slide(GameObject popUp, int upOrDown) {
+
         Vector3 origPos = popUp.transform.position;
         Vector3 newpos;
         if (upOrDown == 0) {
-            newpos = new Vector3(0, -3.2f, 0);
+            if (popUp.Equals(repeatPopUp)) {
+                newpos = new Vector3(0, -3.5f, 0);
+            } else {
+                newpos = new Vector3(0, -0.2f, 0);
+            }
         } else {
             newpos = new Vector3(0, -7, 0);
         }
+
         float i = 0;
         while (i <= 1.2f) {
             popUp.transform.position = Vector3.Lerp(origPos, newpos, i);
@@ -222,28 +234,67 @@ public class AlarmManager : MonoBehaviour {
         }
     }
 
-    public void Option1() {
+    public void Everyday() {
         this.repeat = "Everyday";
         repeatPlaceholder.text = "Everyday";
-        HidePopUp();
+        HideRepeatPopUp();
+        blocker.SetActive(false);
+
     }
 
-    public void Option2() {
-        this.repeat = "Every weekday";
-        repeatPlaceholder.text = "Every weekday";
-        HidePopUp();
+    public void Custom() {
+        // this.repeat = "Every weekday";
+        // repeatPlaceholder.text = "Every weekday";
+        // HideRepeatPopUp();
+
+        HideRepeatPopUp();
+        ShowCustompPopUp();
     }
 
-    public void Option3() {
-        this.repeat = "Every weekend";
-        repeatPlaceholder.text = "Every weekend";
-        HidePopUp();
-    }
-
-    public void Option4() {
+    public void None() {
         this.repeat = "None";
         repeatPlaceholder.text = "None";
-        HidePopUp();
+        HideRepeatPopUp();
+        blocker.SetActive(false);
+    }
+
+    // Custom pop up methods:
+
+    public void Sunday() {
+        this.repeat = "Every Sunday";
+        repeatPlaceholder.text = "Every Sunday";
+        HideCustomPopUp();
+    }
+
+    public void Monday() {
+        this.repeat = "Every Monday";
+        repeatPlaceholder.text = "Every Monday";
+        HideCustomPopUp();
+    }
+    public void Tuesday() {
+        this.repeat = "Every Tuesday";
+        repeatPlaceholder.text = "Every Tuesday";
+        HideCustomPopUp();
+    }
+    public void Wednesday() {
+        this.repeat = "Every Wednesday";
+        repeatPlaceholder.text = "Every Wednesday";
+        HideCustomPopUp();
+    }
+    public void Thursday() {
+        this.repeat = "Every Thursday";
+        repeatPlaceholder.text = "Every Thursday";
+        HideCustomPopUp();
+    }
+    public void Friday() {
+        this.repeat = "Every Friday";
+        repeatPlaceholder.text = "Every Friday";
+        HideCustomPopUp();
+    }
+    public void Saturday() {
+        this.repeat = "Every Saturday";
+        repeatPlaceholder.text = "Every Saturday";
+        HideCustomPopUp();
     }
 
 }
