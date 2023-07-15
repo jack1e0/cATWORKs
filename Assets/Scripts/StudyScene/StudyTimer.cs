@@ -49,7 +49,7 @@ public class StudyTimer : MonoBehaviour {
         studyCatButton.onClick.AddListener(StudyCatTap);
 
         timeFill = Instantiate(TechniqueManager.instance.techniqueData.circularBar, parent.transform);
-        fill = GameObject.FindGameObjectWithTag("Filled").GetComponent<Image>();
+        fill = timeFill.transform.GetChild(1).GetComponent<Image>();
 
         timeline = Instantiate(TechniqueManager.instance.techniqueData.timeLine, screen.transform);
         InstantiateTimer(this.currStage);
@@ -74,12 +74,14 @@ public class StudyTimer : MonoBehaviour {
 
         if (currStage % 2 != 0) { // if break time
             title.text = "Break!";
-            fill.color = Color.magenta;
-            timer.color = Color.magenta;
+            Color breakColor = new Color(Constants.breakColourR, Constants.breakColourG, Constants.breakColourB);
+            fill.color = breakColor;
+            timer.color = breakColor;
         } else {
             title.text = studyName;
-            fill.color = Color.black;
-            timer.color = Color.black;
+            Color studyColor = new Color(Constants.studyColourR, Constants.studyColourG, Constants.studyColourB);
+            fill.color = studyColor;
+            timer.color = studyColor;
         }
 
         studyCatButton.interactable = false;
@@ -138,6 +140,7 @@ public class StudyTimer : MonoBehaviour {
     }
 
     public void Skip() {
+        Debug.Log("SKIPPED");
         StopCoroutine(runningCoroutine);
         popUp.SetActive(true);
     }

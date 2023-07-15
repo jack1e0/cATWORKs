@@ -11,8 +11,8 @@ public class StudyTimerCustom : MonoBehaviour {
     [SerializeField] private GameObject title;
     [SerializeField] private GameObject timeInput;
     [SerializeField] private GameObject studyCat;
-    [SerializeField] private GameObject timeDisplay;
-    [SerializeField] private GameObject timeFill;
+    [SerializeField] private TMP_Text timer;
+    [SerializeField] private Image fill;
     [SerializeField] private GameObject skip;
 
     [SerializeField] private GameObject popUp;
@@ -20,8 +20,6 @@ public class StudyTimerCustom : MonoBehaviour {
     private float duration;
     private float durationLeftInSecs;
     private float totalDuration;
-    private TMP_Text timer;
-    private Image fill;
     private Animator studyCatAnim;
     private Button studyCatButton;
 
@@ -38,8 +36,6 @@ public class StudyTimerCustom : MonoBehaviour {
 
         title.GetComponent<TMP_Text>().text = "Custom";
         studyCat.SetActive(false);
-        timer = timeDisplay.GetComponent<TMP_Text>();
-        fill = timeFill.GetComponent<Image>();
         studyCatAnim = studyCat.GetComponent<Animator>();
         studyCatButton = studyCat.GetComponent<Button>();
 
