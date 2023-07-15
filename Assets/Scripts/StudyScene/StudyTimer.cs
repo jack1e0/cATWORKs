@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using Unity.Notifications.Android;
 
 public class StudyTimer : MonoBehaviour {
     [SerializeField] private GameObject screen;
@@ -30,7 +31,11 @@ public class StudyTimer : MonoBehaviour {
     private int catfoodEarned;
     private Coroutine runningCoroutine;
 
+    [SerializeField] private GameObject quitPopUp;
+
+
     private void Awake() {
+        quitPopUp.SetActive(false);
         popUp.SetActive(false);
         currStage = 0;
         durationStudied = 0;
@@ -49,6 +54,17 @@ public class StudyTimer : MonoBehaviour {
         timeline = Instantiate(TechniqueManager.instance.techniqueData.timeLine, screen.transform);
         InstantiateTimer(this.currStage);
         runningCoroutine = StartCoroutine(StartTiming());
+    }
+
+    private void Start() {
+        // Creating Android Notification Channel to send messages through
+        var channel = new AndroidNotificationChannel() {
+            Id = "warning_channel",
+            Name = "Warning Channel",
+            Importance = Importance.Default,
+            Description = "Notification upon exit study",
+        };
+        AndroidNotificationCenter.RegisterNotificationChannel(channel);
     }
 
     private void InstantiateTimer(int currStage) {
@@ -134,6 +150,33 @@ public class StudyTimer : MonoBehaviour {
 
     public void Back() {
         popUp.SetActive(false);
+        duration = durationLeftInSecs / 60f;
+        Debug.Log("duration: " + duration);
+        runningCoroutine = StartCoroutine(StartTiming());
+    }
+
+    private void OnApplicationPause(bool pauseStatus) {
+        if (pauseStatus) {
+            StopCoroutine(runningCoroutine);
+            quitPopUp.SetActive(true);
+
+            AndroidNotification warning = new AndroidNotification();
+            warning.Title = "Come back!";
+            warning.Text = "You were in the middle of a study session!";
+            warning.FireTime = System.DateTime.Now;
+
+            AndroidNotificationCenter.CancelAllDisplayedNotifications();
+            AndroidNotificationCenter.SendNotification(warning, "warning_channel");
+        }
+    }
+
+    public void Quit() {
+        durationStudied = -1;
+        StartCoroutine(ChangeScene());
+    }
+
+    public void Unquit() {
+        quitPopUp.SetActive(false);
         duration = durationLeftInSecs / 60f;
         Debug.Log("duration: " + duration);
         runningCoroutine = StartCoroutine(StartTiming());

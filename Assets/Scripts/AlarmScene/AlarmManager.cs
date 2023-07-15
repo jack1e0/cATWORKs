@@ -88,7 +88,7 @@ public class AlarmManager : MonoBehaviour {
     private void Start() {
         // Creating Android Notification Channel to send messages through
         var channel = new AndroidNotificationChannel() {
-            Id = "channel_id",
+            Id = "alarm_channel",
             Name = "Alarm Channel",
             Importance = Importance.Default,
             Description = "Alarm notifications",

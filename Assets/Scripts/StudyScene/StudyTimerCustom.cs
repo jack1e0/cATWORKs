@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using Unity.Notifications.Android;
 
 public class StudyTimerCustom : MonoBehaviour {
 
@@ -27,7 +28,10 @@ public class StudyTimerCustom : MonoBehaviour {
     private int catfoodEarned;
     private Coroutine runningCoroutine;
 
+    [SerializeField] private GameObject quitPopUp;
+
     private void Awake() {
+        quitPopUp.SetActive(false);
         skip.GetComponent<Button>().onClick.AddListener(Skip);
         skip.SetActive(false);
         popUp.SetActive(false);
@@ -88,8 +92,6 @@ public class StudyTimerCustom : MonoBehaviour {
     private void FinishStudy() {
         studyCatAnim.SetBool("StudyFinish", true);
         studyCatButton.interactable = true;
-        CatfoodManager.instance.CalculateCatfood(duration);
-        CatfoodManager.instance.CalculateXP(duration);
     }
 
     public void StudyCatTap() {
@@ -97,6 +99,8 @@ public class StudyTimerCustom : MonoBehaviour {
     }
 
     private IEnumerator ChangeScene() {
+        CatfoodManager.instance.CalculateCatfood(duration);
+        CatfoodManager.instance.CalculateXP(duration);
         CatBehaviourManager.instance.justStudied = true;
         yield return new WaitForSeconds(0.5f);
         SceneManager.LoadScene("RoomScene");
@@ -115,6 +119,33 @@ public class StudyTimerCustom : MonoBehaviour {
 
     public void Back() {
         popUp.SetActive(false);
+        duration = durationLeftInSecs / 60f;
+        Debug.Log("duration: " + duration);
+        runningCoroutine = StartCoroutine(StartStudy());
+    }
+
+    private void OnApplicationPause(bool pauseStatus) {
+        if (pauseStatus) {
+            StopCoroutine(runningCoroutine);
+            quitPopUp.SetActive(true);
+
+            AndroidNotification warning = new AndroidNotification();
+            warning.Title = "Come back!";
+            warning.Text = "You were in the middle of a study session!";
+            warning.FireTime = System.DateTime.Now;
+
+            AndroidNotificationCenter.CancelAllDisplayedNotifications();
+            AndroidNotificationCenter.SendNotification(warning, "warning_channel");
+        }
+    }
+
+    public void Quit() {
+        duration = -1;
+        StartCoroutine(ChangeScene());
+    }
+
+    public void Unquit() {
+        quitPopUp.SetActive(false);
         duration = durationLeftInSecs / 60f;
         Debug.Log("duration: " + duration);
         runningCoroutine = StartCoroutine(StartStudy());
