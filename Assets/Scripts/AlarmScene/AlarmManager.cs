@@ -15,6 +15,8 @@ public class AlarmManager : MonoBehaviour {
     private GameObject backButton;
 
     public static AlarmManager instance;
+    private int id; // to be saved, everytime notif is scheduled, increase id by 1
+
     [SerializeField] private GameObject alarmUnit;
     [SerializeField] private GameObject addScreen;
     [SerializeField] private GameObject blocker;
@@ -29,7 +31,7 @@ public class AlarmManager : MonoBehaviour {
     private int hour;
     private int min;
     private int time;
-    private string repeat = "Default";
+    private string repeat = "None";
 
     private void Awake() {
         if (instance == null) {
@@ -60,9 +62,19 @@ public class AlarmManager : MonoBehaviour {
             newUnit.GetComponent<AlarmSetter>().SetValues(keyValue.Key, keyValue.Value[0], keyValue.Value[1] == 0
                                                                                          ? "Everyday"
                                                                                          : keyValue.Value[1] == 1
-                                                                                         ? "Every weekday"
+                                                                                         ? "Every Monday"
                                                                                          : keyValue.Value[1] == 2
-                                                                                         ? "Every weekend"
+                                                                                         ? "Every Tuesday"
+                                                                                         : keyValue.Value[1] == 3
+                                                                                         ? "Every Wednesday"
+                                                                                         : keyValue.Value[1] == 4
+                                                                                         ? "Every Thursday"
+                                                                                         : keyValue.Value[1] == 5
+                                                                                         ? "Every Friday"
+                                                                                         : keyValue.Value[1] == 6
+                                                                                         ? "Every Saturday"
+                                                                                         : keyValue.Value[1] == 7
+                                                                                         ? "Every Sunday"
                                                                                          : "None"
                                                          );
 
@@ -100,6 +112,7 @@ public class AlarmManager : MonoBehaviour {
     public void DeleteAlarm(GameObject alarm) {
         int deletedID = alarm.GetComponent<AlarmSetter>().notifID;
         alarmDict.Remove(deletedID);
+        AndroidNotificationCenter.CancelScheduledNotification(deletedID);
 
         float height = alarm.GetComponent<RectTransform>().rect.height;
         VerticalLayoutGroup.Destroy(alarm);
@@ -118,21 +131,33 @@ public class AlarmManager : MonoBehaviour {
         minInput.GetComponent<TMP_InputField>().text = string.Empty;
         this.hour = 0;
         this.min = 0;
+        this.repeat = "None";
     }
 
     public void ConfirmAlarm() {
         GameObject newUnit = Instantiate(alarmUnit, parent.transform);
         int time = CalcTime();
-        int notifID = ScheduleNotification(time);
+        ScheduleNotification(time);
 
-        newUnit.GetComponent<AlarmSetter>().SetValues(notifID, time, this.repeat);
-        alarmDict.Add(notifID, new int[2] {time, repeat == "Everyday"
+        newUnit.GetComponent<AlarmSetter>().SetValues(id, time, this.repeat);
+        alarmDict.Add(id, new int[2] {time, repeat == "Everyday"
                                     ? 0
-                                    : repeat == "Every weekday"
+                                    : repeat == "Every Monday"
                                     ? 1
-                                    : repeat == "Every weekend"
+                                    : repeat == "Every Tuesday"
                                     ? 2
-                                    : 3 });
+                                    : repeat == "Every Wednesday"
+                                    ? 3
+                                    : repeat == "Every Thursday"
+                                    ? 4
+                                    : repeat == "Every Friday"
+                                    ? 5
+                                    : repeat == "Every Saturday"
+                                    ? 6
+                                    : repeat == "Every Sunday"
+                                    ? 7
+                                    : 8 });
+        id++;
 
         float height = newUnit.GetComponent<RectTransform>().rect.height;
         StartCoroutine(SizeFitter.instance.Expand(height));
@@ -142,26 +167,71 @@ public class AlarmManager : MonoBehaviour {
         minInput.GetComponent<TMP_InputField>().text = string.Empty;
         this.hour = 0;
         this.min = 0;
-        //SetAlarm("hihi", 2, 40);
+        this.repeat = "None";
     }
 
 
-    private int ScheduleNotification(int time) { // time in 24h
-        var notification = new AndroidNotification();
+    private void ScheduleNotification(int time) { // time in 24h
+        AndroidNotification notification = new AndroidNotification();
         notification.Title = "Psst..";
         notification.Text = "Time to study!";
 
-        DateTime dateVal = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, (time - time % 100) / 100, time % 100, 0);
-        if (repeat == "None") {
-            notification.FireTime = dateVal;
-        } else if (repeat == "Everyday") {
-            notification.FireTime = dateVal;
-            notification.RepeatInterval = new System.TimeSpan(1, 0, 0, 0);
-        } else if (repeat == "Every weekday") {
+        DateTime timeTday = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, (time - time % 100) / 100, time % 100, 0); // the time TODAY
+        int daysAway = 0;
+        DayOfWeek day = DayOfWeek.Sunday; // default val
 
+        switch (repeat) {
+            case "None":
+                notification.FireTime = timeTday;
+                notification.IntentData = time.ToString();
+                AndroidNotificationCenter.SendNotificationWithExplicitID(notification, "channel_id", id);
+                return;
+            case "Everyday":
+                notification.FireTime = timeTday;
+                notification.IntentData = time.ToString();
+                notification.RepeatInterval = new System.TimeSpan(1, 0, 0, 0);
+                AndroidNotificationCenter.SendNotificationWithExplicitID(notification, "channel_id", id);
+                return;
+            case "Every Monday":
+                day = DayOfWeek.Monday;
+                break;
+            case "Every Tuesday":
+                day = DayOfWeek.Tuesday;
+                break;
+            case "Every Wednesday":
+                day = DayOfWeek.Wednesday;
+                break;
+            case "Every Thursday":
+                day = DayOfWeek.Thursday;
+                break;
+            case "Every Friday":
+                day = DayOfWeek.Friday;
+                break;
+            case "Every Saturday":
+                day = DayOfWeek.Saturday;
+                break;
+            case "Every Sunday":
+                day = DayOfWeek.Sunday;
+                break;
         }
-        return AndroidNotificationCenter.SendNotification(notification, "channel_id");
+
+        daysAway = (int)timeTday.DayOfWeek - (int)day < 0
+                 ? (int)day - (int)timeTday.DayOfWeek
+                 : (int)timeTday.DayOfWeek - (int)day > 0
+                 ? 7 - ((int)timeTday.DayOfWeek - (int)day)
+                 : 0;
+
+        notification.FireTime = timeTday.AddDays(daysAway);
+        notification.RepeatInterval = new System.TimeSpan(7, 0, 0, 0);
+        notification.IntentData = time.ToString();
+        Debug.Log("intent data: " + notification.IntentData);
+        Debug.Log("days away: " + daysAway);
+        Debug.Log("fire time: " + notification.FireTime + ", intervals: " + notification.RepeatInterval);
+
+        AndroidNotificationCenter.SendNotificationWithExplicitID(notification, "channel_id", id);
+        Debug.Log("notif id: " + id);
     }
+
 
     // Managing user input while setting time
 
@@ -243,10 +313,6 @@ public class AlarmManager : MonoBehaviour {
     }
 
     public void Custom() {
-        // this.repeat = "Every weekday";
-        // repeatPlaceholder.text = "Every weekday";
-        // HideRepeatPopUp();
-
         HideRepeatPopUp();
         ShowCustompPopUp();
     }

@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using Unity.Notifications.Android;
 
 public enum CatState {
     NONE,
@@ -37,12 +38,12 @@ public class CatBehaviourManager : MonoBehaviour {
     private Coroutine randomStateCoroutine;
 
     public bool justStudied;
+    private bool notFirstEnteredGame;
 
     // Making a singleton class
     public static CatBehaviourManager instance;
 
     void Awake() {
-
         if (instance == null) {
             instance = this;
             DontDestroyOnLoad(this);
@@ -50,35 +51,6 @@ public class CatBehaviourManager : MonoBehaviour {
             Destroy(gameObject);
             instance = GameObject.FindGameObjectWithTag("Manager").GetComponent<CatBehaviourManager>();
         }
-
-        // if (instance != null && instance != this) {
-        //     Destroy(this);
-        //     return;
-        // } else if (instance == null) {
-        //     instance = this;
-        //     DontDestroyOnLoad(this);
-        // }
-
-        // buttons = GameObject.FindGameObjectsWithTag("Button");
-        // notifs = GameObject.FindGameObjectWithTag("Notifs").GetComponent<TMP_Text>();
-
-        // notifs.enabled = false;
-        // timeSinceStateChange = 0;
-
-        // // TODO: instead of setting a random state upon start, possible to keep track of state that scene is previously left off at
-        // currentState = GetRandomState();
-
-        // // Instantiate corresponding cat in scene
-        // currCat = GetCat(currentState);
-        // randomStateCoroutine = StartCoroutine(RandomStateChange());
-        // Debug.Log("started random state change");
-
-        // Debug.Log(justStudied);
-        // if (justStudied) {
-        //     Debug.Log("HERE");
-        //     StartCoroutine(EndStudy());
-        //     justStudied = false;
-        // }
     }
 
     private void OnEnable() {
@@ -111,6 +83,17 @@ public class CatBehaviourManager : MonoBehaviour {
                 StartCoroutine(EndStudy());
                 justStudied = false;
             }
+            var intentData = AndroidNotificationCenter.GetLastNotificationIntent();
+            if (intentData != null) {
+                DateTime alarmTime = DateTime.ParseExact(intentData.ToString(), "HHmm", null, System.Globalization.DateTimeStyles.None);
+                TimeSpan timeDif = System.DateTime.Now - alarmTime;
+                if (timeDif.TotalMinutes <= 10f) {
+                    string msg = "Entered within 10mins of alarm time";
+                    StartCoroutine(DisplayNotifs(msg));
+                    CatfoodManager.instance.IncreaseCatfood(10);
+                }
+            }
+
         } else {
             Debug.Log("exit room scene");
             StopAllCoroutines();

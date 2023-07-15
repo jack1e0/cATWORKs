@@ -13,24 +13,6 @@ public class CatfoodManager : MonoBehaviour {
     public int earnedXP;
 
     void Awake() {
-
-        // if (instance == null) {
-        //     instance = this;
-        // } else { // if there is already another previous instance of manager, keep that.
-        //     instance = this;
-        //     Destroy(instance.gameObject);
-        // }
-
-        // if (instance != null && instance != this) {
-        //     Debug.Log(instance.catfoodCount);
-        //     Destroy(this);
-        //     Destroy(this.gameObject);
-        // } else {
-        //     instance = this;
-        //     catfoodText = GameObject.FindGameObjectWithTag("Catfood").GetComponent<TMP_Text>();
-        //     catfoodCount = int.Parse(catfoodText.text);
-        // }
-
         if (instance == null) {
             instance = this;
             DontDestroyOnLoad(this);
@@ -44,7 +26,6 @@ public class CatfoodManager : MonoBehaviour {
     public void Instantiate() {
         Debug.Log("Instantiating catfood count");
         catfoodText = GameObject.FindGameObjectWithTag("Catfood").GetComponent<TMP_Text>();
-        // catfoodCount = int.Parse(catfoodText.text);
         if (catfoodCount == 0) { // FOR TESTING
             catfoodCount = 10;
         }

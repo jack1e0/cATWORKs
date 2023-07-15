@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 945908602704061293}
   - component: {fileID: 6549436698956955058}
   - component: {fileID: 5543751927231272979}
+  - component: {fileID: 1938483759892986199}
   m_Layer: 7
   m_Name: Sit
   m_TagString: Cat
@@ -143,3 +144,15 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 91.337074, y: 82.67822}
   m_EdgeRadius: 0
+--- !u!114 &1938483759892986199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8912440382731239070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9a0b70d27d31be47ae6a0b6b6950205, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
