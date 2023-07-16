@@ -115,6 +115,7 @@ public class StudyTimer : MonoBehaviour {
         currStage++;
         studyCatAnim.SetBool("StudyFinish", true);
         studyCatButton.interactable = true;
+        skip.GetComponent<Button>().interactable = false;
     }
 
     public void StudyCatTap() {
@@ -128,6 +129,7 @@ public class StudyTimer : MonoBehaviour {
     private void NextStage() {
         InstantiateTimer(this.currStage);
         timeline.GetComponent<ShiftStudyStage>().ShiftIndicator();
+        skip.GetComponent<Button>().interactable = true;
         runningCoroutine = StartCoroutine(StartTiming());
     }
 
@@ -140,19 +142,18 @@ public class StudyTimer : MonoBehaviour {
     }
 
     public void Skip() {
-        Debug.Log("SKIPPED");
         StopCoroutine(runningCoroutine);
-        popUp.SetActive(true);
+        StartCoroutine(PopUp());
     }
 
     public void Leave() {
-        popUp.SetActive(false);
+        StartCoroutine(NoPopUp(popUp));
         duration = -1;
         StageEnd();
     }
 
     public void Back() {
-        popUp.SetActive(false);
+        StartCoroutine(NoPopUp(popUp));
         duration = durationLeftInSecs / 60f;
         Debug.Log("duration: " + duration);
         runningCoroutine = StartCoroutine(StartTiming());
@@ -179,9 +180,23 @@ public class StudyTimer : MonoBehaviour {
     }
 
     public void Unquit() {
-        quitPopUp.SetActive(false);
+        StartCoroutine(NoPopUp(quitPopUp));
         duration = durationLeftInSecs / 60f;
         Debug.Log("duration: " + duration);
         runningCoroutine = StartCoroutine(StartTiming());
+    }
+
+    IEnumerator PopUp() {
+        popUp.SetActive(true);
+        LeanTween.scale(popUp.transform.GetChild(0).gameObject, new Vector3(1.1f, 1.1f, 1.1f), 0.1f);
+        yield return new WaitForSeconds(0.1f);
+        LeanTween.scale(popUp.transform.GetChild(0).gameObject, new Vector3(1, 1, 1), 0.1f);
+        yield return new WaitForSeconds(0.1f);
+    }
+
+    IEnumerator NoPopUp(GameObject pop) {
+        LeanTween.scale(pop.transform.GetChild(0).gameObject, new Vector3(0.9f, 0.9f, 0.9f), 0.1f);
+        yield return new WaitForSeconds(0.1f);
+        pop.SetActive(false);
     }
 }

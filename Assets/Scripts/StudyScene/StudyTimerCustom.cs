@@ -104,17 +104,17 @@ public class StudyTimerCustom : MonoBehaviour {
 
     public void Skip() {
         StopCoroutine(runningCoroutine);
-        popUp.SetActive(true);
+        StartCoroutine(PopUp());
     }
 
     public void Leave() {
-        popUp.SetActive(false);
+        StartCoroutine(NoPopUp(popUp));
         duration = -1;
         FinishStudy();
     }
 
     public void Back() {
-        popUp.SetActive(false);
+        StartCoroutine(NoPopUp(popUp));
         duration = durationLeftInSecs / 60f;
         Debug.Log("duration: " + duration);
         runningCoroutine = StartCoroutine(StartStudy());
@@ -141,9 +141,23 @@ public class StudyTimerCustom : MonoBehaviour {
     }
 
     public void Unquit() {
-        quitPopUp.SetActive(false);
+        StartCoroutine(NoPopUp(quitPopUp));
         duration = durationLeftInSecs / 60f;
         Debug.Log("duration: " + duration);
         runningCoroutine = StartCoroutine(StartStudy());
+    }
+
+    IEnumerator PopUp() {
+        popUp.SetActive(true);
+        LeanTween.scale(popUp.transform.GetChild(0).gameObject, new Vector3(1.1f, 1.1f, 1.1f), 0.1f);
+        yield return new WaitForSeconds(0.1f);
+        LeanTween.scale(popUp.transform.GetChild(0).gameObject, new Vector3(1, 1, 1), 0.1f);
+        yield return new WaitForSeconds(0.1f);
+    }
+
+    IEnumerator NoPopUp(GameObject pop) {
+        LeanTween.scale(pop.transform.GetChild(0).gameObject, new Vector3(0.9f, 0.9f, 0.9f), 0.1f);
+        yield return new WaitForSeconds(0.1f);
+        pop.SetActive(false);
     }
 }
