@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class BGM : MonoBehaviour {
     public static BGM instance;
-    private AudioSource audSource;
+    public AudioSource audSource;
+    public bool isPlaying;
     void Awake() {
         if (instance == null) {
             instance = this;
@@ -13,5 +14,7 @@ public class BGM : MonoBehaviour {
             Destroy(gameObject);
             instance = GameObject.FindGameObjectWithTag("BGM").GetComponent<BGM>();
         }
+        instance.isPlaying = true;
+        instance.audSource = instance.gameObject.GetComponent<AudioSource>();
     }
 }

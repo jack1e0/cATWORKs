@@ -38,6 +38,10 @@ public class SceneTransition : MonoBehaviour {
     public void ChangeScene(string sceneName) {
         audSource.volume = 0.15f;
         audSource.Play();
+        if (!BGM.instance.isPlaying) {
+            BGM.instance.isPlaying = true;
+            BGM.instance.audSource.Play();
+        }
         StartCoroutine(FadeIn(sceneName));
     }
 

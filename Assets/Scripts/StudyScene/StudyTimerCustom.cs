@@ -14,6 +14,7 @@ public class StudyTimerCustom : MonoBehaviour {
     [SerializeField] private TMP_Text timer;
     [SerializeField] private Image fill;
     [SerializeField] private GameObject skip;
+    [SerializeField] private GameObject musicButton;
 
     [SerializeField] private GameObject popUp;
 
@@ -31,7 +32,9 @@ public class StudyTimerCustom : MonoBehaviour {
     private void Awake() {
         quitPopUp.SetActive(false);
         skip.GetComponent<Button>().onClick.AddListener(Skip);
+        musicButton.GetComponent<Button>().onClick.AddListener(ControlMusic);
         skip.SetActive(false);
+        musicButton.SetActive(false);
         popUp.SetActive(false);
 
         title.GetComponent<TMP_Text>().text = "Custom";
@@ -59,10 +62,7 @@ public class StudyTimerCustom : MonoBehaviour {
 
         runningCoroutine = StartCoroutine(StartStudy());
         skip.SetActive(true);
-
-        // // Testing
-        // catfoodEarned = CatfoodManager.instance.CalculateCatfood(1);
-        // StudyCatTap();
+        musicButton.SetActive(true);
     }
 
     private IEnumerator StartStudy() {
@@ -100,6 +100,18 @@ public class StudyTimerCustom : MonoBehaviour {
         CatBehaviourManager.instance.justStudied = true;
         yield return new WaitForSeconds(0.5f);
         SceneTransition.instance.ChangeScene("RoomScene");
+    }
+
+    public void ControlMusic() {
+        if (BGM.instance.isPlaying) {
+            BGM.instance.isPlaying = false;
+            BGM.instance.audSource.Pause();
+            musicButton.GetComponent<Image>().color = new Color(1, 1, 1, 0.3f);
+        } else {
+            BGM.instance.isPlaying = true;
+            BGM.instance.audSource.Play();
+            musicButton.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+        }
     }
 
     public void Skip() {

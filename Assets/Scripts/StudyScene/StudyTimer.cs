@@ -15,6 +15,7 @@ public class StudyTimer : MonoBehaviour {
     [SerializeField] private GameObject parent;
     private GameObject timeline;
     [SerializeField] private GameObject skip;
+    [SerializeField] private GameObject musicButton;
     [SerializeField] private GameObject popUp;
 
     private string studyName;
@@ -40,6 +41,7 @@ public class StudyTimer : MonoBehaviour {
         currStage = 0;
         durationStudied = 0;
         skip.GetComponent<Button>().onClick.AddListener(Skip);
+        musicButton.GetComponent<Button>().onClick.AddListener(ControlMusic);
         studyName = TechniqueManager.instance.techniqueData.techniqueName;
         studyStages = TechniqueManager.instance.techniqueData.studyStages;
 
@@ -139,6 +141,18 @@ public class StudyTimer : MonoBehaviour {
         CatBehaviourManager.instance.justStudied = true;
         yield return new WaitForSeconds(0.5f);
         SceneTransition.instance.ChangeScene("RoomScene");
+    }
+
+    public void ControlMusic() {
+        if (BGM.instance.isPlaying) {
+            BGM.instance.isPlaying = false;
+            BGM.instance.audSource.Pause();
+            musicButton.GetComponent<Image>().color = new Color(1, 1, 1, 0.3f);
+        } else {
+            BGM.instance.isPlaying = true;
+            BGM.instance.audSource.Play();
+            musicButton.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+        }
     }
 
     public void Skip() {
