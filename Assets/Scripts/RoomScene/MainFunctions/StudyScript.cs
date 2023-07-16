@@ -52,11 +52,19 @@ public class StudyScript : MonoBehaviour {
     private void MenuAppear() {
         CatBehaviourManager.instance.ButtonPressBefore(CatState.NONE);
         menuScreen.SetActive(true);
+        menuScreen.GetComponent<CanvasGroup>().alpha = 0;
+        LeanTween.alphaCanvas(menuScreen.GetComponent<CanvasGroup>(), 1, 0.1f);
         TechniqueManager.instance.Instantiate();
     }
 
     public void Back() {
         CatBehaviourManager.instance.ButtonPressAfter();
+        StartCoroutine(Fade());
+    }
+
+    IEnumerator Fade() {
+        LeanTween.alphaCanvas(menuScreen.GetComponent<CanvasGroup>(), 0, 0.1f);
+        yield return new WaitForSeconds(0.1f);
         menuScreen.SetActive(false);
     }
 }

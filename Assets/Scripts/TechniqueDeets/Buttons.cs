@@ -10,10 +10,10 @@ public class Buttons : MonoBehaviour {
     }
 
     public void StartTechnique() {
-        SceneManager.LoadScene("StudyScene");
+        SceneTransition.instance.ChangeScene("StudyScene");
     }
 
     public void Back() {
-        SceneManager.LoadScene("RoomScene");
+        SceneTransition.instance.ChangeScene("RoomScene");
     }
 }

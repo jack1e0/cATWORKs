@@ -36,7 +36,7 @@ public class AlarmScript : MonoBehaviour {
 
     public void AlarmScene() {
         CatBehaviourManager.instance.ButtonPressBefore(CatState.NONE);
-        SceneManager.LoadScene("AlarmScene");
+        SceneTransition.instance.ChangeScene("AlarmScene");
     }
 
 }

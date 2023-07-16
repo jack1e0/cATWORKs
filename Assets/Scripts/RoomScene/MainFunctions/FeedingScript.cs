@@ -8,7 +8,7 @@ public class FeedingScript : MonoBehaviour {
     private Button button;
     [SerializeField] private float eatDuration = 5f;
     private bool isFeed;
-    [SerializeField] private GameObject catfood;
+    [SerializeField] private Image catfood;
 
     private void Awake() {
         isFeed = false;
@@ -17,7 +17,7 @@ public class FeedingScript : MonoBehaviour {
 
     void Start() {
         button.onClick.AddListener(StartEat);
-        catfood.SetActive(false);
+        catfood.enabled = false;
     }
 
     public void StartEat() {
@@ -30,7 +30,12 @@ public class FeedingScript : MonoBehaviour {
         if (!isFeed && canFeed) {
             string msg = "Cat eating!";
             StartCoroutine(CatBehaviourManager.instance.DisplayNotifs(msg));
-            catfood.SetActive(true);
+
+            catfood.enabled = true;
+            Color col = catfood.color;
+            catfood.color = new Color(col.r, col.g, col.b, 0);
+            LeanTween.alpha(catfood.rectTransform, 1, 0.1f);
+
             CatBehaviourManager.instance.ButtonPressBefore(CatState.EAT);
             Debug.Log("Start eating!");
             StartCoroutine(EatCoroutine());
@@ -45,7 +50,9 @@ public class FeedingScript : MonoBehaviour {
             yield return new WaitForSeconds(1);
         }
 
-        catfood.SetActive(false);
+        LeanTween.alpha(catfood.rectTransform, 0, 0.1f);
+        yield return new WaitForSeconds(0.1f);
+        catfood.enabled = false;
         Debug.Log("Eating done!");
         CatMeow.instance.Meow();
 

@@ -23,6 +23,8 @@ TagManager:
   - Back
   - XPFill
   - HappyFill
+  - BGM
+  - SceneManager
   layers:
   - Default
   - TransparentFX
@@ -77,4 +79,7 @@ TagManager:
     locked: 0
   - name: MenuButtons
     uniqueID: 1936011063
+    locked: 0
+  - name: SceneBlocker
+    uniqueID: 3796500549
     locked: 0

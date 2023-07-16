@@ -136,7 +136,7 @@ public class StudyTimer : MonoBehaviour {
         CatfoodManager.instance.CalculateXP(durationStudied / 60f);
         CatBehaviourManager.instance.justStudied = true;
         yield return new WaitForSeconds(0.5f);
-        SceneManager.LoadScene("RoomScene");
+        SceneTransition.instance.ChangeScene("RoomScene");
     }
 
     public void Skip() {

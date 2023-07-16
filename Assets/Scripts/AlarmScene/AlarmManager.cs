@@ -107,6 +107,9 @@ public class AlarmManager : MonoBehaviour {
 
     public void AddAlarm() {
         addScreen.SetActive(true);
+        addScreen.SetActive(true);
+        addScreen.GetComponent<CanvasGroup>().alpha = 0;
+        LeanTween.alphaCanvas(addScreen.GetComponent<CanvasGroup>(), 1, 0.1f);
     }
 
     public void DeleteAlarm(GameObject alarm) {
@@ -120,13 +123,13 @@ public class AlarmManager : MonoBehaviour {
     }
 
     public void Back() {
-        SceneManager.LoadScene("RoomScene");
+        SceneTransition.instance.ChangeScene("RoomScene");
     }
 
     // Button functions in addScreen
 
     public void CancelAdd() {
-        addScreen.SetActive(false);
+        StartCoroutine(FadeAddScreen());
         hourInput.GetComponent<TMP_InputField>().text = string.Empty;
         minInput.GetComponent<TMP_InputField>().text = string.Empty;
         this.hour = 0;
@@ -162,12 +165,18 @@ public class AlarmManager : MonoBehaviour {
         float height = newUnit.GetComponent<RectTransform>().rect.height;
         StartCoroutine(SizeFitter.instance.Expand(height));
 
-        addScreen.SetActive(false);
+        StartCoroutine(FadeAddScreen());
         hourInput.GetComponent<TMP_InputField>().text = string.Empty;
         minInput.GetComponent<TMP_InputField>().text = string.Empty;
         this.hour = 0;
         this.min = 0;
         this.repeat = "None";
+    }
+
+    IEnumerator FadeAddScreen() {
+        LeanTween.alphaCanvas(addScreen.GetComponent<CanvasGroup>(), 0, 0.1f);
+        yield return new WaitForSeconds(0.1f);
+        addScreen.SetActive(false);
     }
 
 

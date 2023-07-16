@@ -180,42 +180,24 @@ public class CatBehaviourManager : MonoBehaviour {
     private IEnumerator FadeTransition(GameObject curr, CatState nextState) {
         if (curr != null) {
             Image img = curr.GetComponent<Image>();
-            while (img.color.a > 0) {
-                Color color = img.color;
-                color.a -= 0.08f;
-                img.color = color;
-                yield return null;
-            }
+            LeanTween.alpha(img.rectTransform, 0, 0.3f);
+            yield return new WaitForSeconds(0.3f);
             GameObject temp = currCat;
             currCat = null;
             Destroy(temp);
         }
 
-        // // Destroy all visible cats in scene (just in case there are more than one)
-        // GameObject[] activeCats = GameObject.FindGameObjectsWithTag("Cat");
-        // foreach (GameObject cat in activeCats) {
-        //     Destroy(cat);
-        // }
         // Set visibility of next to invisible first
         GameObject next = GetCat(nextState);
         currCat = next;
-        Color nextColor = next.GetComponent<Image>().color;
+        Image nextImg = next.GetComponent<Image>();
+        Color nextColor = nextImg.color;
         nextColor.a = 0;
         next.GetComponent<Image>().color = nextColor;
 
-        yield return new WaitForSeconds(0.5f);
-        StartCoroutine(FadeIn(next));
-    }
-
-    private IEnumerator FadeIn(GameObject next) {
         if (next != null) {
-            Image img = next.GetComponent<Image>();
-            while (img.color.a < 1) {
-                Color color = img.color;
-                color.a += 0.08f;
-                img.color = color;
-                yield return null;
-            }
+            LeanTween.alpha(nextImg.rectTransform, 1, 0.3f);
+            yield return new WaitForSeconds(0.3f);
         }
     }
 

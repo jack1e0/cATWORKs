@@ -40,14 +40,14 @@ public class TechniqueManager : MonoBehaviour {
         TechniqueDetails obj = Resources.Load<TechniqueDetails>("Custom");
         techniqueData = Instantiate(obj);
 
-        SceneManager.LoadScene("StudySceneCustom");
+        SceneTransition.instance.ChangeScene("StudySceneCustom");
     }
 
     public void Pomodoro() {
         TechniqueDetails obj = Resources.Load<TechniqueDetails>("Pomodoro");
         techniqueData = Instantiate(obj);
 
-        SceneManager.LoadScene("PomodoroScene");
+        SceneTransition.instance.ChangeScene("PomodoroScene");
     }
 
     public void Timeblocking() {
@@ -57,21 +57,4 @@ public class TechniqueManager : MonoBehaviour {
     public void Eisenhower() {
 
     }
-
-    // private IEnumerator StudyCoroutine() {
-    //     StudyScript.instance.isStudying = true;
-
-    //     CatBehaviourManager.instance.ButtonPressBefore(CatState.STUDY);
-    //     float timeInSeconds = studyDuration;
-    //     while (timeInSeconds >= 0) {
-    //         timeInSeconds--;
-    //         yield return new WaitForSeconds(1);
-    //     }
-
-    //     // Random behaviour resumes after studying
-    //     string msg = "Study session completed! Press button to claim catfood.";
-    //     StartCoroutine(CatBehaviourManager.instance.DisplayNotifs(msg));
-    //     StudyScript.instance.animator.SetBool("StudyFinish", true);
-    //     StudyScript.instance.button.interactable = true;
-    // }
 }
