@@ -83,8 +83,13 @@ public class CatBehaviourManager : MonoBehaviour {
                 StartCoroutine(EndStudy());
                 justStudied = false;
             }
+
+            // string test = "2300";
+            // TimeSpan timedif = System.DateTime.Now - DateTime.ParseExact(test, "HHmm", null, System.Globalization.DateTimeStyles.None);
+            // Debug.Log("TEST PARSE: " + timedif.TotalMinutes);
+
             var intentData = AndroidNotificationCenter.GetLastNotificationIntent();
-            if (intentData != null) {
+            if (intentData != null && intentData.Channel == "alarm_channel") {
                 DateTime alarmTime = DateTime.ParseExact(intentData.ToString(), "HHmm", null, System.Globalization.DateTimeStyles.None);
                 TimeSpan timeDif = System.DateTime.Now - alarmTime;
                 if (timeDif.TotalMinutes <= 10f) {

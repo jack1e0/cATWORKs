@@ -90,7 +90,7 @@ public class AlarmManager : MonoBehaviour {
         var channel = new AndroidNotificationChannel() {
             Id = "alarm_channel",
             Name = "Alarm Channel",
-            Importance = Importance.Default,
+            Importance = Importance.High,
             Description = "Alarm notifications",
         };
         AndroidNotificationCenter.RegisterNotificationChannel(channel);
@@ -193,13 +193,13 @@ public class AlarmManager : MonoBehaviour {
             case "None":
                 notification.FireTime = timeTday;
                 notification.IntentData = time.ToString();
-                AndroidNotificationCenter.SendNotificationWithExplicitID(notification, "channel_id", id);
+                AndroidNotificationCenter.SendNotificationWithExplicitID(notification, "alarm_channel", id);
                 return;
             case "Everyday":
                 notification.FireTime = timeTday;
                 notification.IntentData = time.ToString();
                 notification.RepeatInterval = new System.TimeSpan(1, 0, 0, 0);
-                AndroidNotificationCenter.SendNotificationWithExplicitID(notification, "channel_id", id);
+                AndroidNotificationCenter.SendNotificationWithExplicitID(notification, "alarm_channel", id);
                 return;
             case "Every Monday":
                 day = DayOfWeek.Monday;
@@ -237,7 +237,7 @@ public class AlarmManager : MonoBehaviour {
         Debug.Log("days away: " + daysAway);
         Debug.Log("fire time: " + notification.FireTime + ", intervals: " + notification.RepeatInterval);
 
-        AndroidNotificationCenter.SendNotificationWithExplicitID(notification, "channel_id", id);
+        AndroidNotificationCenter.SendNotificationWithExplicitID(notification, "alarm_channel", id);
         Debug.Log("notif id: " + id);
     }
 

@@ -7,6 +7,8 @@ public class Constants {
     public static float breakColourG = 0.7607844f;
     public static float breakColourB = 0.4862745f;
 
-    public static float sceneTransitionTime = 0.1f;
+    public static float sceneEntranceTime = 0.1f;
+    public static float sceneExitTime = 0.02f;
+
 
 }

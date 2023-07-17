@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
 
 public class SceneTransition : MonoBehaviour {
     public static SceneTransition instance;
@@ -36,27 +37,20 @@ public class SceneTransition : MonoBehaviour {
     }
 
     public void ChangeScene(string sceneName) {
-        audSource.volume = 0.15f;
+        audSource.volume = 0.5f;
         audSource.Play();
         if (!BGM.instance.isPlaying) {
             BGM.instance.isPlaying = true;
             BGM.instance.audSource.Play();
         }
-        StartCoroutine(FadeIn(sceneName));
+        Debug.Log("fading in");
+        LeanTween.alpha(blocker.rectTransform, 0.5f, Constants.sceneExitTime);
+        SceneManager.LoadScene(sceneName);
     }
 
     IEnumerator FadeOut() {
-        Debug.Log("fading in");
-        LeanTween.alpha(blocker.rectTransform, 0, Constants.sceneTransitionTime);
-        yield return new WaitForSeconds(Constants.sceneTransitionTime);
-    }
-
-    IEnumerator FadeIn(string name) {
         Debug.Log("fading out");
-        LeanTween.alpha(blocker.rectTransform, 1, Constants.sceneTransitionTime);
-        yield return null;
-        SceneManager.LoadScene(name);
+        LeanTween.alpha(blocker.rectTransform, 0, Constants.sceneEntranceTime);
+        yield return new WaitForSeconds(Constants.sceneEntranceTime);
     }
-
-
 }
