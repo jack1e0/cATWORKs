@@ -17,4 +17,9 @@ public class BGM : MonoBehaviour {
         instance.isPlaying = true;
         instance.audSource = instance.gameObject.GetComponent<AudioSource>();
     }
+
+    public void StopBGM() {
+        this.isPlaying = false;
+        this.audSource.Stop();
+    }
 }

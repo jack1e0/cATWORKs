@@ -15,8 +15,18 @@ public class StudyTimer : MonoBehaviour {
     [SerializeField] private GameObject parent;
     private GameObject timeline;
     [SerializeField] private GameObject skip;
-    [SerializeField] private GameObject musicButton;
     [SerializeField] private GameObject popUp;
+    [SerializeField] private GameObject quitPopUp;
+    [Space(10)]
+
+    [Header("Study Music")]
+    private int musicIndex;
+    [SerializeField] private AudioClip[] studyMusics;
+    [SerializeField] private AudioSource audSource;
+    [SerializeField] private GameObject musicButton;
+    [SerializeField] private Button forward;
+    [SerializeField] private Button backward;
+    [SerializeField] private TMP_Text musicName;
 
     private string studyName;
     private float[] studyStages;
@@ -32,16 +42,24 @@ public class StudyTimer : MonoBehaviour {
     private int catfoodEarned;
     private Coroutine runningCoroutine;
 
-    [SerializeField] private GameObject quitPopUp;
-
 
     private void Awake() {
         quitPopUp.SetActive(false);
         popUp.SetActive(false);
         currStage = 0;
         durationStudied = 0;
+
         skip.GetComponent<Button>().onClick.AddListener(Skip);
-        musicButton.GetComponent<Button>().onClick.AddListener(ControlMusic);
+        musicButton.GetComponent<Button>().onClick.AddListener(PlayMusic);
+        forward.onClick.AddListener(Forward);
+        backward.onClick.AddListener(Backward);
+
+        BGM.instance.StopBGM();
+        musicIndex = 0;
+        audSource.clip = studyMusics[musicIndex];
+        musicName.text = studyMusics[musicIndex].name;
+        audSource.Play();
+
         studyName = TechniqueManager.instance.techniqueData.techniqueName;
         studyStages = TechniqueManager.instance.techniqueData.studyStages;
 
@@ -140,18 +158,52 @@ public class StudyTimer : MonoBehaviour {
         CatfoodManager.instance.CalculateXP(durationStudied / 60f);
         CatBehaviourManager.instance.justStudied = true;
         yield return new WaitForSeconds(0.5f);
+        audSource.Stop();
         SceneTransition.instance.ChangeScene("RoomScene");
     }
 
-    public void ControlMusic() {
-        if (BGM.instance.isPlaying) {
-            BGM.instance.isPlaying = false;
-            BGM.instance.audSource.Pause();
-            musicButton.GetComponent<Image>().color = new Color(1, 1, 1, 0.3f);
+    public void PlayMusic() {
+        if (audSource.isPlaying) {
+            audSource.Pause();
+            Color grey = new Color(1, 1, 1, 0.3f);
+            musicButton.GetComponent<Image>().color = grey;
+            forward.GetComponent<Image>().color = grey;
+            backward.GetComponent<Image>().color = grey;
         } else {
-            BGM.instance.isPlaying = true;
-            BGM.instance.audSource.Play();
-            musicButton.GetComponent<Image>().color = new Color(1, 1, 1, 1);
+            audSource.Play();
+            musicButton.GetComponent<Image>().color = Color.white;
+            forward.GetComponent<Image>().color = Color.white;
+            backward.GetComponent<Image>().color = Color.white;
+        }
+    }
+
+    public void Forward() {
+        if (audSource.isPlaying) {
+            audSource.Stop();
+            if (musicIndex == studyMusics.Length - 1) {
+                musicIndex = 0;
+            } else {
+                musicIndex++;
+            }
+            audSource.clip = studyMusics[musicIndex];
+            musicName.text = studyMusics[musicIndex].name;
+            Canvas.ForceUpdateCanvases();
+            audSource.Play();
+        }
+    }
+
+    public void Backward() {
+        if (audSource.isPlaying) {
+            audSource.Stop();
+            if (musicIndex == 0) {
+                musicIndex = studyMusics.Length - 1;
+            } else {
+                musicIndex--;
+            }
+            audSource.clip = studyMusics[musicIndex];
+            musicName.text = studyMusics[musicIndex].name;
+            Canvas.ForceUpdateCanvases();
+            audSource.Play();
         }
     }
 
