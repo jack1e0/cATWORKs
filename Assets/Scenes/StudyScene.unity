@@ -178,7 +178,7 @@ MonoBehaviour:
   studyMusics:
   - {fileID: 8300000, guid: f2b5df7ce6a33cf419bec285f05b4aef, type: 3}
   - {fileID: 8300000, guid: f92f8534abefaef40985704f172db2c1, type: 3}
-  - {fileID: 8300000, guid: 28801cb6f34bda2449b7cac82fae5a57, type: 3}
+  - {fileID: 8300000, guid: 157afb49431f4bb4a8cfe3db55262430, type: 3}
   - {fileID: 8300000, guid: 865515cff3d912f4292fe9626ed7653a, type: 3}
   audSource: {fileID: 914954774}
   musicButton: {fileID: 774893722}
@@ -1695,7 +1695,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 0.92
+  m_Volume: 0.8
   m_Pitch: 1
   Loop: 1
   Mute: 0
