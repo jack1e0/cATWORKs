@@ -291,23 +291,28 @@ public class AlarmManager : MonoBehaviour {
         blocker.SetActive(false);
     }
 
+    private void Update() {
+        Debug.Log(customPopUp.transform.localPosition);
+    }
+
     IEnumerator Slide(GameObject popUp, int upOrDown) {
 
-        Vector3 origPos = popUp.transform.position;
+        Vector3 origPos = popUp.transform.localPosition;
+        Debug.Log(origPos);
         Vector3 newpos;
         if (upOrDown == 0) {
             if (popUp.Equals(repeatPopUp)) {
-                newpos = new Vector3(0, -3.5f, 0);
+                newpos = new Vector3(0, -633f, 0);
             } else {
-                newpos = new Vector3(0, -0.2f, 0);
+                newpos = new Vector3(0, -439f, 0);
             }
         } else {
-            newpos = new Vector3(0, -7, 0);
+            newpos = new Vector3(0, -2170f, 0);
         }
 
         float i = 0;
         while (i <= 1.2f) {
-            popUp.transform.position = Vector3.Lerp(origPos, newpos, i);
+            popUp.transform.localPosition = Vector3.Lerp(origPos, newpos, i);
             i += 0.2f;
             yield return null;
         }
