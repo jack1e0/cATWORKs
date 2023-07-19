@@ -4513,6 +4513,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c6d8be05b7eaf9479415fa7d2e3756c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bgm: {fileID: 8300000, guid: 3de02ff60d072b1418c70e3915ca3baa, type: 3}
+  drawingGame: {fileID: 0}
+  flappyCat: {fileID: 0}
 --- !u!82 &2135745382
 AudioSource:
   m_ObjectHideFlags: 0

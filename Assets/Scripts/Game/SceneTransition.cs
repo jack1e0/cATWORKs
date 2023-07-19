@@ -10,6 +10,10 @@ public class SceneTransition : MonoBehaviour {
     private Image blocker;
     private AudioSource audSource;
 
+    [SerializeField] private AudioClip bgm;
+    [SerializeField] private AudioClip drawingGame;
+    [SerializeField] private AudioClip flappyCat;
+
     void Awake() {
         if (instance == null) {
             instance = this;
@@ -37,6 +41,16 @@ public class SceneTransition : MonoBehaviour {
     }
 
     public void ChangeScene(string sceneName) {
+        if (sceneName == "FlappyCat") {
+            Screen.orientation = ScreenOrientation.LandscapeLeft;
+            BGM.instance.audSource.clip = flappyCat;
+        } else if (sceneName == "DrawingGame") {
+            Screen.orientation = ScreenOrientation.Portrait;
+            BGM.instance.audSource.clip = drawingGame;
+        } else {
+            Screen.orientation = ScreenOrientation.Portrait;
+            BGM.instance.audSource.clip = bgm;
+        }
         audSource.volume = 0.5f;
         audSource.Play();
         if (!BGM.instance.isPlaying) {

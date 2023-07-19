@@ -291,10 +291,10 @@ RectTransform:
   m_Father: {fileID: 1344429620}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -168.46, y: 637.8501}
-  m_SizeDelta: {x: 536.93, y: 123.39}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: -168.46, y: -62.149902}
+  m_SizeDelta: {x: 536.93, y: 123.390015}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &197196832
 MonoBehaviour:
@@ -1449,8 +1449,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -1796}
-  m_SizeDelta: {x: 873.86, y: 1399.0898}
+  m_AnchoredPosition: {x: 0.92499, y: -1698.9}
+  m_SizeDelta: {x: 875.75, y: 899}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1612192155
 GameObject:
@@ -1510,7 +1510,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Describe timing here
+  m_text: Work is broken into intervals, typically 25 minutes in length, separated
+    by short breaks, which are 5 - 10 minutes.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1818,8 +1819,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non enim
-    a velit feugiat gravida. Pellentesque et ex sed turpis ultrices lobortis. '
+  m_text: The Pomodoro Technique improves focus, productivity, and time management
+    by breaking work into short intervals with regular breaks. It can reduce procrastination
+    and prevent burnout.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2001,8 +2003,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 1.9, y: -1270.1}
-  m_SizeDelta: {x: 877.6, y: 2540.3}
+  m_AnchoredPosition: {x: 1.9, y: -1071}
+  m_SizeDelta: {x: 877.6, y: 2142.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2057756983
 GameObject:
@@ -2015,6 +2017,7 @@ GameObject:
   - component: {fileID: 2057756984}
   - component: {fileID: 2057756986}
   - component: {fileID: 2057756985}
+  - component: {fileID: 2057756987}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -2037,10 +2040,10 @@ RectTransform:
   m_Father: {fileID: 1344429620}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -61.6951}
-  m_SizeDelta: {x: 873.86, y: 1275.7}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: -505.06}
+  m_SizeDelta: {x: 873.86, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2057756985
 MonoBehaviour:
@@ -2062,12 +2065,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla non enim
-    a velit feugiat gravida. Pellentesque et ex sed turpis ultrices lobortis. Vivamus
-    fermentum purus iaculis malesuada viverra. Nam vel arcu rutrum, hendrerit dolor
-    at, aliquam est. Ut quis metus ac massa congue fringilla sit amet sed quam. In
-    vel lorem non massa mollis porta. Proin malesuada pellentesque nulla eu tempor.
-    Nunc nec nisl nec ex bibendum bibendum vitae a nunc. '
+  m_text: The technique was developed by Francesco Cirillo in the late 1980s. Cirillo
+    was a university student looking for a way to improve his own productivity and
+    time management skills. He used a tomato-shaped kitchen timer (hence the name
+    "Pomodoro," which means "tomato" in Italian) to break his work into 25-minute
+    intervals, or "pomodoros," separated by short breaks.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2144,6 +2146,20 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2057756983}
   m_CullTransparentMesh: 1
+--- !u!114 &2057756987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2057756983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!1 &2127265809
 GameObject:
   m_ObjectHideFlags: 0

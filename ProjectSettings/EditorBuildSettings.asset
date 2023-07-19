@@ -20,4 +20,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/StudyScene.unity
     guid: 1a9ba32da3df5564b826cf028bd329ae
+  - enabled: 1
+    path: Assets/Scenes/DrawingGame.unity
+    guid: d858e08ed958ad34fa9718796de55e06
   m_configObjects: {}
