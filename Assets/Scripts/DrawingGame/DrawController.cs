@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Linq;
+using System.IO;
 
 public class DrawController : MonoBehaviour {
     float brushSize;
+    Color selectedColor;
+
     int sorting;
     private Stack<GameObject> drawnLines;
     private GameObject lastDrawn;
 
     [SerializeField] private GameObject linePrefab;
     LineRender activeLine;
-
-    Color selectedColor;
 
     [SerializeField] private GameObject red;
     [SerializeField] private GameObject green;
@@ -27,9 +28,13 @@ public class DrawController : MonoBehaviour {
     [SerializeField] private GameObject big;
 
     [SerializeField] private Button undo;
-
+    [SerializeField] private Button save;
+    [SerializeField] private Button cross;
 
     private float activeButtonSize = 1.2f;
+
+    [SerializeField] private RenderTexture rt;
+    private int fileCounter;
 
 
     private void Awake() {
@@ -47,6 +52,8 @@ public class DrawController : MonoBehaviour {
         big.GetComponent<Button>().onClick.AddListener(Big);
 
         undo.onClick.AddListener(Undo);
+        save.onClick.AddListener(Save);
+        cross.onClick.AddListener(Cross);
 
         Red();
         Mid();
@@ -56,6 +63,7 @@ public class DrawController : MonoBehaviour {
 
         if (Input.touchCount > 0) {
             Touch touch = Input.GetTouch(0);
+            Debug.Log(touch.position);
             if (touch.phase == TouchPhase.Began && WithinBounds(touch.position)) {
                 Debug.Log("within bounds");
                 lastDrawn = Instantiate(linePrefab);
@@ -77,15 +85,47 @@ public class DrawController : MonoBehaviour {
     }
 
     private bool WithinBounds(Vector2 pos) {
-        return pos.x > 41.3f && pos.x < 1038 && pos.y > 408 && pos.y < 1710;
+        return pos.x > 41.3f && pos.x < 1038 && pos.y > 408 && pos.y < 2050;
     }
 
     private void Undo() {
         if (drawnLines.Count > 0) {
             Destroy(drawnLines.Pop());
         }
+    }
 
-        Debug.Log(drawnLines);
+    private void Save() {
+        Capture();
+    }
+
+    public void Capture() {
+        RenderTexture activeRenderTexture = RenderTexture.active;
+        Camera.main.targetTexture = rt;
+        RenderTexture.active = Camera.main.targetTexture;
+
+        Camera.main.Render();
+
+        Texture2D image = new Texture2D(Camera.main.targetTexture.width, Camera.main.targetTexture.height);
+        image.ReadPixels(new Rect(0, 0, Camera.main.targetTexture.width, Camera.main.targetTexture.height), 0, 0);
+        image.Apply();
+        RenderTexture.active = activeRenderTexture;
+        Camera.main.targetTexture = null;
+
+        byte[] bytes = image.EncodeToPNG();
+        Destroy(image);
+
+        // string path = Application.dataPath + "/Drawings/" + fileCounter + ".png";
+        // Debug.Log(path);
+        // File.WriteAllBytes(Application.dataPath + "/Drawings/" + fileCounter + ".png", bytes);
+        // fileCounter++;
+
+        // Save the screenshot to Gallery/Photos
+        string name = string.Format("{0}_Capture{1}_{2}.png", Application.productName, "{0}", System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss"));
+        Debug.Log("Permission result: " + NativeGallery.SaveImageToGallery(bytes, Application.productName + " Captures", name));
+    }
+
+    private void Cross() {
+        SceneTransition.instance.ChangeScene("RoomScene");
     }
 
     private void Red() {

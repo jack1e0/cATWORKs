@@ -14,6 +14,8 @@ public class SceneTransition : MonoBehaviour {
     [SerializeField] private AudioClip drawingGame;
     [SerializeField] private AudioClip flappyCat;
 
+    private string currScene;
+
     void Awake() {
         if (instance == null) {
             instance = this;
@@ -33,6 +35,7 @@ public class SceneTransition : MonoBehaviour {
     }
 
     private void Instantiate(Scene scene, LoadSceneMode mode) {
+        BGM.instance.isPlaying = true;
         gameObject.GetComponent<Canvas>().worldCamera = Camera.main;
         blocker = GetComponent<Image>();
         audSource = GetComponent<AudioSource>();
@@ -43,27 +46,28 @@ public class SceneTransition : MonoBehaviour {
     public void ChangeScene(string sceneName) {
         if (sceneName == "FlappyCat") {
             Screen.orientation = ScreenOrientation.LandscapeLeft;
-            BGM.instance.audSource.clip = flappyCat;
+            BGM.instance.ChangeClip(flappyCat);
         } else if (sceneName == "DrawingGame") {
             Screen.orientation = ScreenOrientation.Portrait;
-            BGM.instance.audSource.clip = drawingGame;
+            BGM.instance.ChangeClip(drawingGame);
         } else {
             Screen.orientation = ScreenOrientation.Portrait;
-            BGM.instance.audSource.clip = bgm;
+            BGM.instance.ChangeClip(bgm);
         }
-        audSource.volume = 0.5f;
-        audSource.Play();
-        if (!BGM.instance.isPlaying) {
-            BGM.instance.isPlaying = true;
+
+        if (SceneManager.GetActiveScene().name == "RoomScene" && sceneName == "DrawingGame") {
             BGM.instance.audSource.Play();
         }
-        Debug.Log("fading in");
+        if (SceneManager.GetActiveScene().name == "DrawingGame" && sceneName == "RoomScene") {
+            BGM.instance.audSource.Play();
+        }
+
+        this.audSource.Play();
         LeanTween.alpha(blocker.rectTransform, 0.5f, Constants.sceneExitTime);
         SceneManager.LoadScene(sceneName);
     }
 
     IEnumerator FadeOut() {
-        Debug.Log("fading out");
         LeanTween.alpha(blocker.rectTransform, 0, Constants.sceneEntranceTime);
         yield return new WaitForSeconds(Constants.sceneEntranceTime);
     }
