@@ -2,11 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System.Linq;
 
 public class DrawController : MonoBehaviour {
-    int brushSize;
-    [SerializeField] private GameObject canvas;
-    private Texture2D tex;
+    float brushSize;
+    int sorting;
+    private Stack<GameObject> drawnLines;
+    private GameObject lastDrawn;
+
+    [SerializeField] private GameObject linePrefab;
+    LineRender activeLine;
+
     Color selectedColor;
 
     [SerializeField] private GameObject red;
@@ -20,18 +26,15 @@ public class DrawController : MonoBehaviour {
     [SerializeField] private GameObject mid;
     [SerializeField] private GameObject big;
 
+    [SerializeField] private Button undo;
+
 
     private float activeButtonSize = 1.2f;
 
 
     private void Awake() {
-        // Clone texture
-        Texture2D initTex = canvas.GetComponent<Renderer>().material.mainTexture as Texture2D;
-        tex = new Texture2D(initTex.width, initTex.height, initTex.format, false);
-        tex.SetPixels32(initTex.GetPixels32());
-        tex.Apply();
-        canvas.GetComponent<Renderer>().material.mainTexture = tex;
-
+        sorting = 0;
+        drawnLines = new Stack<GameObject>();
         red.GetComponent<Button>().onClick.AddListener(Red);
         green.GetComponent<Button>().onClick.AddListener(Green);
         blue.GetComponent<Button>().onClick.AddListener(Blue);
@@ -43,34 +46,46 @@ public class DrawController : MonoBehaviour {
         mid.GetComponent<Button>().onClick.AddListener(Mid);
         big.GetComponent<Button>().onClick.AddListener(Big);
 
+        undo.onClick.AddListener(Undo);
+
         Red();
         Mid();
     }
 
     void Update() {
+
         if (Input.touchCount > 0) {
             Touch touch = Input.GetTouch(0);
-            RaycastHit hit = new RaycastHit();
-            Physics.Raycast(Camera.main.ScreenPointToRay(touch.position), out hit, 500);
-            if (hit.collider == canvas.GetComponent<MeshCollider>()) {
-                Vector2 textureCoord = hit.textureCoord;
-
-                int pixelX = (int)(textureCoord.x * tex.width);
-                int pixelY = (int)(textureCoord.y * tex.height);
-
-                Vector2Int paintPixelPos = new Vector2Int(pixelX, pixelY);
-                for (int i = pixelX - brushSize / 2; i < pixelX + brushSize / 2; i++) {
-                    for (int j = pixelY - brushSize / 2; j < pixelY + brushSize / 2; j++) {
-                        // if (Mathf.Pow(i - pixelX, 2) + Mathf.Pow(j - pixelY, 2) <= Mathf.Pow(brushSize / 2, 2)) {
-                        //     tex.SetPixel(i, j, selectedColor);
-                        // }
-                        tex.SetPixel(i, j, selectedColor);
-                    }
-                }
-
-                tex.Apply();
+            if (touch.phase == TouchPhase.Began && WithinBounds(touch.position)) {
+                Debug.Log("within bounds");
+                lastDrawn = Instantiate(linePrefab);
+                activeLine = lastDrawn.GetComponent<LineRender>();
+                lastDrawn.GetComponent<LineRenderer>().material.SetColor("_Color", selectedColor);
+                lastDrawn.GetComponent<LineRenderer>().startWidth = brushSize;
+                lastDrawn.GetComponent<LineRenderer>().sortingOrder = sorting;
+                sorting++;
+            }
+            if (activeLine != null) {
+                Vector2 worldPos = Camera.main.ScreenPointToRay(touch.position).GetPoint(40);
+                activeLine.UpdatePoint(worldPos);
+            }
+            if (touch.phase == TouchPhase.Ended && activeLine != null) {
+                activeLine = null;
+                drawnLines.Push(lastDrawn);
             }
         }
+    }
+
+    private bool WithinBounds(Vector2 pos) {
+        return pos.x > 41.3f && pos.x < 1038 && pos.y > 408 && pos.y < 1710;
+    }
+
+    private void Undo() {
+        if (drawnLines.Count > 0) {
+            Destroy(drawnLines.Pop());
+        }
+
+        Debug.Log(drawnLines);
     }
 
     private void Red() {
@@ -125,19 +140,19 @@ public class DrawController : MonoBehaviour {
     private void Small() {
         ResetButtonColor();
         SetButtonColor(small);
-        brushSize = 30;
+        brushSize = 0.1f;
     }
 
     private void Mid() {
         ResetButtonColor();
         SetButtonColor(mid);
-        brushSize = 70;
+        brushSize = 0.35f;
     }
 
     private void Big() {
         ResetButtonColor();
         SetButtonColor(big);
-        brushSize = 150;
+        brushSize = 1.25f;
     }
 
     private void SetButtonColor(GameObject active) {
