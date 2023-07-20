@@ -9,7 +9,7 @@ using TMPro;
 using Unity.Notifications.Android;
 
 public class AlarmManager : MonoBehaviour {
-    private Dictionary<int, int[]> alarmDict; // a mapping of notif id to its time and repeats
+    private Dictionary<int, List<int>> alarmDict; // a mapping of notif id to its time and repeats
 
     private GameObject addButton;
     private GameObject backButton;
@@ -36,7 +36,7 @@ public class AlarmManager : MonoBehaviour {
     private void Awake() {
         if (instance == null) {
             instance = this;
-            alarmDict = new Dictionary<int, int[]>();
+            // alarmDict = new Dictionary<int, int[]>();
             //DontDestroyOnLoad(this);
         }
         // else {
@@ -56,33 +56,36 @@ public class AlarmManager : MonoBehaviour {
 
         parent = GameObject.FindGameObjectWithTag("Parent");
 
-        float heights = 0;
-        foreach (KeyValuePair<int, int[]> keyValue in alarmDict) {
-            GameObject newUnit = Instantiate(alarmUnit, parent.transform);
-            newUnit.GetComponent<AlarmSetter>().SetValues(keyValue.Key, keyValue.Value[0], keyValue.Value[1] == 0
-                                                                                         ? "Everyday"
-                                                                                         : keyValue.Value[1] == 1
-                                                                                         ? "Every Monday"
-                                                                                         : keyValue.Value[1] == 2
-                                                                                         ? "Every Tuesday"
-                                                                                         : keyValue.Value[1] == 3
-                                                                                         ? "Every Wednesday"
-                                                                                         : keyValue.Value[1] == 4
-                                                                                         ? "Every Thursday"
-                                                                                         : keyValue.Value[1] == 5
-                                                                                         ? "Every Friday"
-                                                                                         : keyValue.Value[1] == 6
-                                                                                         ? "Every Saturday"
-                                                                                         : keyValue.Value[1] == 7
-                                                                                         ? "Every Sunday"
-                                                                                         : "None"
-                                                         );
+        alarmDict = SceneTransition.instance.user.alarmDict;
+        if (alarmDict != null) {
+            float heights = 0;
+            foreach (KeyValuePair<int, List<int>> keyValue in alarmDict) {
+                GameObject newUnit = Instantiate(alarmUnit, parent.transform);
+                newUnit.GetComponent<AlarmSetter>().SetValues(keyValue.Key, keyValue.Value[0], keyValue.Value[1] == 0
+                                                                                             ? "Everyday"
+                                                                                             : keyValue.Value[1] == 1
+                                                                                             ? "Every Monday"
+                                                                                             : keyValue.Value[1] == 2
+                                                                                             ? "Every Tuesday"
+                                                                                             : keyValue.Value[1] == 3
+                                                                                             ? "Every Wednesday"
+                                                                                             : keyValue.Value[1] == 4
+                                                                                             ? "Every Thursday"
+                                                                                             : keyValue.Value[1] == 5
+                                                                                             ? "Every Friday"
+                                                                                             : keyValue.Value[1] == 6
+                                                                                             ? "Every Saturday"
+                                                                                             : keyValue.Value[1] == 7
+                                                                                             ? "Every Sunday"
+                                                                                             : "None"
+                                                             );
 
-            heights += newUnit.GetComponent<RectTransform>().rect.height;
+                heights += newUnit.GetComponent<RectTransform>().rect.height;
+            }
+
+            await WaitFrame();
+            StartCoroutine(SizeFitter.instance.Expand(heights));
         }
-
-        await WaitFrame();
-        StartCoroutine(SizeFitter.instance.Expand(heights));
     }
 
     private void Start() {
@@ -138,12 +141,15 @@ public class AlarmManager : MonoBehaviour {
     }
 
     public void ConfirmAlarm() {
+        if (alarmDict == null) {
+            alarmDict = new Dictionary<int, List<int>>();
+        }
         GameObject newUnit = Instantiate(alarmUnit, parent.transform);
         int time = CalcTime();
         ScheduleNotification(time);
 
         newUnit.GetComponent<AlarmSetter>().SetValues(id, time, this.repeat);
-        alarmDict.Add(id, new int[2] {time, repeat == "Everyday"
+        alarmDict.Add(id, new List<int> {time, repeat == "Everyday"
                                     ? 0
                                     : repeat == "Every Monday"
                                     ? 1

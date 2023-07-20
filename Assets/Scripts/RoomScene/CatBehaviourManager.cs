@@ -88,7 +88,7 @@ public class CatBehaviourManager : MonoBehaviour {
             }
 
             if (SceneTransition.instance.firstEnteredRoom) {
-                string msg = "Welcome back, " + SceneTransition.instance.username + "!";
+                string msg = "Welcome back, " + SceneTransition.instance.user.username + "!";
                 StartCoroutine(DisplayNotifs(msg));
                 SceneTransition.instance.firstEnteredRoom = false;
             }

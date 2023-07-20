@@ -27,6 +27,12 @@ public class StatsManager : MonoBehaviour {
         }
     }
 
+    private void Start() {
+        this.currXP = SceneTransition.instance.user.currXP;
+        this.currHappy = SceneTransition.instance.user.currHappiness;
+        this.currLvl = SceneTransition.instance.user.level;
+    }
+
     public void AddXP(int amt) {
         OnXPChange?.Invoke(amt);
     }

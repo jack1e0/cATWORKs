@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using Firebase;
 using Firebase.Auth;
+using Firebase.Database;
 using TMPro;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 public class Authentication : MonoBehaviour {
     //Firebase variables
@@ -12,6 +14,7 @@ public class Authentication : MonoBehaviour {
     public DependencyStatus dependencyStatus;
     public FirebaseAuth auth;
     public FirebaseUser User;
+    public DatabaseReference DBreference;
 
     //Login variables
     [Header("Login")]
@@ -51,24 +54,25 @@ public class Authentication : MonoBehaviour {
         Debug.Log("Setting up Firebase Auth");
         //Set the authentication instance object
         auth = FirebaseAuth.DefaultInstance;
+        DBreference = FirebaseDatabase.DefaultInstance.RootReference;
     }
 
     //Function for the login button
     public void LoginButton() {
         //Call the login coroutine passing the email and password
-        StartCoroutine(Login(emailLoginField.text, passwordLoginField.text));
+        Login(emailLoginField.text, passwordLoginField.text);
     }
     //Function for the register button
-    public void RegisterButton() {
+    public async void RegisterButton() {
         //Call the register coroutine passing the email, password, and username
-        StartCoroutine(Register(emailRegisterField.text, passwordRegisterField.text, usernameRegisterField.text));
+        await Register(emailRegisterField.text, passwordRegisterField.text, usernameRegisterField.text);
     }
 
-    private IEnumerator Login(string _email, string _password) {
+    private async void Login(string _email, string _password) {
         //Call the Firebase auth signin function passing the email and password
         Task<AuthResult> LoginTask = auth.SignInWithEmailAndPasswordAsync(_email, _password);
         //Wait until the task completes
-        yield return new WaitUntil(predicate: () => LoginTask.IsCompleted);
+        await LoginTask;
 
         if (LoginTask.Exception != null) {
             //If there are errors handle them
@@ -100,7 +104,7 @@ public class Authentication : MonoBehaviour {
             //Now get the result
             User = new FirebaseUser(LoginTask.Result.User);
             Debug.LogFormat("User signed in successfully: {0} ({1})", User.DisplayName, User.Email);
-            SceneTransition.instance.username = User.DisplayName;
+            SceneTransition.instance.user = await LoadUserData(User.UserId, User.DisplayName, User.Email);
             warningLoginText.text = "";
             confirmLoginText.text = "Logged In";
             SceneTransition.instance.firstEnteredRoom = true;
@@ -108,7 +112,32 @@ public class Authentication : MonoBehaviour {
         }
     }
 
-    private IEnumerator Register(string _email, string _password, string _username) {
+    private async Task<UserData> LoadUserData(string userId, string name, string email) {
+        UserData user = new UserData(name, email);
+        Task<DataSnapshot> DBTask = DBreference.Child("users").Child(userId).GetValueAsync();
+        await DBTask;
+        if (DBTask.Exception != null) {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        } else if (DBTask.Result.Value != null) {
+            //Data has been retrieved
+            DataSnapshot snapshot = DBTask.Result;
+            user.catfoodCount = int.Parse(snapshot.Child("catfoodCount").Value.ToString());
+            user.level = int.Parse(snapshot.Child("level").Value.ToString());
+            user.currXP = int.Parse(snapshot.Child("currXP").Value.ToString());
+            user.currHappiness = int.Parse(snapshot.Child("currHappiness").Value.ToString());
+            user.prevExitTime = int.Parse(snapshot.Child("prevExitTime").Value.ToString());
+            if (snapshot.Child("alarmDict").Value.ToString() == null) {
+                user.alarmDict = null;
+            } else {
+                user.alarmDict = JsonConvert.DeserializeObject<Dictionary<int, List<int>>>(snapshot.Child("alarmDict").Value.ToString());
+            }
+        }
+
+        return user;
+
+    }
+
+    private async Task Register(string _email, string _password, string _username) {
         if (_username == "") {
             //If the username field is blank show a warning
             warningRegisterText.text = "Missing Username";
@@ -118,8 +147,7 @@ public class Authentication : MonoBehaviour {
         } else {
             //Call the Firebase auth signin function passing the email and password
             Task<AuthResult> RegisterTask = auth.CreateUserWithEmailAndPasswordAsync(_email, _password);
-            //Wait until the task completes
-            yield return new WaitUntil(predicate: () => RegisterTask.IsCompleted);
+            await RegisterTask;
 
             if (RegisterTask.Exception != null) {
                 //If there are errors handle them
@@ -154,8 +182,7 @@ public class Authentication : MonoBehaviour {
 
                     //Call the Firebase auth update user profile function passing the profile with the username
                     Task ProfileTask = User.UpdateUserProfileAsync(profile);
-                    //Wait until the task completes
-                    yield return new WaitUntil(predicate: () => ProfileTask.IsCompleted);
+                    await ProfileTask;
 
                     if (ProfileTask.Exception != null) {
                         //If there are errors handle them
@@ -166,6 +193,7 @@ public class Authentication : MonoBehaviour {
                     } else {
                         //Username is now set
                         //Now return to login screen
+                        await WriteNewUser(User.UserId, User.DisplayName, User.Email);
                         LoginScreen();
                         warningRegisterText.text = "";
                     }
@@ -173,6 +201,25 @@ public class Authentication : MonoBehaviour {
             }
         }
     }
+
+    private async Task WriteNewUser(string userId, string name, string email) {
+        UserData user = new UserData(name, email);
+        string catfoodCount = JsonConvert.SerializeObject(user.catfoodCount);
+        string level = JsonConvert.SerializeObject(user.level);
+        string currXP = JsonConvert.SerializeObject(user.currXP);
+        string currHappiness = JsonConvert.SerializeObject(user.currHappiness);
+        string prevExitTime = JsonConvert.SerializeObject(user.prevExitTime);
+        string alarmDict = JsonConvert.SerializeObject(user.alarmDict);
+
+        await DBreference.Child("users").Child(userId).Child("catfoodCount").SetValueAsync(catfoodCount);
+        await DBreference.Child("users").Child(userId).Child("level").SetValueAsync(level);
+        await DBreference.Child("users").Child(userId).Child("currXP").SetValueAsync(currXP);
+        await DBreference.Child("users").Child(userId).Child("currHappiness").SetValueAsync(currHappiness);
+        await DBreference.Child("users").Child(userId).Child("prevExitTime").SetValueAsync(prevExitTime);
+        await DBreference.Child("users").Child(userId).Child("alarmDict").SetValueAsync(alarmDict);
+
+    }
+
 
     public void LoginScreen() //Back button
     {

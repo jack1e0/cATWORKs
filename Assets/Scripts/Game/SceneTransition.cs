@@ -15,7 +15,7 @@ public class SceneTransition : MonoBehaviour {
     [SerializeField] private AudioClip flappyCat;
 
     private string currScene;
-    public string username;
+    public UserData user;
     public bool firstEnteredRoom;
 
     void Awake() {

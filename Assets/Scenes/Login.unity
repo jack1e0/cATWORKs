@@ -3018,6 +3018,7 @@ MonoBehaviour:
   drawingGame: {fileID: 8300000, guid: f92f8534abefaef40985704f172db2c1, type: 3}
   flappyCat: {fileID: 0}
   username: 
+  firstEnteredRoom: 0
 --- !u!114 &1463079192
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3987,7 +3988,7 @@ GameObject:
   - component: {fileID: 1551696860}
   - component: {fileID: 1551696859}
   m_Layer: 0
-  m_Name: AuthManager
+  m_Name: FirebaseManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

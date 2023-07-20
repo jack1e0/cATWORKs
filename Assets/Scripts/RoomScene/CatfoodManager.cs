@@ -23,12 +23,14 @@ public class CatfoodManager : MonoBehaviour {
         instance.Instantiate();
     }
 
+    private void Start() {
+        catfoodCount = SceneTransition.instance.user.catfoodCount;
+        catfoodText.text = catfoodCount.ToString("0");
+    }
+
     public void Instantiate() {
         Debug.Log("Instantiating catfood count");
         catfoodText = GameObject.FindGameObjectWithTag("Catfood").GetComponent<TMP_Text>();
-        if (catfoodCount == 0) { // FOR TESTING
-            catfoodCount = 10;
-        }
         catfoodText.text = catfoodCount.ToString("0");
     }
 
