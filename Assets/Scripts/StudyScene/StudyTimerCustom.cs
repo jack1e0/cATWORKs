@@ -10,6 +10,8 @@ public class StudyTimerCustom : MonoBehaviour {
 
     [SerializeField] private GameObject title;
     [SerializeField] private GameObject timeInput;
+    [SerializeField] private TMP_InputField inputField;
+    [SerializeField] private Button inputButton;
     [SerializeField] private GameObject studyCat;
     [SerializeField] private TMP_Text timer;
     [SerializeField] private Image fill;
@@ -38,7 +40,11 @@ public class StudyTimerCustom : MonoBehaviour {
     private int catfoodEarned;
     private Coroutine runningCoroutine;
 
+    private bool isCoroutineRunning;
+
     private void Awake() {
+        isCoroutineRunning = false;
+        inputButton.interactable = false;
         quitPopUp.SetActive(false);
         popUp.SetActive(false);
 
@@ -64,7 +70,15 @@ public class StudyTimerCustom : MonoBehaviour {
 
     // Reading user input
     public void ReadInput(string number) {
-        duration = int.Parse(number);
+        int value;
+        bool isInt = int.TryParse(number, out value);
+        if (!isInt || value < 0 || value > 500) {
+            inputButton.interactable = false;
+            inputField.text = string.Empty;
+        } else {
+            inputButton.interactable = true;
+            this.duration = value;
+        }
     }
 
     // locking in user input and start study
@@ -92,6 +106,7 @@ public class StudyTimerCustom : MonoBehaviour {
     }
 
     private IEnumerator StartStudy() {
+        isCoroutineRunning = true;
         float tempDuration = duration * 60f;
         while (tempDuration >= 0) {
             float minutes = Mathf.Floor(tempDuration / 60f);
@@ -112,6 +127,7 @@ public class StudyTimerCustom : MonoBehaviour {
     }
 
     private void FinishStudy() {
+        isCoroutineRunning = false;
         studyCatAnim.SetBool("StudyFinish", true);
         studyCatButton.interactable = true;
     }
@@ -126,6 +142,8 @@ public class StudyTimerCustom : MonoBehaviour {
         CatBehaviourManager.instance.justStudied = true;
         yield return new WaitForSeconds(0.5f);
         audSource.Stop();
+        BGM.instance.isPlaying = true;
+        BGM.instance.audSource.Play();
         SceneTransition.instance.ChangeScene("RoomScene");
     }
 
@@ -176,6 +194,7 @@ public class StudyTimerCustom : MonoBehaviour {
 
     public void Skip() {
         StopCoroutine(runningCoroutine);
+        isCoroutineRunning = false;
         StartCoroutine(PopUp());
     }
 
@@ -193,7 +212,7 @@ public class StudyTimerCustom : MonoBehaviour {
     }
 
     private void OnApplicationPause(bool pauseStatus) {
-        if (pauseStatus) {
+        if (isCoroutineRunning && pauseStatus) {
             if (runningCoroutine != null) {
                 StopCoroutine(runningCoroutine);
             }

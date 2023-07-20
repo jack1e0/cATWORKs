@@ -49,8 +49,11 @@ public class StatsDisplay : MonoBehaviour {
     private void HandleHappyChange(int amt) {
         if (amt > 0) {
             if (currHappy < maxHappy) {
+                StatsManager.instance.happinessFull = false;
                 StartCoroutine(ChangeFill(happyFill, (float)currHappy, (float)amt, (float)this.maxHappy));
                 currHappy += Mathf.Min(amt, maxHappy - currHappy);
+            } else {
+                StatsManager.instance.happinessFull = true;
             }
         } else { // TODO: not completely implemented yet
             if (currHappy + amt >= 0) {

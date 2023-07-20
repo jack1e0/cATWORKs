@@ -1,0 +1,40 @@
+{
+    "project_info": {
+        "firebase_url": "null",
+        "project_number": "80494281273",
+        "project_id": "catworks-31100",
+        "storage_bucket": "catworks-31100.appspot.com"
+    },
+    "client": [
+        {
+            "client_info": {
+                "mobilesdk_app_id": "1:80494281273:android:4346a70678c1ba6d5083e8",
+                "android_client_info": {
+                    "package_name": "com.DefaultCompany.cATWORKs"
+                }
+            },
+            "oauth_client": [
+                {
+                    "client_id": "80494281273-01qu7kumid1s8o7o2b1ql41d9396besk.apps.googleusercontent.com",
+                    "client_type": 3
+                }
+            ],
+            "api_key": [
+                {
+                    "current_key": "AIzaSyB9uqhWrrGg9391e7kHO36ianzoQSM1m5M"
+                }
+            ],
+            "services": {
+                "appinvite_service": {
+                    "other_platform_oauth_client": [
+                        {
+                            "client_id": "80494281273-01qu7kumid1s8o7o2b1ql41d9396besk.apps.googleusercontent.com",
+                            "client_type": 3
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "configuration_version": "1"
+}

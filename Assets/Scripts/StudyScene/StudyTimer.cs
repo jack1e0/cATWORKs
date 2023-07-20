@@ -42,6 +42,8 @@ public class StudyTimer : MonoBehaviour {
     private int catfoodEarned;
     private Coroutine runningCoroutine;
 
+    private bool isCoroutineRunning;
+
 
     private void Awake() {
         quitPopUp.SetActive(false);
@@ -109,6 +111,7 @@ public class StudyTimer : MonoBehaviour {
     }
 
     private IEnumerator StartTiming() {
+        isCoroutineRunning = true;
         float tempDuration = duration * 60f;
         while (tempDuration >= 0) {
             float minutes = Mathf.Floor(tempDuration / 60f);
@@ -132,6 +135,7 @@ public class StudyTimer : MonoBehaviour {
     }
 
     private void StageEnd() {
+        isCoroutineRunning = false;
         currStage++;
         studyCatAnim.SetBool("StudyFinish", true);
         studyCatButton.interactable = true;
@@ -159,6 +163,8 @@ public class StudyTimer : MonoBehaviour {
         CatBehaviourManager.instance.justStudied = true;
         yield return new WaitForSeconds(0.5f);
         audSource.Stop();
+        BGM.instance.isPlaying = true;
+        BGM.instance.audSource.Play();
         SceneTransition.instance.ChangeScene("RoomScene");
     }
 
@@ -209,6 +215,7 @@ public class StudyTimer : MonoBehaviour {
 
     public void Skip() {
         StopCoroutine(runningCoroutine);
+        isCoroutineRunning = false;
         StartCoroutine(PopUp());
     }
 
@@ -226,7 +233,7 @@ public class StudyTimer : MonoBehaviour {
     }
 
     private void OnApplicationPause(bool pauseStatus) {
-        if (pauseStatus) {
+        if (isCoroutineRunning && pauseStatus) {
             StopCoroutine(runningCoroutine);
             quitPopUp.SetActive(true);
 
