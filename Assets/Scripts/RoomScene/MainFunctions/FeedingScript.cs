@@ -21,16 +21,13 @@ public class FeedingScript : MonoBehaviour {
     }
 
     public void StartEat() {
-        bool canFeed = CatfoodManager.instance.DecreaseCatfood(5);
-        bool shouldNotFeed = StatsManager.instance.happinessFull;
-
+        bool canFeed = CatfoodManager.instance.DecreaseCatfood(1);
         if (!canFeed) {
             string msg = "Catfood insufficient! Study to earn more.";
             StartCoroutine(CatBehaviourManager.instance.DisplayNotifs(msg));
-        } else if (shouldNotFeed) {
-            string msg = "Cat is full...";
-            StartCoroutine(CatBehaviourManager.instance.DisplayNotifs(msg));
-        } else if (!isFeed && canFeed) {
+        }
+
+        if (!isFeed && canFeed) {
             string msg = "Cat eating!";
             StartCoroutine(CatBehaviourManager.instance.DisplayNotifs(msg));
 

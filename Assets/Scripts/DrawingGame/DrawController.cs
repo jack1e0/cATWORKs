@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
+using System.Linq;
+using System.IO;
 
 public class DrawController : MonoBehaviour {
     float brushSize;
@@ -30,8 +31,6 @@ public class DrawController : MonoBehaviour {
     [SerializeField] private Button save;
     [SerializeField] private Button cross;
 
-    [SerializeField] private Image notif;
-
     private float activeButtonSize = 1.2f;
 
     [SerializeField] private RenderTexture rt;
@@ -41,9 +40,6 @@ public class DrawController : MonoBehaviour {
     private void Awake() {
         sorting = 0;
         drawnLines = new Stack<GameObject>();
-        notif.enabled = false;
-        notif.transform.GetChild(0).GetComponent<TMP_Text>().text = string.Empty;
-
         red.GetComponent<Button>().onClick.AddListener(Red);
         green.GetComponent<Button>().onClick.AddListener(Green);
         blue.GetComponent<Button>().onClick.AddListener(Blue);
@@ -99,22 +95,7 @@ public class DrawController : MonoBehaviour {
     }
 
     private void Save() {
-        StartCoroutine(Notif());
         Capture();
-    }
-
-    IEnumerator Notif() {
-        notif.enabled = true;
-        notif.color = new Color(notif.color.r, notif.color.g, notif.color.b, 0);
-        LeanTween.alpha(notif.GetComponent<RectTransform>(), 0.5f, 0.3f);
-        yield return new WaitForSeconds(0.3f);
-        notif.transform.GetChild(0).GetComponent<TMP_Text>().text = "Saved!";
-        yield return new WaitForSeconds(1f);
-
-        notif.transform.GetChild(0).GetComponent<TMP_Text>().text = string.Empty;
-        LeanTween.alpha(notif.GetComponent<RectTransform>(), 0, 0.2f);
-        yield return new WaitForSeconds(0.2f);
-        notif.enabled = false;
     }
 
     public void Capture() {

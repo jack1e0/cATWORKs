@@ -30,7 +30,7 @@ public class CatBehaviourManager : MonoBehaviour {
 
     private GameObject[] buttons;
 
-    private Image notifs;
+    private TMP_Text notifs;
 
     public CatState currentState;
     private float timeSinceStateChange;
@@ -39,8 +39,6 @@ public class CatBehaviourManager : MonoBehaviour {
 
     public bool justStudied;
     private bool notFirstEnteredGame;
-
-    private bool notifsExist;
 
     // Making a singleton class
     public static CatBehaviourManager instance;
@@ -69,8 +67,7 @@ public class CatBehaviourManager : MonoBehaviour {
             StopAllCoroutines();
             randomStateCoroutine = null;
             buttons = GameObject.FindGameObjectsWithTag("Button");
-            notifs = GameObject.FindGameObjectWithTag("Notifs").GetComponent<Image>();
-            notifs.GetComponent<Button>().onClick.AddListener(SkipNotifs);
+            notifs = GameObject.FindGameObjectWithTag("Notifs").GetComponent<TMP_Text>();
 
             notifs.enabled = false;
             timeSinceStateChange = 0;
@@ -232,23 +229,8 @@ public class CatBehaviourManager : MonoBehaviour {
 
     public IEnumerator DisplayNotifs(string str) {
         notifs.enabled = true;
-        notifsExist = true;
-        LeanTween.moveLocalX(notifs.gameObject, -307f, 0.2f);
-        notifs.transform.GetChild(0).gameObject.GetComponent<TMP_Text>().text = str;
-        yield return new WaitForSeconds(5);
-        if (notifsExist) {
-            StartCoroutine(Skip());
-        }
-    }
-
-    private void SkipNotifs() {
-        StartCoroutine(Skip());
-    }
-
-    IEnumerator Skip() {
-        notifsExist = false;
-        LeanTween.moveLocalX(notifs.gameObject, -1100f, 0.2f);
-        yield return new WaitForSeconds(0.2f);
+        notifs.text = str;
+        yield return new WaitForSeconds(3);
         notifs.enabled = false;
     }
 

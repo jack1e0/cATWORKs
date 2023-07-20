@@ -159,8 +159,6 @@ public class StudyTimer : MonoBehaviour {
         CatBehaviourManager.instance.justStudied = true;
         yield return new WaitForSeconds(0.5f);
         audSource.Stop();
-        BGM.instance.isPlaying = true;
-        BGM.instance.audSource.Play();
         SceneTransition.instance.ChangeScene("RoomScene");
     }
 

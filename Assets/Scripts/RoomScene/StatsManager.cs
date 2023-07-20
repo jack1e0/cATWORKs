@@ -15,8 +15,6 @@ public class StatsManager : MonoBehaviour {
     public int currHappy;
     public int currLvl;
 
-    public bool happinessFull;
-
     private void Awake() {
         if (instance == null) {
             instance = this;
