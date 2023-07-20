@@ -10,6 +10,8 @@ public class StudyTimerCustom : MonoBehaviour {
 
     [SerializeField] private GameObject title;
     [SerializeField] private GameObject timeInput;
+    [SerializeField] private TMP_InputField inputField;
+    [SerializeField] private Button inputButton;
     [SerializeField] private GameObject studyCat;
     [SerializeField] private TMP_Text timer;
     [SerializeField] private Image fill;
@@ -39,6 +41,7 @@ public class StudyTimerCustom : MonoBehaviour {
     private Coroutine runningCoroutine;
 
     private void Awake() {
+        inputButton.interactable = false;
         quitPopUp.SetActive(false);
         popUp.SetActive(false);
 
@@ -64,7 +67,15 @@ public class StudyTimerCustom : MonoBehaviour {
 
     // Reading user input
     public void ReadInput(string number) {
-        duration = int.Parse(number);
+        int value;
+        bool isInt = int.TryParse(number, out value);
+        if (!isInt || value < 0 || value > 500) {
+            inputButton.interactable = false;
+            inputField.text = string.Empty;
+        } else {
+            inputButton.interactable = true;
+            this.duration = value;
+        }
     }
 
     // locking in user input and start study
@@ -126,6 +137,8 @@ public class StudyTimerCustom : MonoBehaviour {
         CatBehaviourManager.instance.justStudied = true;
         yield return new WaitForSeconds(0.5f);
         audSource.Stop();
+        BGM.instance.isPlaying = true;
+        BGM.instance.audSource.Play();
         SceneTransition.instance.ChangeScene("RoomScene");
     }
 

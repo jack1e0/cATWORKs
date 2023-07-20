@@ -291,9 +291,6 @@ public class AlarmManager : MonoBehaviour {
         blocker.SetActive(false);
     }
 
-    private void Update() {
-        Debug.Log(customPopUp.transform.localPosition);
-    }
 
     IEnumerator Slide(GameObject popUp, int upOrDown) {
 

@@ -2020,7 +2020,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
+    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.40392157}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -4037,6 +4037,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   title: {fileID: 406792741}
   timeInput: {fileID: 1126687971}
+  inputField: {fileID: 158341985}
+  inputButton: {fileID: 703589954}
   studyCat: {fileID: 282614240}
   timer: {fileID: 2106361655}
   fill: {fileID: 1769735784}
@@ -5313,7 +5315,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 1.4973959}
-  m_SizeDelta: {x: 612.22, y: 159.07}
+  m_SizeDelta: {x: 675.02, y: 159.07}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &2106361654
 Canvas:
@@ -5575,6 +5577,50 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 293163355}
     m_Modifications:
+    - target: {fileID: 3505423375095207168, guid: f41c17e52c837044f9439e930a643957, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3505423375095207168, guid: f41c17e52c837044f9439e930a643957, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3505423375095207168, guid: f41c17e52c837044f9439e930a643957, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3505423375095207168, guid: f41c17e52c837044f9439e930a643957, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3505423375437734822, guid: f41c17e52c837044f9439e930a643957, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 497.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 3505423375437734822, guid: f41c17e52c837044f9439e930a643957, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 497.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 3505423375437734822, guid: f41c17e52c837044f9439e930a643957, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 497.28
+      objectReference: {fileID: 0}
+    - target: {fileID: 3505423375545999024, guid: f41c17e52c837044f9439e930a643957, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3505423375545999024, guid: f41c17e52c837044f9439e930a643957, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3505423375545999024, guid: f41c17e52c837044f9439e930a643957, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3505423375545999024, guid: f41c17e52c837044f9439e930a643957, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3505423375545999039, guid: f41c17e52c837044f9439e930a643957, type: 3}
       propertyPath: m_Color.b
       value: 0.94117653
