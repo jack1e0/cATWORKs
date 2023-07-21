@@ -46,6 +46,10 @@ public class AlarmManager : MonoBehaviour {
         instance.Instantiate();
     }
 
+    private void OnDisable() {
+        SceneTransition.instance.user.alarmDict = this.alarmDict;
+    }
+
     private async void Instantiate() {
         addScreen.SetActive(false);
         blocker.SetActive(false);

@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
+using Newtonsoft.Json;
 
 public class SceneTransition : MonoBehaviour {
     public static SceneTransition instance;
@@ -72,5 +73,9 @@ public class SceneTransition : MonoBehaviour {
     IEnumerator FadeOut() {
         LeanTween.alpha(blocker.rectTransform, 0, Constants.sceneEntranceTime);
         yield return new WaitForSeconds(Constants.sceneEntranceTime);
+    }
+
+    private void OnApplicationQuit() {
+        string json = JsonConvert.SerializeObject(this.user);
     }
 }
