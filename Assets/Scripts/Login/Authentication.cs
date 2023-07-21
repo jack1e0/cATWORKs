@@ -113,7 +113,7 @@ public class Authentication : MonoBehaviour {
     }
 
     private async Task<UserData> LoadUserData(string userId, string name, string email) {
-        UserData user = new UserData(name, email);
+        UserData user = new UserData(name, userId);
         Task<DataSnapshot> DBTask = DBreference.Child("users").Child(userId).GetValueAsync();
         await DBTask;
         if (DBTask.Exception != null) {
@@ -126,6 +126,8 @@ public class Authentication : MonoBehaviour {
             user.currXP = int.Parse(snapshot.Child("currXP").Value.ToString());
             user.currHappiness = int.Parse(snapshot.Child("currHappiness").Value.ToString());
             user.prevExitTime = int.Parse(snapshot.Child("prevExitTime").Value.ToString());
+            user.alarmId = int.Parse(snapshot.Child("alarmId").Value.ToString());
+
             if (snapshot.Child("alarmDict").Value.ToString() == null) {
                 user.alarmDict = null;
             } else {
@@ -193,7 +195,7 @@ public class Authentication : MonoBehaviour {
                     } else {
                         //Username is now set
                         //Now return to login screen
-                        await WriteNewUser(User.UserId, User.DisplayName, User.Email);
+                        await WriteNewUser(User.UserId, User.DisplayName);
                         LoginScreen();
                         warningRegisterText.text = "";
                     }
@@ -202,20 +204,26 @@ public class Authentication : MonoBehaviour {
         }
     }
 
-    private async Task WriteNewUser(string userId, string name, string email) {
-        UserData user = new UserData(name, email);
+    private async Task WriteNewUser(string userId, string name) {
+        UserData user = new UserData(name, userId);
+        string username = JsonConvert.SerializeObject(user.username);
+        string id = JsonConvert.SerializeObject(user.userId);
         string catfoodCount = JsonConvert.SerializeObject(user.catfoodCount);
         string level = JsonConvert.SerializeObject(user.level);
         string currXP = JsonConvert.SerializeObject(user.currXP);
         string currHappiness = JsonConvert.SerializeObject(user.currHappiness);
         string prevExitTime = JsonConvert.SerializeObject(user.prevExitTime);
+        string alarmId = JsonConvert.SerializeObject(user.alarmId);
         string alarmDict = JsonConvert.SerializeObject(user.alarmDict);
 
+        await DBreference.Child("users").Child(userId).Child("username").SetValueAsync(username);
+        await DBreference.Child("users").Child(userId).Child("id").SetValueAsync(id);
         await DBreference.Child("users").Child(userId).Child("catfoodCount").SetValueAsync(catfoodCount);
         await DBreference.Child("users").Child(userId).Child("level").SetValueAsync(level);
         await DBreference.Child("users").Child(userId).Child("currXP").SetValueAsync(currXP);
         await DBreference.Child("users").Child(userId).Child("currHappiness").SetValueAsync(currHappiness);
         await DBreference.Child("users").Child(userId).Child("prevExitTime").SetValueAsync(prevExitTime);
+        await DBreference.Child("users").Child(userId).Child("alarmId").SetValueAsync(alarmId);
         await DBreference.Child("users").Child(userId).Child("alarmDict").SetValueAsync(alarmDict);
 
     }

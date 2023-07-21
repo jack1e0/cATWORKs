@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class UserData {
     public string username;
-    public string email;
+    public string userId;
 
     public int catfoodCount;
     public int level;
@@ -12,11 +12,12 @@ public class UserData {
     public int currHappiness;
     public long prevExitTime;
 
+    public int alarmId;
     public Dictionary<int, List<int>> alarmDict;
 
-    public UserData(string name, string email) {
+    public UserData(string name, string userId) {
         username = name;
-        this.email = email;
+        this.userId = userId;
     }
 
 }

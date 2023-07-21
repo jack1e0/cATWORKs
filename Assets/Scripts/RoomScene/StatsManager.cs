@@ -16,6 +16,7 @@ public class StatsManager : MonoBehaviour {
     public int currLvl;
 
     public bool happinessFull;
+    private bool notFirstEnter;
 
     private void Awake() {
         if (instance == null) {
@@ -25,12 +26,16 @@ public class StatsManager : MonoBehaviour {
             Destroy(this);
             instance = GameObject.FindGameObjectWithTag("Manager").GetComponent<StatsManager>();
         }
+        instance.Instantiate();
     }
 
-    private void Start() {
-        this.currXP = SceneTransition.instance.user.currXP;
-        this.currHappy = SceneTransition.instance.user.currHappiness;
-        this.currLvl = SceneTransition.instance.user.level;
+    private void Instantiate() {
+        if (!notFirstEnter) {
+            this.currXP = SceneTransition.instance.user.currXP;
+            this.currHappy = SceneTransition.instance.user.currHappiness;
+            this.currLvl = SceneTransition.instance.user.level;
+            notFirstEnter = true;
+        }
     }
 
     public void AddXP(int amt) {

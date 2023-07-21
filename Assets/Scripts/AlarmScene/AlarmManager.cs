@@ -47,6 +47,7 @@ public class AlarmManager : MonoBehaviour {
     }
 
     private void OnDisable() {
+        SceneTransition.instance.user.alarmId = this.id;
         SceneTransition.instance.user.alarmDict = this.alarmDict;
     }
 
@@ -60,6 +61,7 @@ public class AlarmManager : MonoBehaviour {
 
         parent = GameObject.FindGameObjectWithTag("Parent");
 
+        this.id = SceneTransition.instance.user.alarmId;
         alarmDict = SceneTransition.instance.user.alarmDict;
         if (alarmDict != null) {
             float heights = 0;
