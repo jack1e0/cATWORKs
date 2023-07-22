@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Newtonsoft.Json;
+using Firebase.Database;
+using System.Threading.Tasks;
 
 public class CatfoodManager : MonoBehaviour {
 
@@ -36,20 +39,31 @@ public class CatfoodManager : MonoBehaviour {
 
     }
 
-    public void IncreaseCatfood(int dif) {
+    public async void IncreaseCatfood(int dif) {
         catfoodCount += dif;
         catfoodText.text = catfoodCount.ToString("0");
+        await UpdateCatfood();
     }
 
-    public bool DecreaseCatfood(int dif) {
+    public async Task<bool> DecreaseCatfood(int dif) {
         if (dif <= catfoodCount) {
             int newCount = catfoodCount -= dif;
             catfoodCount = newCount;
             catfoodText.text = catfoodCount.ToString("0");
+            await UpdateCatfood();
             return true;
         } else {
             return false;
         }
+    }
+
+    private async Task UpdateCatfood() {
+        SceneTransition.instance.user.catfoodCount = catfoodCount;
+
+        string catfood = JsonConvert.SerializeObject(SceneTransition.instance.user.catfoodCount);
+
+        DatabaseReference DBreference = FirebaseDatabase.DefaultInstance.RootReference;
+        await DBreference.Child("users").Child(SceneTransition.instance.user.userId).Child("catfoodCount").SetValueAsync(catfood);
     }
 
     public int CalculateCatfood(float studyDuration) {

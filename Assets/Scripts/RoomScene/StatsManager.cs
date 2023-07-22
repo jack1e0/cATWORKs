@@ -12,6 +12,7 @@ public class StatsManager : MonoBehaviour {
     public event HappyChangeHandler onHappyChange;
 
     public int currXP;
+    public int maxXP;
     public int currHappy;
     public int currLvl;
 
@@ -32,6 +33,7 @@ public class StatsManager : MonoBehaviour {
     private void Instantiate() {
         if (!notFirstEnter) {
             this.currXP = SceneTransition.instance.user.currXP;
+            this.maxXP = SceneTransition.instance.user.maxXP;
             this.currHappy = SceneTransition.instance.user.currHappiness;
             this.currLvl = SceneTransition.instance.user.level;
             notFirstEnter = true;
@@ -46,8 +48,9 @@ public class StatsManager : MonoBehaviour {
         onHappyChange?.Invoke(amt);
     }
 
-    public void SetStats(int currXP, int currHappy, int currLvl) {
+    public void SetStats(int currXP, int maxXP, int currHappy, int currLvl) {
         this.currXP = currXP;
+        this.maxXP = maxXP;
         this.currHappy = currHappy;
         this.currLvl = currLvl;
     }

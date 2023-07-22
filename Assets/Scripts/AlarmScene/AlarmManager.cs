@@ -7,6 +7,9 @@ using UnityEngine.SceneManagement;
 using System.Threading.Tasks;
 using TMPro;
 using Unity.Notifications.Android;
+using Newtonsoft.Json;
+using Firebase.Database;
+
 
 public class AlarmManager : MonoBehaviour {
     private Dictionary<int, List<int>> alarmDict; // a mapping of notif id to its time and repeats
@@ -44,11 +47,6 @@ public class AlarmManager : MonoBehaviour {
         //     instance = GameObject.FindGameObjectWithTag("AlarmManager").GetComponent<AlarmManager>();
         // }
         instance.Instantiate();
-    }
-
-    private void OnDisable() {
-        SceneTransition.instance.user.alarmId = this.id;
-        SceneTransition.instance.user.alarmDict = this.alarmDict;
     }
 
     private async void Instantiate() {
@@ -121,7 +119,7 @@ public class AlarmManager : MonoBehaviour {
         LeanTween.alphaCanvas(addScreen.GetComponent<CanvasGroup>(), 1, 0.1f);
     }
 
-    public void DeleteAlarm(GameObject alarm) {
+    public async void DeleteAlarm(GameObject alarm) {
         int deletedID = alarm.GetComponent<AlarmSetter>().notifID;
         alarmDict.Remove(deletedID);
         AndroidNotificationCenter.CancelScheduledNotification(deletedID);
@@ -129,6 +127,7 @@ public class AlarmManager : MonoBehaviour {
         float height = alarm.GetComponent<RectTransform>().rect.height;
         VerticalLayoutGroup.Destroy(alarm);
         StartCoroutine(SizeFitter.instance.Contract(height));
+        await UpdateAlarms();
     }
 
     public void Back() {
@@ -146,7 +145,7 @@ public class AlarmManager : MonoBehaviour {
         this.repeat = "None";
     }
 
-    public void ConfirmAlarm() {
+    public async void ConfirmAlarm() {
         if (alarmDict == null) {
             alarmDict = new Dictionary<int, List<int>>();
         }
@@ -183,6 +182,19 @@ public class AlarmManager : MonoBehaviour {
         this.hour = 0;
         this.min = 0;
         this.repeat = "None";
+        await UpdateAlarms();
+    }
+
+    private async Task UpdateAlarms() {
+        SceneTransition.instance.user.alarmId = this.id;
+        SceneTransition.instance.user.alarmDict = this.alarmDict;
+
+        string alarmId = JsonConvert.SerializeObject(SceneTransition.instance.user.alarmId);
+        string alarmDict = JsonConvert.SerializeObject(SceneTransition.instance.user.alarmDict);
+
+        DatabaseReference DBreference = FirebaseDatabase.DefaultInstance.RootReference;
+        await DBreference.Child("users").Child(SceneTransition.instance.user.userId).Child("alarmId").SetValueAsync(alarmId);
+        await DBreference.Child("users").Child(SceneTransition.instance.user.userId).Child("alarmDict").SetValueAsync(alarmDict);
     }
 
     IEnumerator FadeAddScreen() {

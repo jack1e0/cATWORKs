@@ -2306,7 +2306,7 @@ MonoBehaviour:
   lvlText: {fileID: 1412507240}
   happyFill: {fileID: 2058829484}
   currXP: 0
-  maxXP: 20
+  maxXP: 10
   currLvl: 1
   currHappy: 0
   maxHappy: 20
@@ -2638,6 +2638,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a10878a0d5138104ab0bc651352d327f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  catfoodCount: 0
   earnedCatfood: 0
   earnedXP: 0
 --- !u!114 &1160994919
@@ -2666,6 +2667,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currXP: 0
+  maxXP: 0
   currHappy: 0
   currLvl: 1
   happinessFull: 0

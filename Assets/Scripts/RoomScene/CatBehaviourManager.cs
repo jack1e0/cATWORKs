@@ -111,6 +111,8 @@ public class CatBehaviourManager : MonoBehaviour {
         }
     }
 
+
+
     private CatState GetRandomState() {
         int rand = UnityEngine.Random.Range(0, 2);
         switch (rand) {

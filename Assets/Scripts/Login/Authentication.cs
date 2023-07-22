@@ -20,8 +20,7 @@ public class Authentication : MonoBehaviour {
     [Header("Login")]
     public TMP_InputField emailLoginField;
     public TMP_InputField passwordLoginField;
-    public TMP_Text warningLoginText;
-    public TMP_Text confirmLoginText;
+    public TMP_Text loginText;
 
     //Register variables
     [Header("Register")]
@@ -38,6 +37,7 @@ public class Authentication : MonoBehaviour {
 
     void Awake() {
         registerUI.SetActive(false);
+        loginText.text = string.Empty;
         //Check that all of the necessary dependencies for Firebase are present on the system
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
             dependencyStatus = task.Result;
@@ -98,15 +98,14 @@ public class Authentication : MonoBehaviour {
                     message = "Account does not exist";
                     break;
             }
-            warningLoginText.text = message;
+            loginText.text = message;
         } else {
             //User is now logged in
             //Now get the result
             User = new FirebaseUser(LoginTask.Result.User);
             Debug.LogFormat("User signed in successfully: {0} ({1})", User.DisplayName, User.Email);
             SceneTransition.instance.user = await LoadUserData(User.UserId, User.DisplayName, User.Email);
-            warningLoginText.text = "";
-            confirmLoginText.text = "Logged In";
+            loginText.text = "Logged In";
             SceneTransition.instance.firstEnteredRoom = true;
             SceneTransition.instance.ChangeScene("RoomScene");
         }
@@ -124,6 +123,7 @@ public class Authentication : MonoBehaviour {
             user.catfoodCount = int.Parse(snapshot.Child("catfoodCount").Value.ToString());
             user.level = int.Parse(snapshot.Child("level").Value.ToString());
             user.currXP = int.Parse(snapshot.Child("currXP").Value.ToString());
+            user.maxXP = int.Parse(snapshot.Child("maxXP").Value.ToString());
             user.currHappiness = int.Parse(snapshot.Child("currHappiness").Value.ToString());
             user.prevExitTime = int.Parse(snapshot.Child("prevExitTime").Value.ToString());
             user.alarmId = int.Parse(snapshot.Child("alarmId").Value.ToString());
@@ -211,8 +211,9 @@ public class Authentication : MonoBehaviour {
         string catfoodCount = JsonConvert.SerializeObject(user.catfoodCount);
         string level = JsonConvert.SerializeObject(user.level);
         string currXP = JsonConvert.SerializeObject(user.currXP);
+        string maxXP = JsonConvert.SerializeObject(user.maxXP);
         string currHappiness = JsonConvert.SerializeObject(user.currHappiness);
-        string prevExitTime = JsonConvert.SerializeObject(user.prevExitTime);
+        string prevExitTime = JsonConvert.SerializeObject(System.DateTime.Now);
         string alarmId = JsonConvert.SerializeObject(user.alarmId);
         string alarmDict = JsonConvert.SerializeObject(user.alarmDict);
 
@@ -221,6 +222,7 @@ public class Authentication : MonoBehaviour {
         await DBreference.Child("users").Child(userId).Child("catfoodCount").SetValueAsync(catfoodCount);
         await DBreference.Child("users").Child(userId).Child("level").SetValueAsync(level);
         await DBreference.Child("users").Child(userId).Child("currXP").SetValueAsync(currXP);
+        await DBreference.Child("users").Child(userId).Child("maxXP").SetValueAsync(maxXP);
         await DBreference.Child("users").Child(userId).Child("currHappiness").SetValueAsync(currHappiness);
         await DBreference.Child("users").Child(userId).Child("prevExitTime").SetValueAsync(prevExitTime);
         await DBreference.Child("users").Child(userId).Child("alarmId").SetValueAsync(alarmId);

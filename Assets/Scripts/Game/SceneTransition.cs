@@ -84,24 +84,12 @@ public class SceneTransition : MonoBehaviour {
         user.currXP = StatsManager.instance.currXP;
         user.currHappiness = StatsManager.instance.currHappy;
         user.level = StatsManager.instance.currLvl;
-        user.catfoodCount = CatfoodManager.instance.catfoodCount;
 
-        string catfoodCount = JsonConvert.SerializeObject(user.catfoodCount);
-        string level = JsonConvert.SerializeObject(user.level);
-        string currXP = JsonConvert.SerializeObject(user.currXP);
-        string currHappiness = JsonConvert.SerializeObject(user.currHappiness);
         string prevExitTime = JsonConvert.SerializeObject(user.prevExitTime);
-        string alarmId = JsonConvert.SerializeObject(user.alarmId);
-        string alarmDict = JsonConvert.SerializeObject(user.alarmDict);
 
         DatabaseReference DBreference = FirebaseDatabase.DefaultInstance.RootReference;
 
-        await DBreference.Child("users").Child(user.userId).Child("catfoodCount").SetValueAsync(catfoodCount);
-        await DBreference.Child("users").Child(user.userId).Child("level").SetValueAsync(level);
-        await DBreference.Child("users").Child(user.userId).Child("currXP").SetValueAsync(currXP);
-        await DBreference.Child("users").Child(user.userId).Child("currHappiness").SetValueAsync(currHappiness);
         await DBreference.Child("users").Child(user.userId).Child("prevExitTime").SetValueAsync(prevExitTime);
-        await DBreference.Child("users").Child(user.userId).Child("alarmId").SetValueAsync(alarmId);
-        await DBreference.Child("users").Child(user.userId).Child("alarmDict").SetValueAsync(alarmDict);
+
     }
 }

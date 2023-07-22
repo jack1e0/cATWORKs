@@ -20,8 +20,8 @@ public class FeedingScript : MonoBehaviour {
         catfood.enabled = false;
     }
 
-    public void StartEat() {
-        bool canFeed = CatfoodManager.instance.DecreaseCatfood(3);
+    public async void StartEat() {
+        bool canFeed = await CatfoodManager.instance.DecreaseCatfood(3);
 
         if (StatsManager.instance.happinessFull) {
             string msg = "Cat is full...";

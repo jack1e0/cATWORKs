@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Newtonsoft.Json;
+using Firebase.Database;
+using System.Threading.Tasks;
 
 public class StatsDisplay : MonoBehaviour {
     [SerializeField] private Image XPFill;
@@ -30,13 +33,13 @@ public class StatsDisplay : MonoBehaviour {
     }
 
     private void OnDisable() {
-        StatsManager.instance.SetStats(this.currXP, this.currHappy, this.currLvl);
+        StatsManager.instance.SetStats(this.currXP, this.maxXP, this.currHappy, this.currLvl);
 
         StatsManager.instance.OnXPChange -= HandleXPChange;
         StatsManager.instance.onHappyChange -= HandleHappyChange;
     }
 
-    private void HandleXPChange(int amt) {
+    private async void HandleXPChange(int amt) {
         StartCoroutine(ChangeFill(XPFill, (float)currXP, (float)amt, (float)this.maxXP));
 
         if (currXP + amt < maxXP) {
@@ -44,9 +47,10 @@ public class StatsDisplay : MonoBehaviour {
         }
 
         StatsManager.instance.currXP = this.currXP;
+        await UpdateXP();
     }
 
-    private void HandleHappyChange(int amt) {
+    private async void HandleHappyChange(int amt) {
         if (amt > 0) {
             if (currHappy < maxHappy) {
                 StatsManager.instance.happinessFull = false;
@@ -62,6 +66,7 @@ public class StatsDisplay : MonoBehaviour {
         }
 
         StatsManager.instance.currHappy = this.currHappy;
+        await UpdateHappiness();
     }
 
     IEnumerator ChangeFill(Image fill, float init, float amt, float max) {
@@ -78,7 +83,7 @@ public class StatsDisplay : MonoBehaviour {
         }
     }
 
-    void LevelUp() {
+    async void LevelUp() {
         SetFill(XPFill, 0, maxXP);
         currLvl++;
         lvlText.text = currLvl.ToString();
@@ -92,10 +97,35 @@ public class StatsDisplay : MonoBehaviour {
         string congrats = $"Congrats! You levelled up! Gained {reward} catfood";
         StartCoroutine(CatBehaviourManager.instance.DisplayNotifs(congrats));
         CatfoodManager.instance.IncreaseCatfood(reward);
+        await UpdateXP();
 
     }
 
     void SetFill(Image fill, float amt, float max) {
         fill.fillAmount = amt / max;
+    }
+
+    private async Task UpdateHappiness() {
+        SceneTransition.instance.user.currHappiness = currHappy;
+
+        string currHap = JsonConvert.SerializeObject(SceneTransition.instance.user.currHappiness);
+
+        DatabaseReference DBreference = FirebaseDatabase.DefaultInstance.RootReference;
+        await DBreference.Child("users").Child(SceneTransition.instance.user.userId).Child("currHappiness").SetValueAsync(currHap);
+    }
+
+    private async Task UpdateXP() {
+        SceneTransition.instance.user.currXP = currXP;
+        SceneTransition.instance.user.maxXP = maxXP;
+        SceneTransition.instance.user.level = currLvl;
+
+        string xp = JsonConvert.SerializeObject(SceneTransition.instance.user.currXP);
+        string maxxp = JsonConvert.SerializeObject(SceneTransition.instance.user.maxXP);
+        string lvl = JsonConvert.SerializeObject(SceneTransition.instance.user.level);
+
+        DatabaseReference DBreference = FirebaseDatabase.DefaultInstance.RootReference;
+        await DBreference.Child("users").Child(SceneTransition.instance.user.userId).Child("currXP").SetValueAsync(xp);
+        await DBreference.Child("users").Child(SceneTransition.instance.user.userId).Child("maxXP").SetValueAsync(maxxp);
+        await DBreference.Child("users").Child(SceneTransition.instance.user.userId).Child("level").SetValueAsync(lvl);
     }
 }
