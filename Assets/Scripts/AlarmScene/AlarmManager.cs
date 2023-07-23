@@ -146,7 +146,7 @@ public class AlarmManager : MonoBehaviour {
         this.repeat = "None";
     }
 
-    public async void ConfirmAlarm() {
+    public void ConfirmAlarm() {
         if (alarmDict == null) {
             alarmDict = new Dictionary<int, List<int>>();
         }
@@ -183,7 +183,12 @@ public class AlarmManager : MonoBehaviour {
         this.hour = 0;
         this.min = 0;
         this.repeat = "None";
-        await UpdateAlarms();
+        StartCoroutine(await());
+    }
+
+    IEnumerator await() {
+        Task t = UpdateAlarms();
+        yield return new WaitUntil(() => t.IsCompleted);
     }
 
     private async Task UpdateAlarms() {
@@ -216,12 +221,17 @@ public class AlarmManager : MonoBehaviour {
 
         switch (repeat) {
             case "None":
-                notification.FireTime = timeTday;
+                if ((timeTday - DateTime.Now).Minutes < 0) {
+                    notification.FireTime = timeTday.AddDays(1);
+                }
                 notification.IntentData = time.ToString();
                 AndroidNotificationCenter.SendNotificationWithExplicitID(notification, "alarm_channel", id);
+                Debug.Log("fire time: " + notification.FireTime);
                 return;
             case "Everyday":
-                notification.FireTime = timeTday;
+                if ((timeTday - DateTime.Now).Minutes < 0) {
+                    notification.FireTime = timeTday.AddDays(1);
+                }
                 notification.IntentData = time.ToString();
                 notification.RepeatInterval = new System.TimeSpan(1, 0, 0, 0);
                 AndroidNotificationCenter.SendNotificationWithExplicitID(notification, "alarm_channel", id);
@@ -255,7 +265,16 @@ public class AlarmManager : MonoBehaviour {
                  ? 7 - ((int)timeTday.DayOfWeek - (int)day)
                  : 0;
 
-        notification.FireTime = timeTday.AddDays(daysAway);
+        if (daysAway == 0) {
+            if ((timeTday - DateTime.Now).Minutes < 0) {
+                notification.FireTime = timeTday.AddDays(7);
+            } else {
+                notification.FireTime = timeTday;
+            }
+        } else {
+            notification.FireTime = timeTday.AddDays(daysAway);
+        }
+
         notification.RepeatInterval = new System.TimeSpan(7, 0, 0, 0);
         notification.IntentData = time.ToString();
         Debug.Log("intent data: " + notification.IntentData);
