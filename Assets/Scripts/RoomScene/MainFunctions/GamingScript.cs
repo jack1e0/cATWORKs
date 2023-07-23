@@ -12,7 +12,7 @@ public class GamingScript : MonoBehaviour {
     }
 
     public void GameScene() {
-        CatBehaviourManager.instance.ButtonPressBefore(CatState.NONE);
+        RoomSceneManager.instance.ButtonPressBefore(CatState.NONE);
         SceneTransition.instance.ChangeScene("DrawingGame");
     }
 }

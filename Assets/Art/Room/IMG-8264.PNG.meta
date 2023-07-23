@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: dd8018f8288f7714bbb1607fe7dd55ab
+guid: baf75a54d20e0c64fb7b19a4cf39de22
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -33,7 +33,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -129,13 +129,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: teenageSleep_0
+      name: IMG-8264_0
       rect:
         serializedVersion: 2
-        x: 376
-        y: 251
-        width: 306
-        height: 205
+        x: 784
+        y: 576
+        width: 124
+        height: 197
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -143,8 +143,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 91f9cd872da52d7428319640c8495121
-      internalID: 711471129
+      spriteID: 989b398ec2bc1f84394fa275de58c66f
+      internalID: 845909363
       vertices: []
       indices: 
       edges: []
@@ -160,7 +160,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      teenageSleep_0: 711471129
+      IMG-8264_0: 845909363
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

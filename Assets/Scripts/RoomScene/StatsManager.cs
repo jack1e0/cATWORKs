@@ -8,7 +8,7 @@ public class StatsManager : MonoBehaviour {
     public delegate void XPChangeHandler(int amt);
     public event XPChangeHandler OnXPChange;
 
-    public delegate void HappyChangeHandler(int amt);
+    public delegate void HappyChangeHandler(double amt);
     public event HappyChangeHandler onHappyChange;
 
     public bool happinessFull;
@@ -30,7 +30,7 @@ public class StatsManager : MonoBehaviour {
         OnXPChange?.Invoke(amt);
     }
 
-    public void ChangeHappy(int amt) {
+    public void ChangeHappy(double amt) {
         onHappyChange?.Invoke(amt);
     }
 }

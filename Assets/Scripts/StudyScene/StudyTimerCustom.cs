@@ -7,12 +7,11 @@ using UnityEngine.SceneManagement;
 using Unity.Notifications.Android;
 
 public class StudyTimerCustom : MonoBehaviour {
-
+    [SerializeField] private GameObject screen;
     [SerializeField] private GameObject title;
     [SerializeField] private GameObject timeInput;
     [SerializeField] private TMP_InputField inputField;
     [SerializeField] private Button inputButton;
-    [SerializeField] private GameObject studyCat;
     [SerializeField] private TMP_Text timer;
     [SerializeField] private Image fill;
     [SerializeField] private GameObject skip;
@@ -20,6 +19,11 @@ public class StudyTimerCustom : MonoBehaviour {
     [SerializeField] private GameObject popUp;
     [SerializeField] private GameObject quitPopUp;
     [Space(10)]
+
+    [SerializeField] private GameObject cat0;
+    [SerializeField] private GameObject cat1;
+    [SerializeField] private GameObject cat2;
+    private GameObject studyCat;
 
     [Header("Study Music")]
     private int musicIndex;
@@ -60,9 +64,16 @@ public class StudyTimerCustom : MonoBehaviour {
         musicName.enabled = false;
 
         title.GetComponent<TMP_Text>().text = "Custom";
-        studyCat.SetActive(false);
+        if (SceneTransition.instance.user.growth == 0) {
+            studyCat = Instantiate(cat0, screen.transform);
+        } else if (SceneTransition.instance.user.growth == 1) {
+            studyCat = Instantiate(cat1, screen.transform);
+        } else {
+            studyCat = Instantiate(cat2, screen.transform);
+        }
         studyCatAnim = studyCat.GetComponent<Animator>();
         studyCatButton = studyCat.GetComponent<Button>();
+        studyCat.SetActive(false);
 
         studyCatButton.onClick.AddListener(StudyCatTap);
     }
@@ -139,7 +150,7 @@ public class StudyTimerCustom : MonoBehaviour {
     private IEnumerator ChangeScene() {
         CatfoodManager.instance.CalculateCatfood(duration);
         CatfoodManager.instance.CalculateXP(duration);
-        CatBehaviourManager.instance.justStudied = true;
+        RoomSceneManager.instance.justStudied = true;
         yield return new WaitForSeconds(0.5f);
         audSource.Stop();
         BGM.instance.isPlaying = true;
@@ -230,7 +241,7 @@ public class StudyTimerCustom : MonoBehaviour {
 
     public void Quit() {
         duration = -1;
-        CatBehaviourManager.instance.quitStudy = true;
+        RoomSceneManager.instance.quitStudy = true;
         StartCoroutine(ChangeScene());
     }
 

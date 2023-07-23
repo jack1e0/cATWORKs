@@ -128,7 +128,7 @@ public class Authentication : MonoBehaviour {
             user.currXP = int.Parse(snapshot.Child("currXP").Value.ToString());
             user.maxXP = int.Parse(snapshot.Child("maxXP").Value.ToString());
             user.currHappiness = int.Parse(snapshot.Child("currHappiness").Value.ToString());
-            user.prevExitTime = snapshot.Child("prevExitTime").Value.ToString();
+            user.prevExitTime = JsonConvert.DeserializeObject<System.DateTime>(snapshot.Child("prevExitTime").Value.ToString());
             user.alarmId = int.Parse(snapshot.Child("alarmId").Value.ToString());
 
             if (snapshot.Child("alarmDict").Value.ToString() == null) {
@@ -217,7 +217,7 @@ public class Authentication : MonoBehaviour {
         string currXP = JsonConvert.SerializeObject(user.currXP);
         string maxXP = JsonConvert.SerializeObject(user.maxXP);
         string currHappiness = JsonConvert.SerializeObject(user.currHappiness);
-        string prevExitTime = JsonConvert.SerializeObject(System.DateTime.Now.ToString());
+        string prevExitTime = JsonConvert.SerializeObject(System.DateTime.Now);
         string alarmId = JsonConvert.SerializeObject(user.alarmId);
         string alarmDict = JsonConvert.SerializeObject(user.alarmDict);
 

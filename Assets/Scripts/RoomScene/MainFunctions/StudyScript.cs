@@ -50,7 +50,7 @@ public class StudyScript : MonoBehaviour {
     }
 
     private void MenuAppear() {
-        CatBehaviourManager.instance.ButtonPressBefore(CatState.NONE);
+        RoomSceneManager.instance.ButtonPressBefore(CatState.NONE);
         menuScreen.SetActive(true);
         menuScreen.GetComponent<CanvasGroup>().alpha = 0;
         LeanTween.alphaCanvas(menuScreen.GetComponent<CanvasGroup>(), 1, 0.1f);
@@ -58,7 +58,7 @@ public class StudyScript : MonoBehaviour {
     }
 
     public void Back() {
-        CatBehaviourManager.instance.ButtonPressAfter();
+        RoomSceneManager.instance.ButtonPressAfter();
         StartCoroutine(Fade());
     }
 

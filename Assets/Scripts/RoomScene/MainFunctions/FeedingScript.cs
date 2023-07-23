@@ -6,13 +6,15 @@ using TMPro;
 
 public class FeedingScript : MonoBehaviour {
     private Button button;
-    [SerializeField] private float eatDuration = 5f;
+    [SerializeField] private float eatDuration = 3f;
     private bool isFeed;
     [SerializeField] private Image catfood;
+    private AudioSource aud;
 
     private void Awake() {
         isFeed = false;
-        button = gameObject.GetComponent<Button>();
+        button = GetComponent<Button>();
+        aud = GetComponent<AudioSource>();
     }
 
     void Start() {
@@ -25,20 +27,20 @@ public class FeedingScript : MonoBehaviour {
 
         if (StatsManager.instance.happinessFull) {
             string msg = "Cat is full...";
-            StartCoroutine(CatBehaviourManager.instance.DisplayNotifs(msg));
+            StartCoroutine(RoomSceneManager.instance.DisplayNotifs(msg));
         } else if (!canFeed) {
             string msg = "Catfood insufficient! Study to earn more.";
-            StartCoroutine(CatBehaviourManager.instance.DisplayNotifs(msg));
+            StartCoroutine(RoomSceneManager.instance.DisplayNotifs(msg));
         } else if (!isFeed && canFeed) {
             string msg = "Cat eating!";
-            StartCoroutine(CatBehaviourManager.instance.DisplayNotifs(msg));
+            StartCoroutine(RoomSceneManager.instance.DisplayNotifs(msg));
 
             catfood.enabled = true;
             Color col = catfood.color;
             catfood.color = new Color(col.r, col.g, col.b, 0);
             LeanTween.alpha(catfood.rectTransform, 1, 0.1f);
 
-            CatBehaviourManager.instance.ButtonPressBefore(CatState.EAT);
+            RoomSceneManager.instance.ButtonPressBefore(CatState.EAT);
             Debug.Log("Start eating!");
             StartCoroutine(EatCoroutine());
         }
@@ -46,12 +48,9 @@ public class FeedingScript : MonoBehaviour {
 
     private IEnumerator EatCoroutine() {
         isFeed = true;
-        float timeInSeconds = eatDuration;
-        while (timeInSeconds >= 0) {
-            timeInSeconds--;
-            yield return new WaitForSeconds(1);
-        }
-
+        aud.Play();
+        yield return new WaitForSeconds(eatDuration);
+        aud.Stop();
         LeanTween.alpha(catfood.rectTransform, 0, 0.1f);
         yield return new WaitForSeconds(0.1f);
         catfood.enabled = false;
@@ -59,7 +58,7 @@ public class FeedingScript : MonoBehaviour {
         CatMeow.instance.Meow();
 
         StatsManager.instance.ChangeHappy(5);
-        CatBehaviourManager.instance.ButtonPressAfter();
+        RoomSceneManager.instance.ButtonPressAfter();
         isFeed = false;
     }
 }

@@ -22,20 +22,15 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class AlarmScript : MonoBehaviour {
 
-    [SerializeField] private TMP_Text countdown;
-    [SerializeField] private GameObject timerScreen;
     private Button button;
-    private bool needToStudy;
 
     private void Awake() {
         button = gameObject.GetComponent<Button>();
-        timerScreen.SetActive(false);
-
         button.onClick.AddListener(AlarmScene);
     }
 
     public void AlarmScene() {
-        CatBehaviourManager.instance.ButtonPressBefore(CatState.NONE);
+        RoomSceneManager.instance.ButtonPressBefore(CatState.NONE);
         SceneTransition.instance.ChangeScene("AlarmScene");
     }
 

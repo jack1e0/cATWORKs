@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class UserData {
     public string username;
@@ -13,7 +14,7 @@ public class UserData {
     public int currXP;
     public int maxXP;
     public int currHappiness;
-    public string prevExitTime;
+    public DateTime prevExitTime;
 
     public int alarmId;
     public Dictionary<int, List<int>> alarmDict;

@@ -9,7 +9,6 @@ using Unity.Notifications.Android;
 public class StudyTimer : MonoBehaviour {
     [SerializeField] private GameObject screen;
     [SerializeField] private TMP_Text title;
-    [SerializeField] private GameObject studyCat;
     [SerializeField] private TMP_Text timer;
     private GameObject timeFill;
     [SerializeField] private GameObject parent;
@@ -19,6 +18,11 @@ public class StudyTimer : MonoBehaviour {
     [SerializeField] private TMP_Text popupText;
     [SerializeField] private GameObject quitPopUp;
     [Space(10)]
+
+    [SerializeField] private GameObject cat0;
+    [SerializeField] private GameObject cat1;
+    [SerializeField] private GameObject cat2;
+    private GameObject studyCat;
 
     [Header("Study Music")]
     private int musicIndex;
@@ -66,6 +70,14 @@ public class StudyTimer : MonoBehaviour {
 
         studyName = TechniqueManager.instance.techniqueData.techniqueName;
         studyStages = TechniqueManager.instance.techniqueData.studyStages;
+
+        if (SceneTransition.instance.user.growth == 0) {
+            studyCat = Instantiate(cat0, screen.transform);
+        } else if (SceneTransition.instance.user.growth == 1) {
+            studyCat = Instantiate(cat1, screen.transform);
+        } else {
+            studyCat = Instantiate(cat2, screen.transform);
+        }
 
         studyCatAnim = studyCat.GetComponent<Animator>();
         studyCatButton = studyCat.GetComponent<Button>();
@@ -164,7 +176,7 @@ public class StudyTimer : MonoBehaviour {
     private IEnumerator ChangeScene() {
         CatfoodManager.instance.CalculateCatfood(durationStudied / 60f);
         CatfoodManager.instance.CalculateXP(durationStudied / 60f);
-        CatBehaviourManager.instance.justStudied = true;
+        RoomSceneManager.instance.justStudied = true;
         yield return new WaitForSeconds(0.5f);
         audSource.Stop();
         BGM.instance.isPlaying = true;
@@ -253,7 +265,7 @@ public class StudyTimer : MonoBehaviour {
 
     public void Quit() {
         durationStudied = -1;
-        CatBehaviourManager.instance.quitStudy = true;
+        RoomSceneManager.instance.quitStudy = true;
         StartCoroutine(ChangeScene());
     }
 

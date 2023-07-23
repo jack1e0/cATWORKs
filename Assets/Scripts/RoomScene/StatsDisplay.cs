@@ -50,21 +50,27 @@ public class StatsDisplay : MonoBehaviour {
         await UpdateXP();
     }
 
-    private async void HandleHappyChange(int amt) {
+    private async void HandleHappyChange(double amt) {
         if (amt > 0) {
             if (currHappy < maxHappy) {
                 StatsManager.instance.happinessFull = false;
                 StartCoroutine(ChangeFill(happyFill, (float)currHappy, (float)amt, (float)this.maxHappy));
-                currHappy += Mathf.Min(amt, maxHappy - currHappy);
+                currHappy += Mathf.Min((int)amt, maxHappy - currHappy);
                 StatsManager.instance.happinessPercent = (float)currHappy / (float)maxHappy;
             } else {
                 StatsManager.instance.happinessFull = true;
             }
+            SceneTransition.instance.user.prevExitTime = System.DateTime.Now;
+            await UpdatePrevTime();
+
         } else { // TODO: not completely implemented yet
             if (currHappy + amt >= 0) {
-                currHappy += amt;
-                StatsManager.instance.happinessPercent = (float)currHappy / (float)maxHappy;
+                currHappy += (int)amt;
+            } else {
+                currHappy = 0;
             }
+            SetFill(happyFill, currHappy, maxHappy);
+            StatsManager.instance.happinessPercent = (float)currHappy / (float)maxHappy;
         }
 
         await UpdateHappiness();
@@ -98,12 +104,15 @@ public class StatsDisplay : MonoBehaviour {
 
         string congrats;
         if (currLvl == 4 || currLvl == 7 || currLvl == 10) {
-            SceneTransition.instance.user.growth = Mathf.Min(2, SceneTransition.instance.user.growth++);
+            SceneTransition.instance.user.growth = Mathf.Min(2, SceneTransition.instance.user.growth + 1);
+            Debug.Log("growth: " + SceneTransition.instance.user.growth);
+            await UpdateGrowth();
+            RoomSceneManager.instance.catControl.Initialize();
             congrats = $"Levelling up! Your cat has grown as well! Gained {reward} catfood";
         } else {
             congrats = $"Congrats! You levelled up! Gained {reward} catfood";
         }
-        StartCoroutine(CatBehaviourManager.instance.DisplayNotifs(congrats));
+        StartCoroutine(RoomSceneManager.instance.DisplayNotifs(congrats));
         CatfoodManager.instance.IncreaseCatfood(reward);
         await UpdateXP();
 
@@ -135,5 +144,19 @@ public class StatsDisplay : MonoBehaviour {
         await DBreference.Child("users").Child(SceneTransition.instance.user.userId).Child("currXP").SetValueAsync(xp);
         await DBreference.Child("users").Child(SceneTransition.instance.user.userId).Child("maxXP").SetValueAsync(maxxp);
         await DBreference.Child("users").Child(SceneTransition.instance.user.userId).Child("level").SetValueAsync(lvl);
+    }
+
+    private async Task UpdateGrowth() {
+        string grow = JsonConvert.SerializeObject(SceneTransition.instance.user.growth);
+
+        DatabaseReference DBreference = FirebaseDatabase.DefaultInstance.RootReference;
+        await DBreference.Child("users").Child(SceneTransition.instance.user.userId).Child("growth").SetValueAsync(grow);
+    }
+
+    private async Task UpdatePrevTime() {
+        string prev = JsonConvert.SerializeObject(SceneTransition.instance.user.prevExitTime);
+
+        DatabaseReference DBreference = FirebaseDatabase.DefaultInstance.RootReference;
+        await DBreference.Child("users").Child(SceneTransition.instance.user.userId).Child("prevExitTime").SetValueAsync(prev);
     }
 }
