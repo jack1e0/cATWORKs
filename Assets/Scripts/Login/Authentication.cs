@@ -130,6 +130,7 @@ public class Authentication : MonoBehaviour {
             user.currHappiness = int.Parse(snapshot.Child("currHappiness").Value.ToString());
             user.prevExitTime = JsonConvert.DeserializeObject<System.DateTime>(snapshot.Child("prevExitTime").Value.ToString());
             user.alarmId = int.Parse(snapshot.Child("alarmId").Value.ToString());
+            user.firstTime = bool.Parse(snapshot.Child("firstTime").Value.ToString());
 
             if (snapshot.Child("alarmDict").Value.ToString() == null) {
                 user.alarmDict = null;
@@ -220,6 +221,7 @@ public class Authentication : MonoBehaviour {
         string prevExitTime = JsonConvert.SerializeObject(System.DateTime.Now);
         string alarmId = JsonConvert.SerializeObject(user.alarmId);
         string alarmDict = JsonConvert.SerializeObject(user.alarmDict);
+        string firstTime = JsonConvert.SerializeObject(user.firstTime);
 
         await DBreference.Child("users").Child(userId).Child("username").SetValueAsync(username);
         await DBreference.Child("users").Child(userId).Child("id").SetValueAsync(id);
@@ -232,6 +234,7 @@ public class Authentication : MonoBehaviour {
         await DBreference.Child("users").Child(userId).Child("prevExitTime").SetValueAsync(prevExitTime);
         await DBreference.Child("users").Child(userId).Child("alarmId").SetValueAsync(alarmId);
         await DBreference.Child("users").Child(userId).Child("alarmDict").SetValueAsync(alarmDict);
+        await DBreference.Child("users").Child(userId).Child("firstTime").SetValueAsync(firstTime);
 
     }
 

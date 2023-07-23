@@ -216,6 +216,7 @@ public class AlarmManager : MonoBehaviour {
         notification.Text = "Time to study!";
 
         DateTime timeTday = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, (time - time % 100) / 100, time % 100, 0); // the time TODAY
+        Debug.Log("time now: " + timeTday);
         int daysAway = 0;
         DayOfWeek day = DayOfWeek.Sunday; // default val
 

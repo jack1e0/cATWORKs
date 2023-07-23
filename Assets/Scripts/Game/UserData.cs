@@ -19,6 +19,8 @@ public class UserData {
     public int alarmId;
     public Dictionary<int, List<int>> alarmDict;
 
+    public bool firstTime;
+
     public UserData(string name, string userId) {
         username = name;
         this.userId = userId;
@@ -28,7 +30,7 @@ public class UserData {
         currXP = 0;
         maxXP = 2;
         currHappiness = 0;
-
+        firstTime = true;
     }
 
 }

@@ -48,14 +48,9 @@ public class SceneTransition : MonoBehaviour {
     }
 
     public void ChangeScene(string sceneName) {
-        if (sceneName == "FlappyCat") {
-            Screen.orientation = ScreenOrientation.LandscapeLeft;
-            BGM.instance.ChangeClip(flappyCat);
-        } else if (sceneName == "DrawingGame") {
-            Screen.orientation = ScreenOrientation.Portrait;
+        if (sceneName == "DrawingGame") {
             BGM.instance.ChangeClip(drawingGame);
         } else {
-            Screen.orientation = ScreenOrientation.Portrait;
             BGM.instance.ChangeClip(bgm);
         }
 

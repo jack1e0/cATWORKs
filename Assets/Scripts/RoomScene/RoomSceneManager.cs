@@ -52,8 +52,9 @@ public class RoomSceneManager : MonoBehaviour {
             notifs.GetComponent<Button>().onClick.AddListener(SkipNotifs);
             notifs.enabled = false;
 
-            catControl = Instantiate(catPrefab, Vector3.zero, Quaternion.identity).GetComponent<CatController>();
-            catControl.Initialize();
+            if (!SceneTransition.instance.user.firstTime) {
+                InstantiateCats();
+            }
 
             DateTime prev = SceneTransition.instance.user.prevExitTime;
             double mins = (System.DateTime.Now - prev).TotalMinutes;
@@ -67,7 +68,7 @@ public class RoomSceneManager : MonoBehaviour {
                 justStudied = false;
             }
 
-            if (SceneTransition.instance.firstEnteredRoom) {
+            if (SceneTransition.instance.firstEnteredRoom && !SceneTransition.instance.user.firstTime) {
                 string msg = "Welcome back, " + SceneTransition.instance.user.username + "!";
                 StartCoroutine(DisplayNotifs(msg));
                 SceneTransition.instance.firstEnteredRoom = false;
@@ -85,6 +86,11 @@ public class RoomSceneManager : MonoBehaviour {
             }
 
         }
+    }
+
+    public void InstantiateCats() {
+        catControl = Instantiate(catPrefab, Vector3.zero, Quaternion.identity).GetComponent<CatController>();
+        catControl.Initialize();
     }
 
     public void ButtonPressBefore(CatState state) {

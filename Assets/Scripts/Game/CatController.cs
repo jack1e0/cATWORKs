@@ -105,12 +105,12 @@ public class CatController : MonoBehaviour {
     private float GetStateDuration(CatState state) {
         switch (state) {
             case CatState.SLEEP:
-                // return UnityEngine.Random.Range(10, 20);
-                return 10;
+                return UnityEngine.Random.Range(12, 25);
+            // 10;
             //return 5;
             case CatState.SIT:
-                //return UnityEngine.Random.Range(5, 10);
-                return 5;
+                return UnityEngine.Random.Range(5, 10);
+            //return 5;
             //return 5;
             default:
                 return -1;
