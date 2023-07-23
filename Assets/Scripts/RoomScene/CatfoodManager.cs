@@ -70,7 +70,7 @@ public class CatfoodManager : MonoBehaviour {
         if (studyDuration < 0) {
             return 0;
         }
-        int food = Mathf.CeilToInt(studyDuration / 2);
+        int food = Mathf.CeilToInt(studyDuration / 2 * (StatsManager.instance.happinessPercent) * 5);
         int earned = Mathf.Max(2, food);
         Debug.Log("catfood earned: " + earned);
         earnedCatfood = earned;

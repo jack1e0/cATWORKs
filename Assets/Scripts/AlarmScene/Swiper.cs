@@ -37,6 +37,7 @@ public class Swiper : MonoBehaviour, IDragHandler {
         float dif = eventData.pressPosition.x - eventData.position.x;
         Debug.Log(dif);
         if (dif > threshold && !isDeleting) { // If swiping left
+            Debug.Log("swiping left");
             isDeleting = true;
             StartCoroutine(Move(above, new Vector3(-316, 0, 0)));
         } else if (isDeleting) { // If swiping right when button is exposed

@@ -230,6 +230,7 @@ public class StudyTimerCustom : MonoBehaviour {
 
     public void Quit() {
         duration = -1;
+        CatBehaviourManager.instance.quitStudy = true;
         StartCoroutine(ChangeScene());
     }
 

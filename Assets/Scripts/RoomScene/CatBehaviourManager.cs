@@ -39,6 +39,7 @@ public class CatBehaviourManager : MonoBehaviour {
 
     public bool justStudied;
     private bool notFirstEnteredGame;
+    public bool quitStudy;
 
     private bool notifsExist;
 
@@ -260,15 +261,26 @@ public class CatBehaviourManager : MonoBehaviour {
         Debug.Log(CatfoodManager.instance);
         int catfoodEarned = CatfoodManager.instance.earnedCatfood;
         int xpEarned = CatfoodManager.instance.earnedXP;
-
-        string msg = $"Study session ended!\n+{catfoodEarned} catfood, +{xpEarned} XP";
+        string msg;
+        if (quitStudy) {
+            msg = "Quit study session... Try again?";
+            quitStudy = false;
+        } else {
+            if (xpEarned == 0) {
+                msg = $"Study session ended! Try studying longer for more rewards :)";
+            } else {
+                msg = $"Study session ended!\n+{catfoodEarned} catfood, +{xpEarned} XP";
+            }
+        }
         StartCoroutine(DisplayNotifs(msg));
 
         // Wait for next frame so CatfoodManager finish Awake()
         yield return null;
         CatfoodManager.instance.IncreaseCatfood(catfoodEarned);
-        StatsManager.instance.AddXP(xpEarned);
-        CatMeow.instance.Meow();
+        if (xpEarned != 0) {
+            StatsManager.instance.AddXP(xpEarned);
+            CatMeow.instance.Meow();
+        }
 
         Debug.Log("ENDED");
     }

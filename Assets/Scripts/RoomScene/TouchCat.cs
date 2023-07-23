@@ -16,7 +16,10 @@ public class TouchCat : MonoBehaviour, IPointerDownHandler {
         if (hit.collider != null && hit.collider.gameObject.tag == "Cat") {
             Debug.Log("hit cat");
             if (CatBehaviourManager.instance.currentState == CatState.SIT) {
-                CatMeow.instance.Meow();
+                if (Random.Range(0, 4) == 2) {
+                    CatMeow.instance.Meow();
+                    StatsManager.instance.ChangeHappy(1);
+                }
             } else if (CatBehaviourManager.instance.currentState == CatState.SLEEP) {
                 CatMeow.instance.Snore();
             }

@@ -17,11 +17,14 @@ public class StatsDisplay : MonoBehaviour {
     [SerializeField] private int reward;
 
     [SerializeField] private TMP_Text textDisplay;
+    private AudioSource aud;
 
     private void Start() {
-        this.currXP = StatsManager.instance.currXP;
-        this.currHappy = StatsManager.instance.currHappy;
-        this.currLvl = StatsManager.instance.currLvl;
+        aud = GetComponent<AudioSource>();
+        this.currXP = SceneTransition.instance.user.currXP;
+        this.currHappy = SceneTransition.instance.user.currHappiness;
+        this.currLvl = SceneTransition.instance.user.level;
+        this.maxXP = SceneTransition.instance.user.maxXP;
 
         lvlText.text = currLvl.ToString();
         SetFill(XPFill, (float)currXP, (float)maxXP);
@@ -33,8 +36,6 @@ public class StatsDisplay : MonoBehaviour {
     }
 
     private void OnDisable() {
-        StatsManager.instance.SetStats(this.currXP, this.maxXP, this.currHappy, this.currLvl);
-
         StatsManager.instance.OnXPChange -= HandleXPChange;
         StatsManager.instance.onHappyChange -= HandleHappyChange;
     }
@@ -46,7 +47,6 @@ public class StatsDisplay : MonoBehaviour {
             currXP += amt;
         }
 
-        StatsManager.instance.currXP = this.currXP;
         await UpdateXP();
     }
 
@@ -56,20 +56,22 @@ public class StatsDisplay : MonoBehaviour {
                 StatsManager.instance.happinessFull = false;
                 StartCoroutine(ChangeFill(happyFill, (float)currHappy, (float)amt, (float)this.maxHappy));
                 currHappy += Mathf.Min(amt, maxHappy - currHappy);
+                StatsManager.instance.happinessPercent = (float)currHappy / (float)maxHappy;
             } else {
                 StatsManager.instance.happinessFull = true;
             }
         } else { // TODO: not completely implemented yet
             if (currHappy + amt >= 0) {
                 currHappy += amt;
+                StatsManager.instance.happinessPercent = (float)currHappy / (float)maxHappy;
             }
         }
 
-        StatsManager.instance.currHappy = this.currHappy;
         await UpdateHappiness();
     }
 
     IEnumerator ChangeFill(Image fill, float init, float amt, float max) {
+        aud.Play();
         float i = 0;
         while (i <= 1) {
             fill.fillAmount = Mathf.Lerp(init / max, Mathf.Min(1, (init + amt) / max), i);
@@ -89,12 +91,18 @@ public class StatsDisplay : MonoBehaviour {
         lvlText.text = currLvl.ToString();
 
         currXP = 0;
-        maxXP += 20;
+        maxXP += 3;
         if (reward <= 20) {
             reward += 2;
         }
 
-        string congrats = $"Congrats! You levelled up! Gained {reward} catfood";
+        string congrats;
+        if (currLvl == 4 || currLvl == 7 || currLvl == 10) {
+            SceneTransition.instance.user.growth = Mathf.Min(2, SceneTransition.instance.user.growth++);
+            congrats = $"Levelling up! Your cat has grown as well! Gained {reward} catfood";
+        } else {
+            congrats = $"Congrats! You levelled up! Gained {reward} catfood";
+        }
         StartCoroutine(CatBehaviourManager.instance.DisplayNotifs(congrats));
         CatfoodManager.instance.IncreaseCatfood(reward);
         await UpdateXP();

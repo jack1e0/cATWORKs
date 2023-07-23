@@ -174,6 +174,7 @@ MonoBehaviour:
   parent: {fileID: 1056155391}
   skip: {fileID: 1018268410}
   popUp: {fileID: 216151383}
+  popupText: {fileID: 1765545368}
   quitPopUp: {fileID: 1660005889}
   studyMusics:
   - {fileID: 8300000, guid: f2b5df7ce6a33cf419bec285f05b4aef, type: 3}

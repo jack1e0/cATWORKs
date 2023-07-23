@@ -93,6 +93,7 @@ public class AlarmManager : MonoBehaviour {
     }
 
     private void Start() {
+        AndroidNotificationCenter.CancelAllDisplayedNotifications();
         // Creating Android Notification Channel to send messages through
         var channel = new AndroidNotificationChannel() {
             Id = "alarm_channel",

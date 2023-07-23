@@ -16,6 +16,7 @@ public class StudyTimer : MonoBehaviour {
     private GameObject timeline;
     [SerializeField] private GameObject skip;
     [SerializeField] private GameObject popUp;
+    [SerializeField] private TMP_Text popupText;
     [SerializeField] private GameObject quitPopUp;
     [Space(10)]
 
@@ -43,6 +44,7 @@ public class StudyTimer : MonoBehaviour {
     private Coroutine runningCoroutine;
 
     private bool isCoroutineRunning;
+    private bool isBreak;
 
 
     private void Awake() {
@@ -96,10 +98,12 @@ public class StudyTimer : MonoBehaviour {
 
         if (currStage % 2 != 0) { // if break time
             title.text = "Break!";
+            isBreak = true;
             Color breakColor = new Color(Constants.breakColourR, Constants.breakColourG, Constants.breakColourB);
             fill.color = breakColor;
             timer.color = breakColor;
         } else {
+            isBreak = false;
             title.text = studyName;
             Color studyColor = new Color(Constants.studyColourR, Constants.studyColourG, Constants.studyColourB);
             fill.color = studyColor;
@@ -249,6 +253,7 @@ public class StudyTimer : MonoBehaviour {
 
     public void Quit() {
         durationStudied = -1;
+        CatBehaviourManager.instance.quitStudy = true;
         StartCoroutine(ChangeScene());
     }
 
@@ -261,6 +266,12 @@ public class StudyTimer : MonoBehaviour {
 
     IEnumerator PopUp() {
         popUp.SetActive(true);
+        if (isBreak) {
+            popupText.text = "Are you sure? Breaks are important as well!";
+        } else {
+            popupText.text = "Are you sure? Your remaining rewards for this stage will be lost!";
+        }
+
         LeanTween.scale(popUp.transform.GetChild(0).gameObject, new Vector3(1.1f, 1.1f, 1.1f), 0.1f);
         yield return new WaitForSeconds(0.1f);
         LeanTween.scale(popUp.transform.GetChild(0).gameObject, new Vector3(1, 1, 1), 0.1f);

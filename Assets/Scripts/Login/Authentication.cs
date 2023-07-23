@@ -37,7 +37,7 @@ public class Authentication : MonoBehaviour {
 
     void Awake() {
         registerUI.SetActive(false);
-        loginText.text = string.Empty;
+        loginText.text = "";
         //Check that all of the necessary dependencies for Firebase are present on the system
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
             dependencyStatus = task.Result;
@@ -58,9 +58,9 @@ public class Authentication : MonoBehaviour {
     }
 
     //Function for the login button
-    public void LoginButton() {
+    public async void LoginButton() {
         //Call the login coroutine passing the email and password
-        Login(emailLoginField.text, passwordLoginField.text);
+        await Login(emailLoginField.text, passwordLoginField.text);
     }
     //Function for the register button
     public async void RegisterButton() {
@@ -68,46 +68,48 @@ public class Authentication : MonoBehaviour {
         await Register(emailRegisterField.text, passwordRegisterField.text, usernameRegisterField.text);
     }
 
-    private async void Login(string _email, string _password) {
+    private async Task Login(string _email, string _password) {
         //Call the Firebase auth signin function passing the email and password
         Task<AuthResult> LoginTask = auth.SignInWithEmailAndPasswordAsync(_email, _password);
         //Wait until the task completes
-        await LoginTask;
+        try {
+            await LoginTask;
 
-        if (LoginTask.Exception != null) {
-            //If there are errors handle them
-            Debug.LogWarning(message: $"Failed to register task with {LoginTask.Exception}");
-            FirebaseException firebaseEx = LoginTask.Exception.GetBaseException() as FirebaseException;
-            AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
-
-            string message = "Login Failed!";
-            switch (errorCode) {
-                case AuthError.MissingEmail:
-                    message = "Missing Email";
-                    break;
-                case AuthError.MissingPassword:
-                    message = "Missing Password";
-                    break;
-                case AuthError.WrongPassword:
-                    message = "Wrong Password";
-                    break;
-                case AuthError.InvalidEmail:
-                    message = "Invalid Email";
-                    break;
-                case AuthError.UserNotFound:
-                    message = "Account does not exist";
-                    break;
-            }
-            loginText.text = message;
-        } else {
-            //User is now logged in
-            //Now get the result
             User = new FirebaseUser(LoginTask.Result.User);
             Debug.LogFormat("User signed in successfully: {0} ({1})", User.DisplayName, User.Email);
             SceneTransition.instance.user = await LoadUserData(User.UserId, User.DisplayName, User.Email);
             loginText.text = "Logged In";
             SceneTransition.instance.firstEnteredRoom = true;
             SceneTransition.instance.ChangeScene("RoomScene");
+            Debug.Log("change scene");
+        } catch {
+            if (LoginTask.Exception != null) {
+                //If there are errors handle them
+                Debug.LogWarning(message: $"Failed to register task with {LoginTask.Exception}");
+                FirebaseException firebaseEx = LoginTask.Exception.GetBaseException() as FirebaseException;
+                AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
+
+                string message = "Login Failed!";
+                switch (errorCode) {
+                    case AuthError.MissingEmail:
+                        message = "Missing Email";
+                        break;
+                    case AuthError.MissingPassword:
+                        message = "Missing Password";
+                        break;
+                    case AuthError.WrongPassword:
+                        message = "Wrong Password";
+                        break;
+                    case AuthError.InvalidEmail:
+                        message = "Invalid Email";
+                        break;
+                    case AuthError.UserNotFound:
+                        message = "Account does not exist";
+                        break;
+                }
+                loginText.text = message;
+                Debug.Log(message);
+            }
         }
     }
 
@@ -120,12 +122,13 @@ public class Authentication : MonoBehaviour {
         } else if (DBTask.Result.Value != null) {
             //Data has been retrieved
             DataSnapshot snapshot = DBTask.Result;
+            user.growth = int.Parse(snapshot.Child("growth").Value.ToString());
             user.catfoodCount = int.Parse(snapshot.Child("catfoodCount").Value.ToString());
             user.level = int.Parse(snapshot.Child("level").Value.ToString());
             user.currXP = int.Parse(snapshot.Child("currXP").Value.ToString());
             user.maxXP = int.Parse(snapshot.Child("maxXP").Value.ToString());
             user.currHappiness = int.Parse(snapshot.Child("currHappiness").Value.ToString());
-            user.prevExitTime = int.Parse(snapshot.Child("prevExitTime").Value.ToString());
+            user.prevExitTime = snapshot.Child("prevExitTime").Value.ToString();
             user.alarmId = int.Parse(snapshot.Child("alarmId").Value.ToString());
 
             if (snapshot.Child("alarmDict").Value.ToString() == null) {
@@ -208,17 +211,19 @@ public class Authentication : MonoBehaviour {
         UserData user = new UserData(name, userId);
         string username = JsonConvert.SerializeObject(user.username);
         string id = JsonConvert.SerializeObject(user.userId);
+        string growth = JsonConvert.SerializeObject(user.growth);
         string catfoodCount = JsonConvert.SerializeObject(user.catfoodCount);
         string level = JsonConvert.SerializeObject(user.level);
         string currXP = JsonConvert.SerializeObject(user.currXP);
         string maxXP = JsonConvert.SerializeObject(user.maxXP);
         string currHappiness = JsonConvert.SerializeObject(user.currHappiness);
-        string prevExitTime = JsonConvert.SerializeObject(System.DateTime.Now);
+        string prevExitTime = JsonConvert.SerializeObject(System.DateTime.Now.ToString());
         string alarmId = JsonConvert.SerializeObject(user.alarmId);
         string alarmDict = JsonConvert.SerializeObject(user.alarmDict);
 
         await DBreference.Child("users").Child(userId).Child("username").SetValueAsync(username);
         await DBreference.Child("users").Child(userId).Child("id").SetValueAsync(id);
+        await DBreference.Child("users").Child(userId).Child("growth").SetValueAsync(growth);
         await DBreference.Child("users").Child(userId).Child("catfoodCount").SetValueAsync(catfoodCount);
         await DBreference.Child("users").Child(userId).Child("level").SetValueAsync(level);
         await DBreference.Child("users").Child(userId).Child("currXP").SetValueAsync(currXP);
@@ -236,9 +241,10 @@ public class Authentication : MonoBehaviour {
         loginUI.SetActive(true);
         registerUI.SetActive(false);
     }
-    public void RegisterScreen() // Regester button
+    public void RegisterScreen() // Register button
     {
         loginUI.SetActive(false);
         registerUI.SetActive(true);
+        warningRegisterText.text = string.Empty;
     }
 }

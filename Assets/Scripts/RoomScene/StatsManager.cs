@@ -11,12 +11,8 @@ public class StatsManager : MonoBehaviour {
     public delegate void HappyChangeHandler(int amt);
     public event HappyChangeHandler onHappyChange;
 
-    public int currXP;
-    public int maxXP;
-    public int currHappy;
-    public int currLvl;
-
     public bool happinessFull;
+    public float happinessPercent;
     private bool notFirstEnter;
 
     private void Awake() {
@@ -27,18 +23,8 @@ public class StatsManager : MonoBehaviour {
             Destroy(this);
             instance = GameObject.FindGameObjectWithTag("Manager").GetComponent<StatsManager>();
         }
-        instance.Instantiate();
     }
 
-    private void Instantiate() {
-        if (!notFirstEnter) {
-            this.currXP = SceneTransition.instance.user.currXP;
-            this.maxXP = SceneTransition.instance.user.maxXP;
-            this.currHappy = SceneTransition.instance.user.currHappiness;
-            this.currLvl = SceneTransition.instance.user.level;
-            notFirstEnter = true;
-        }
-    }
 
     public void AddXP(int amt) {
         OnXPChange?.Invoke(amt);
@@ -46,12 +32,5 @@ public class StatsManager : MonoBehaviour {
 
     public void ChangeHappy(int amt) {
         onHappyChange?.Invoke(amt);
-    }
-
-    public void SetStats(int currXP, int maxXP, int currHappy, int currLvl) {
-        this.currXP = currXP;
-        this.maxXP = maxXP;
-        this.currHappy = currHappy;
-        this.currLvl = currLvl;
     }
 }

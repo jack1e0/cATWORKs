@@ -76,20 +76,4 @@ public class SceneTransition : MonoBehaviour {
         yield return new WaitForSeconds(Constants.sceneEntranceTime);
     }
 
-    private void OnApplicationQuit() {
-        UpdateDatabase();
-    }
-
-    private async void UpdateDatabase() {
-        user.currXP = StatsManager.instance.currXP;
-        user.currHappiness = StatsManager.instance.currHappy;
-        user.level = StatsManager.instance.currLvl;
-
-        string prevExitTime = JsonConvert.SerializeObject(user.prevExitTime);
-
-        DatabaseReference DBreference = FirebaseDatabase.DefaultInstance.RootReference;
-
-        await DBreference.Child("users").Child(user.userId).Child("prevExitTime").SetValueAsync(prevExitTime);
-
-    }
 }
