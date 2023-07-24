@@ -115,7 +115,6 @@ public class AlarmManager : MonoBehaviour {
 
     public void AddAlarm() {
         addScreen.SetActive(true);
-        addScreen.SetActive(true);
         addScreen.GetComponent<CanvasGroup>().alpha = 0;
         LeanTween.alphaCanvas(addScreen.GetComponent<CanvasGroup>(), 1, 0.1f);
     }
@@ -144,6 +143,7 @@ public class AlarmManager : MonoBehaviour {
         this.hour = 0;
         this.min = 0;
         this.repeat = "None";
+        repeatPlaceholder.text = "None";
     }
 
     public void ConfirmAlarm() {
@@ -183,6 +183,7 @@ public class AlarmManager : MonoBehaviour {
         this.hour = 0;
         this.min = 0;
         this.repeat = "None";
+        repeatPlaceholder.text = "None";
         StartCoroutine(await());
     }
 
@@ -224,6 +225,8 @@ public class AlarmManager : MonoBehaviour {
             case "None":
                 if ((timeTday - DateTime.Now).Minutes < 0) {
                     notification.FireTime = timeTday.AddDays(1);
+                } else {
+                    notification.FireTime = timeTday;
                 }
                 notification.IntentData = time.ToString();
                 AndroidNotificationCenter.SendNotificationWithExplicitID(notification, "alarm_channel", id);
@@ -232,7 +235,10 @@ public class AlarmManager : MonoBehaviour {
             case "Everyday":
                 if ((timeTday - DateTime.Now).Minutes < 0) {
                     notification.FireTime = timeTday.AddDays(1);
+                } else {
+                    notification.FireTime = timeTday;
                 }
+                Debug.Log("fire time: " + notification.FireTime);
                 notification.IntentData = time.ToString();
                 notification.RepeatInterval = new System.TimeSpan(1, 0, 0, 0);
                 AndroidNotificationCenter.SendNotificationWithExplicitID(notification, "alarm_channel", id);

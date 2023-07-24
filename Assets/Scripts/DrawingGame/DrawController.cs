@@ -68,7 +68,8 @@ public class DrawController : MonoBehaviour {
         if (Input.touchCount > 0) {
             Touch touch = Input.GetTouch(0);
             Debug.Log(touch.position);
-            if (touch.phase == TouchPhase.Began && WithinBounds(touch.position)) {
+            Ray ray = Camera.main.ScreenPointToRay(touch.position);
+            if (touch.phase == TouchPhase.Began && Raycast(ray)) {
                 Debug.Log("within bounds");
                 lastDrawn = Instantiate(linePrefab);
                 activeLine = lastDrawn.GetComponent<LineRender>();
@@ -88,8 +89,14 @@ public class DrawController : MonoBehaviour {
         }
     }
 
-    private bool WithinBounds(Vector2 pos) {
-        return pos.x > 41.3f && pos.x < 1038 && pos.y > 408 && pos.y < 2050;
+    private bool Raycast(Ray ray) {
+        int layerMask = LayerMask.GetMask("Widgets");
+        RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 200, layerMask);
+        if (hit.collider == null) {
+            Debug.Log("can draw");
+            return true;
+        }
+        return false;
     }
 
     private void Undo() {
