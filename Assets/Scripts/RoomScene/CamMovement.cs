@@ -8,13 +8,21 @@ public class CamMovement : MonoBehaviour {
     private Vector3 mousePos;
     private float difference;
     private bool isDrag;
-    private bool atLeft;
-    private bool atRight;
+    public bool control;
+
+    public static CamMovement instance;
+
+    private void Awake() {
+        if (instance == null) {
+            instance = this;
+        }
+        control = !SceneTransition.instance.user.firstTime;
+    }
 
     private void LateUpdate() {
         curr = camera.transform.position;
 
-        if (Input.GetMouseButton(0)) {
+        if (Input.GetMouseButton(0) && control) {
             difference = camera.ScreenToWorldPoint(Input.mousePosition).x - camera.transform.position.x;
             //if (curr.x - difference)
             if (!isDrag) {

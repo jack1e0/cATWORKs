@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56b5c3187bbfbfd44a9feaaa93a493f1, type: 3}
+  m_Name: Pomodoro
+  m_EditorClassIdentifier: 
+  techniqueName: Pomodoro
+  circularBar: {fileID: 3505423375854197043, guid: f41c17e52c837044f9439e930a643957, type: 3}
+  timeLine: {fileID: 8256060263883257415, guid: 995e104e5a9867248826fc94bc5f54e2, type: 3}
+  studyStages:
+  - 25
+  - 5
+  - 25
+  - 5
+  - 25

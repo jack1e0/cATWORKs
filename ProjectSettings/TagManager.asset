@@ -5,6 +5,27 @@ TagManager:
   serializedVersion: 2
   tags:
   - Cat
+  - Catfood
+  - Notifs
+  - Scroller
+  - Container
+  - Manager
+  - Button
+  - Technique1
+  - Technique2
+  - Technique3
+  - Technique4
+  - Unfilled
+  - Filled
+  - AlarmManager
+  - Parent
+  - Placeholder
+  - Back
+  - XPFill
+  - HappyFill
+  - BGM
+  - SceneManager
+  - InfoButton
   layers:
   - Default
   - TransparentFX
@@ -13,8 +34,8 @@ TagManager:
   - Water
   - UI
   - Pos
-  - 
-  - 
+  - Cat
+  - Widgets
   - 
   - 
   - 
@@ -59,4 +80,7 @@ TagManager:
     locked: 0
   - name: MenuButtons
     uniqueID: 1936011063
+    locked: 0
+  - name: SceneBlocker
+    uniqueID: 3796500549
     locked: 0
