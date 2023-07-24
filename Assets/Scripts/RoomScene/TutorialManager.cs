@@ -53,8 +53,8 @@ public class TutorialManager : MonoBehaviour {
     }
 
     private IEnumerator Display() {
-        screen.GetComponent<RectTransform>().LeanScaleX(1, 0.7f);
-        yield return new WaitForSeconds(0.7f);
+        screen.GetComponent<RectTransform>().LeanScaleX(1, 0.5f);
+        yield return new WaitForSeconds(0.5f);
         cat.SetActive(true);
         StartCoroutine(DisplayLine());
     }
@@ -74,9 +74,9 @@ public class TutorialManager : MonoBehaviour {
             StartCoroutine(DisplayLine());
         } else {
             isTextShowing = false;
+            content.text = "";
+            cat.SetActive(false);
             CamMovement.instance.control = true;
-
-            RoomSceneManager.instance.InstantiateCats();
             SceneTransition.instance.user.firstTime = false;
             StartCoroutine(await());
         }
@@ -92,6 +92,9 @@ public class TutorialManager : MonoBehaviour {
     IEnumerator await() {
         Task t = UpdateFirstTime();
         yield return new WaitUntil(() => t.IsCompleted);
+        screen.GetComponent<RectTransform>().LeanScaleX(0, 0.5f);
+        yield return new WaitForSeconds(0.5f);
         gameObject.SetActive(false);
+        RoomSceneManager.instance.InstantiateCats();
     }
 }

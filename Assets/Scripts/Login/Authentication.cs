@@ -74,7 +74,6 @@ public class Authentication : MonoBehaviour {
         //Wait until the task completes
         try {
             await LoginTask;
-
             User = new FirebaseUser(LoginTask.Result.User);
             Debug.LogFormat("User signed in successfully: {0} ({1})", User.DisplayName, User.Email);
             SceneTransition.instance.user = await LoadUserData(User.UserId, User.DisplayName, User.Email);
@@ -82,6 +81,7 @@ public class Authentication : MonoBehaviour {
             SceneTransition.instance.firstEnteredRoom = true;
             SceneTransition.instance.ChangeScene("RoomScene");
             Debug.Log("change scene");
+
         } catch {
             if (LoginTask.Exception != null) {
                 //If there are errors handle them
@@ -153,31 +153,8 @@ public class Authentication : MonoBehaviour {
         } else {
             //Call the Firebase auth signin function passing the email and password
             Task<AuthResult> RegisterTask = auth.CreateUserWithEmailAndPasswordAsync(_email, _password);
-            await RegisterTask;
-
-            if (RegisterTask.Exception != null) {
-                //If there are errors handle them
-                Debug.LogWarning(message: $"Failed to register task with {RegisterTask.Exception}");
-                FirebaseException firebaseEx = RegisterTask.Exception.GetBaseException() as FirebaseException;
-                AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
-
-                string message = "Register Failed!";
-                switch (errorCode) {
-                    case AuthError.MissingEmail:
-                        message = "Missing Email";
-                        break;
-                    case AuthError.MissingPassword:
-                        message = "Missing Password";
-                        break;
-                    case AuthError.WeakPassword:
-                        message = "Weak Password";
-                        break;
-                    case AuthError.EmailAlreadyInUse:
-                        message = "Email Already In Use";
-                        break;
-                }
-                warningRegisterText.text = message;
-            } else {
+            try {
+                await RegisterTask;
                 //User has now been created
                 //Now get the result
                 User = new FirebaseUser(RegisterTask.Result.User);
@@ -188,21 +165,49 @@ public class Authentication : MonoBehaviour {
 
                     //Call the Firebase auth update user profile function passing the profile with the username
                     Task ProfileTask = User.UpdateUserProfileAsync(profile);
-                    await ProfileTask;
-
-                    if (ProfileTask.Exception != null) {
-                        //If there are errors handle them
-                        Debug.LogWarning(message: $"Failed to register task with {ProfileTask.Exception}");
-                        FirebaseException firebaseEx = ProfileTask.Exception.GetBaseException() as FirebaseException;
-                        AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
-                        warningRegisterText.text = "Username Set Failed!";
-                    } else {
+                    try {
+                        await ProfileTask;
                         //Username is now set
                         //Now return to login screen
                         await WriteNewUser(User.UserId, User.DisplayName);
                         LoginScreen();
                         warningRegisterText.text = "";
+                    } catch {
+                        if (ProfileTask.Exception != null) {
+                            //If there are errors handle them
+                            // Debug.LogWarning(message: $"Failed to register task with {ProfileTask.Exception}");
+                            FirebaseException firebaseEx = ProfileTask.Exception.GetBaseException() as FirebaseException;
+                            AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
+                            warningRegisterText.text = "Username Set Failed!";
+                        }
                     }
+                }
+            } catch {
+                if (RegisterTask.Exception != null) {
+                    //If there are errors handle them
+                    // Debug.LogWarning(message: $"Failed to register task with {RegisterTask.Exception}");
+                    FirebaseException firebaseEx = RegisterTask.Exception.GetBaseException() as FirebaseException;
+                    AuthError errorCode = (AuthError)firebaseEx.ErrorCode;
+
+                    string message = "Register Failed!";
+                    switch (errorCode) {
+                        case AuthError.MissingEmail:
+                            message = "Missing Email";
+                            break;
+                        case AuthError.MissingPassword:
+                            message = "Missing Password";
+                            break;
+                        case AuthError.WeakPassword:
+                            message = "Weak Password";
+                            break;
+                        case AuthError.EmailAlreadyInUse:
+                            message = "Email Already In Use";
+                            break;
+                        case AuthError.InvalidEmail:
+                            message = "Invalid email";
+                            break;
+                    }
+                    warningRegisterText.text = message;
                 }
             }
         }
@@ -248,6 +253,6 @@ public class Authentication : MonoBehaviour {
     {
         loginUI.SetActive(false);
         registerUI.SetActive(true);
-        warningRegisterText.text = string.Empty;
+        warningRegisterText.text = "";
     }
 }
