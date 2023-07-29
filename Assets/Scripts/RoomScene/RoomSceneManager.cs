@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using Unity.Notifications.Android;
-using Newtonsoft.Json;
+using System.Threading.Tasks;
 
 
 public class RoomSceneManager : MonoBehaviour {
@@ -56,12 +56,6 @@ public class RoomSceneManager : MonoBehaviour {
                 InstantiateCats();
             }
 
-            DateTime prev = SceneTransition.instance.user.prevExitTime;
-            double mins = (System.DateTime.Now - prev).TotalMinutes;
-            Debug.Log("mins: " + mins);
-            StatsManager.instance.ChangeHappy(-1 * mins);
-
-
             if (justStudied) {
                 Debug.Log("HERE");
                 StartCoroutine(EndStudy());
@@ -85,6 +79,22 @@ public class RoomSceneManager : MonoBehaviour {
                 }
             }
 
+        }
+    }
+
+    private async void Start() {
+        await WaitFrame();
+        DateTime prev = SceneTransition.instance.user.prevExitTime;
+        double mins = (System.DateTime.Now - prev).TotalMinutes;
+        Debug.Log("mins: " + -1 * mins);
+        StatsManager.instance.ChangeHappy(-1 * mins);
+    }
+
+    private async Task WaitFrame() {
+        var currnet = Time.frameCount;
+
+        while (currnet == Time.frameCount) {
+            await Task.Yield();
         }
     }
 

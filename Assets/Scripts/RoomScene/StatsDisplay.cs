@@ -51,6 +51,7 @@ public class StatsDisplay : MonoBehaviour {
     }
 
     private async void HandleHappyChange(double amt) {
+        Debug.Log("ere");
         if (amt > 0) {
             if (currHappy < maxHappy) {
                 StatsManager.instance.happinessFull = false;
@@ -68,6 +69,7 @@ public class StatsDisplay : MonoBehaviour {
                 currHappy += (int)amt;
             } else {
                 currHappy = 0;
+                Debug.Log("SET ALARM");
             }
             SetFill(happyFill, currHappy, maxHappy);
             StatsManager.instance.happinessPercent = (float)currHappy / (float)maxHappy;
