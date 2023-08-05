@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StatsManager : MonoBehaviour {
+public class StatsManager : MonoBehaviour
+{
     public static StatsManager instance;
 
     public delegate void XPChangeHandler(int amt);
@@ -15,22 +16,28 @@ public class StatsManager : MonoBehaviour {
     public float happinessPercent;
     private bool notFirstEnter;
 
-    private void Awake() {
-        if (instance == null) {
+    private void Awake()
+    {
+        if (instance == null)
+        {
             instance = this;
             DontDestroyOnLoad(this);
-        } else {
+        }
+        else
+        {
             Destroy(this);
             instance = GameObject.FindGameObjectWithTag("Manager").GetComponent<StatsManager>();
         }
     }
 
 
-    public void AddXP(int amt) {
+    public void AddXP(int amt)
+    {
         OnXPChange?.Invoke(amt);
     }
 
-    public void ChangeHappy(double amt) {
+    public void ChangeHappy(double amt)
+    {
         onHappyChange?.Invoke(amt);
     }
 }

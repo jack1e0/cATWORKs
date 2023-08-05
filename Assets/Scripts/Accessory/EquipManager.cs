@@ -6,7 +6,8 @@ using Newtonsoft.Json;
 using System.Threading.Tasks;
 using UnityEngine.UI;
 
-public enum Accessories {
+public enum Accessories
+{
     NONE,
     CAP,
     GLASSES,
@@ -16,7 +17,8 @@ public enum Accessories {
     CLIP
 }
 
-public class EquipManager : MonoBehaviour {
+public class EquipManager : MonoBehaviour
+{
     public static EquipManager instance;
 
     private Accessories selected;
@@ -29,7 +31,9 @@ public class EquipManager : MonoBehaviour {
 
     private Button hanger;
 
-    [SerializeField] private GameObject shopPanel;
+    public GameObject shopPanel;
+    private GameObject catDisplay;
+    private CatController catControl;
     [Space(10)]
 
     [SerializeField] private Button capButton;
@@ -47,10 +51,13 @@ public class EquipManager : MonoBehaviour {
     private Dictionary<Accessories, int> price;
     private Dictionary<string, int> unlocked;
 
-    private void Awake() {
-        if (instance == null) {
+    private void Awake()
+    {
+        if (instance == null)
+        {
             instance = this;
         }
+        shopPanel.SetActive(false);
         selected = Accessories.NONE;
         selectedPrice = 0;
         price = new Dictionary<Accessories, int> {
@@ -66,106 +73,164 @@ public class EquipManager : MonoBehaviour {
         clipButton.onClick.AddListener(Clip);
         sproutButton.onClick.AddListener(Sprout);
         glassesButton.onClick.AddListener(Glasses);
+
+        InitializeButtons();
     }
 
-    private void InitializeButtons() {
+    private void InitializeButtons()
+    {
         capButton.interactable = true;
 
-        if (unlocked.ContainsKey("CLIP")) {
+        if (unlocked.ContainsKey("CLIP"))
+        {
             clipButton.interactable = true;
-            if (unlocked["CLIP"] == 0) {
+            if (unlocked["CLIP"] == 0)
+            {
                 clipPrice.SetActive(false);
-            } else {
+            }
+            else
+            {
                 clipPrice.SetActive(true);
             }
-        } else {
+        }
+        else
+        {
             clipButton.interactable = false;
         }
 
-        if (unlocked.ContainsKey("SPROUT")) {
+        if (unlocked.ContainsKey("SPROUT"))
+        {
             sproutButton.interactable = true;
-            if (unlocked["SPROUT"] == 0) {
+            if (unlocked["SPROUT"] == 0)
+            {
                 sproutPrice.SetActive(false);
-            } else {
+            }
+            else
+            {
                 sproutPrice.SetActive(true);
             }
-        } else {
+        }
+        else
+        {
             sproutButton.interactable = false;
         }
 
-        if (unlocked.ContainsKey("GLASSES")) {
+        if (unlocked.ContainsKey("GLASSES"))
+        {
             glassesButton.interactable = true;
-            if (unlocked["GLASSES"] == 0) {
+            if (unlocked["GLASSES"] == 0)
+            {
                 glassesPrice.SetActive(false);
-            } else {
+            }
+            else
+            {
                 glassesPrice.SetActive(true);
             }
-        } else {
+        }
+        else
+        {
             glassesButton.interactable = false;
         }
     }
 
-    public void Shop() {
+    public void Shop()
+    {
+        catControl = RoomSceneManager.instance.catControl;
         shopPanel.SetActive(true);
-        RoomSceneManager.instance.catControl.CatShopDisplay();
+        InitializeButtons();
+        catDisplay = catControl.CatShopDisplay();
     }
 
-    public void Back() {
+    public void Back()
+    {
+        Destroy(catDisplay);
         shopPanel.SetActive(false);
+        selected = catControl.equipped;
+        selectedPrice = 0;
         RoomSceneManager.instance.ButtonPressAfter();
     }
 
-    public async void Confirm() {
-        if (CatfoodManager.instance.catfoodCount < selectedPrice) {
+    public async void Confirm()
+    {
+        Debug.Log("selected accessory: " + selected.ToString());
+        if (CatfoodManager.instance.catfoodCount < selectedPrice)
+        {
             string msg = "Not enough catfood!";
-            RoomSceneManager.instance.DisplayNotifs(msg);
+            StartCoroutine(RoomSceneManager.instance.DisplayNotifs(msg));
             return;
-        } else {
+        }
+        else
+        {
             await CatfoodManager.instance.DecreaseCatfood(selectedPrice);
         }
 
-        RoomSceneManager.instance.catControl.equipped = selected;
-        await UpdateEquipped(selected);
+        if (selectedPrice != 0)
+        {
+            unlocked[selected.ToString()] = 0;
+            Debug.Log(unlocked);
+        }
+
+        if (selected == Accessories.NONE)
+        {
+            selected = catControl.equipped;
+        }
+        catControl.equipped = selected;
+        await UpdateEquipped();
         RoomSceneManager.instance.ButtonPressAfter();
-        selected = Accessories.NONE;
         selectedPrice = 0;
+        Destroy(catDisplay);
         shopPanel.SetActive(false);
     }
 
-    private async Task UpdateEquipped(Accessories stuff) {
-        SceneTransition.instance.user.equippedAccessory = stuff.ToString();
+    private async Task UpdateEquipped()
+    {
+        SceneTransition.instance.user.equippedAccessory = selected.ToString();
+        SceneTransition.instance.user.unlockedAccessoryDict = unlocked;
         string equippedAccessory = JsonConvert.SerializeObject(SceneTransition.instance.user.equippedAccessory);
+        string unlockedAccessories = JsonConvert.SerializeObject(SceneTransition.instance.user.unlockedAccessoryDict);
 
         DatabaseReference DBreference = FirebaseDatabase.DefaultInstance.RootReference;
         await DBreference.Child("users").Child(SceneTransition.instance.user.userId).Child("equippedAccessory").SetValueAsync(equippedAccessory);
+        await DBreference.Child("users").Child(SceneTransition.instance.user.userId).Child("unlockedAccessoryDict").SetValueAsync(unlockedAccessories);
     }
 
-    public void Cap() {
+    public void Cap()
+    {
         selected = Accessories.CAP;
         selectedPrice = 0;
+        catControl.Equip(selected, catDisplay);
     }
 
-    public void Clip() {
+    public void Clip()
+    {
         selectedPrice = 0;
-        if (clipPrice.activeInHierarchy == true) {
+        if (clipPrice.activeInHierarchy == true)
+        {
             selectedPrice = price[Accessories.CLIP];
         }
-        selected = Accessories.CAP;
+        selected = Accessories.CLIP;
+        catControl.Equip(selected, catDisplay);
     }
 
-    public void Sprout() {
+    public void Sprout()
+    {
         selectedPrice = 0;
-        if (sproutPrice.activeInHierarchy == true) {
+        if (sproutPrice.activeInHierarchy == true)
+        {
             selectedPrice = price[Accessories.SPROUT];
         }
         selected = Accessories.SPROUT;
+        catControl.Equip(selected, catDisplay);
     }
 
-    public void Glasses() {
+    public void Glasses()
+    {
         selectedPrice = 0;
-        if (glassesPrice.activeInHierarchy == true) {
+        if (glassesPrice.activeInHierarchy == true)
+        {
             selectedPrice = price[Accessories.GLASSES];
         }
         selected = Accessories.GLASSES;
+        catControl.Equip(selected, catDisplay);
     }
 }

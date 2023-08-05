@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class UserData {
+public class UserData
+{
     public string username;
     public string userId;
 
@@ -26,7 +27,8 @@ public class UserData {
 
     public bool firstTime;
 
-    public UserData(string name, string userId) {
+    public UserData(string name, string userId)
+    {
         username = name;
         this.userId = userId;
         this.growth = 0;
@@ -35,9 +37,11 @@ public class UserData {
         currXP = 0;
         maxXP = 2;
         currHappiness = 0;
-        equippedAccessory = "";
-        unlockedAccessoryDict = new Dictionary<string, int>();
-        unlockedAccessoryDict.Add("CAP", 0);
+        equippedAccessory = string.Empty;
+        unlockedAccessoryDict = new Dictionary<string, int> {
+            {"CAP", 0},
+            {"CLIP", 1}
+        };
         firstTime = true;
     }
 
