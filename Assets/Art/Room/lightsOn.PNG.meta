@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 680a81a52e1f2284fb74a8baa5db6501
+guid: 0217e0b650156004fac37bea9b6ba2bb
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -129,13 +129,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: babySit_0
+      name: lightsOn_0
       rect:
         serializedVersion: 2
-        x: 645
-        y: 266
-        width: 186
-        height: 173
+        x: 269
+        y: 1047
+        width: 250
+        height: 176
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -143,8 +143,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0631f5e5388a8bf42b4096c527c5194f
-      internalID: 581646915
+      spriteID: e83150cd2cb48e7498b5cbe43e7a0652
+      internalID: -281844886
       vertices: []
       indices: 
       edges: []
@@ -160,7 +160,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      babySit_0: 581646915
+      lightsOn_0: -281844886
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

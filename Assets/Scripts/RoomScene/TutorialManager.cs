@@ -22,7 +22,9 @@ public class TutorialManager : MonoBehaviour {
                 "Hi " + SceneTransition.instance.user.username + ", I'm your new study buddy!",
                 "I will earn you rewards while you work, so do take care of me :)",
                 "Other than studying, I do love painting as well, perhaps we could paint together?",
-                "And I can't wait to unlock cool stuff when we level up!"
+                "And I can't wait to unlock cool stuff when we level up!",
+                "Do explore the room while you are not studying, ",
+                "who knows? You might find some cool stuff!"
             };
             screen.GetComponent<RectTransform>().localScale = new Vector3(0, 1, 1);
             cat.SetActive(false);

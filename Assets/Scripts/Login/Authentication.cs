@@ -131,11 +131,18 @@ public class Authentication : MonoBehaviour {
             user.prevExitTime = JsonConvert.DeserializeObject<System.DateTime>(snapshot.Child("prevExitTime").Value.ToString());
             user.alarmId = int.Parse(snapshot.Child("alarmId").Value.ToString());
             user.firstTime = bool.Parse(snapshot.Child("firstTime").Value.ToString());
+            user.equippedAccessory = snapshot.Child("equippedAccessory").Value.ToString();
 
             if (snapshot.Child("alarmDict").Value.ToString() == null) {
                 user.alarmDict = null;
             } else {
                 user.alarmDict = JsonConvert.DeserializeObject<Dictionary<int, List<int>>>(snapshot.Child("alarmDict").Value.ToString());
+            }
+
+            if (snapshot.Child("unlockedAccessoryDict").Value.ToString() == null) {
+                user.unlockedAccessoryDict = null;
+            } else {
+                user.unlockedAccessoryDict = JsonConvert.DeserializeObject<Dictionary<string, int>>(snapshot.Child("unlockedAccessoryDict").Value.ToString());
             }
         }
 
@@ -226,6 +233,8 @@ public class Authentication : MonoBehaviour {
         string prevExitTime = JsonConvert.SerializeObject(System.DateTime.Now);
         string alarmId = JsonConvert.SerializeObject(user.alarmId);
         string alarmDict = JsonConvert.SerializeObject(user.alarmDict);
+        string equippedAccessory = JsonConvert.SerializeObject(user.equippedAccessory);
+        string unlockedAccessoryDict = JsonConvert.SerializeObject(user.unlockedAccessoryDict);
         string firstTime = JsonConvert.SerializeObject(user.firstTime);
 
         await DBreference.Child("users").Child(userId).Child("username").SetValueAsync(username);
@@ -239,6 +248,8 @@ public class Authentication : MonoBehaviour {
         await DBreference.Child("users").Child(userId).Child("prevExitTime").SetValueAsync(prevExitTime);
         await DBreference.Child("users").Child(userId).Child("alarmId").SetValueAsync(alarmId);
         await DBreference.Child("users").Child(userId).Child("alarmDict").SetValueAsync(alarmDict);
+        await DBreference.Child("users").Child(userId).Child("equippedAccessories").SetValueAsync(equippedAccessory);
+        await DBreference.Child("users").Child(userId).Child("unlockedAccessoryDict").SetValueAsync(unlockedAccessoryDict);
         await DBreference.Child("users").Child(userId).Child("firstTime").SetValueAsync(firstTime);
 
     }

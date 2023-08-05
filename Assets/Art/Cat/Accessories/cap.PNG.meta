@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 680a81a52e1f2284fb74a8baa5db6501
+guid: b9c1c545e6dab074493c05b16e372cc4
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -129,13 +129,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: babySit_0
+      name: IMG-8349_0
       rect:
         serializedVersion: 2
-        x: 645
-        y: 266
-        width: 186
-        height: 173
+        x: 384
+        y: 727
+        width: 72
+        height: 47
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -143,8 +143,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0631f5e5388a8bf42b4096c527c5194f
-      internalID: 581646915
+      spriteID: 157735248e33fed45972626d2de6f0cc
+      internalID: 1574745670
       vertices: []
       indices: 
       edges: []
@@ -160,7 +160,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      babySit_0: 581646915
+      IMG-8349_0: 1574745670
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

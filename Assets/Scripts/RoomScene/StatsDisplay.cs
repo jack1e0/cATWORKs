@@ -105,12 +105,30 @@ public class StatsDisplay : MonoBehaviour {
         }
 
         string congrats;
+        if (currLvl == 2) {
+            SceneTransition.instance.user.unlockedAccessoryDict.Add("CLIP", 1);
+            congrats = $"Levelled up, gained {reward} catfood!/nP.S. Check the closet :D";
+            await UpdateUnlockedAccessories();
+        }
+
+        if (currLvl == 3) {
+            SceneTransition.instance.user.unlockedAccessoryDict.Add("SPROUT", 1);
+            congrats = $"Levelled up, gained {reward} catfood!/nP.S. Check the closet :D";
+            await UpdateUnlockedAccessories();
+        }
+
+        if (currLvl == 5) {
+            SceneTransition.instance.user.unlockedAccessoryDict.Add("GLASSES", 1);
+            congrats = $"Levelled up, gained {reward} catfood!/nP.S. Check the closet :D";
+            await UpdateUnlockedAccessories();
+        }
+
         if (currLvl == 4 || currLvl == 7 || currLvl == 10) {
             SceneTransition.instance.user.growth = Mathf.Min(2, SceneTransition.instance.user.growth + 1);
             Debug.Log("growth: " + SceneTransition.instance.user.growth);
             await UpdateGrowth();
             RoomSceneManager.instance.catControl.Initialize();
-            congrats = $"Levelling up! Your cat has grown as well! Gained {reward} catfood";
+            congrats = $"Levelled up! Your cat has grown as well! Gained {reward} catfood";
         } else {
             congrats = $"Congrats! You levelled up! Gained {reward} catfood";
         }
@@ -160,5 +178,12 @@ public class StatsDisplay : MonoBehaviour {
 
         DatabaseReference DBreference = FirebaseDatabase.DefaultInstance.RootReference;
         await DBreference.Child("users").Child(SceneTransition.instance.user.userId).Child("prevExitTime").SetValueAsync(prev);
+    }
+
+    private async Task UpdateUnlockedAccessories() {
+        string unlocked = JsonConvert.SerializeObject(SceneTransition.instance.user.unlockedAccessoryDict);
+
+        DatabaseReference DBreference = FirebaseDatabase.DefaultInstance.RootReference;
+        await DBreference.Child("users").Child(SceneTransition.instance.user.userId).Child("unlockedAccessoryDict").SetValueAsync(unlocked);
     }
 }

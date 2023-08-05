@@ -19,6 +19,11 @@ public class UserData {
     public int alarmId;
     public Dictionary<int, List<int>> alarmDict;
 
+    public string equippedAccessory;
+
+    // contains a mapping of unlocked accessories, and  0 / 1  to show whether they are bought or not.
+    public Dictionary<string, int> unlockedAccessoryDict;
+
     public bool firstTime;
 
     public UserData(string name, string userId) {
@@ -30,6 +35,9 @@ public class UserData {
         currXP = 0;
         maxXP = 2;
         currHappiness = 0;
+        equippedAccessory = "";
+        unlockedAccessoryDict = new Dictionary<string, int>();
+        unlockedAccessoryDict.Add("CAP", 0);
         firstTime = true;
     }
 

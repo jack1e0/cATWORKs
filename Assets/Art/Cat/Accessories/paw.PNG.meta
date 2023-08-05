@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: ba2525abd56cadf46b3598926a1b36c8
+guid: 9332afcad3f0cd64e8e2279a212ece37
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -33,7 +33,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -129,13 +129,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: IMG-8322_0
+      name: IMG-8348_0
       rect:
         serializedVersion: 2
-        x: 695
-        y: 421
-        width: 216
-        height: 262
+        x: 1088
+        y: 640
+        width: 27
+        height: 24
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -143,8 +143,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1504ae46cc262e44d93b5d87effc86cc
-      internalID: -897005314
+      spriteID: 3635591f73b91d243a042f0ae4b1bf97
+      internalID: 2004617465
       vertices: []
       indices: 
       edges: []
@@ -160,7 +160,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      IMG-8322_0: -897005314
+      IMG-8348_0: 2004617465
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
