@@ -406,6 +406,7 @@ public class CatController : MonoBehaviour
         cat.transform.localScale = new Vector3(7, 7, 7);
         currentState = CatState.SIT;
         Equip(this.equipped, cat);
+        cat.GetComponent<BoxCollider2D>().enabled = false;
         return cat;
     }
 }

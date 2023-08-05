@@ -138,7 +138,15 @@ public class EquipManager : MonoBehaviour
         catControl = RoomSceneManager.instance.catControl;
         shopPanel.SetActive(true);
         InitializeButtons();
+        selected = catControl.equipped;
         catDisplay = catControl.CatShopDisplay();
+    }
+
+    public void Reset()
+    {
+        selected = Accessories.NONE;
+        selectedPrice = 0;
+        catControl.Equip(selected, catDisplay);
     }
 
     public void Back()
@@ -170,10 +178,6 @@ public class EquipManager : MonoBehaviour
             Debug.Log(unlocked);
         }
 
-        if (selected == Accessories.NONE)
-        {
-            selected = catControl.equipped;
-        }
         catControl.equipped = selected;
         await UpdateEquipped();
         RoomSceneManager.instance.ButtonPressAfter();
