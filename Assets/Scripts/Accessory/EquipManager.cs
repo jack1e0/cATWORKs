@@ -137,6 +137,8 @@ public class EquipManager : MonoBehaviour
     {
         catControl = RoomSceneManager.instance.catControl;
         shopPanel.SetActive(true);
+        shopPanel.GetComponent<CanvasGroup>().alpha = 0;
+        LeanTween.alphaCanvas(shopPanel.GetComponent<CanvasGroup>(), 1, 0.1f);
         InitializeButtons();
         selected = catControl.equipped;
         catDisplay = catControl.CatShopDisplay();
@@ -151,8 +153,7 @@ public class EquipManager : MonoBehaviour
 
     public void Back()
     {
-        Destroy(catDisplay);
-        shopPanel.SetActive(false);
+        StartCoroutine(Fade());
         selected = catControl.equipped;
         selectedPrice = 0;
         RoomSceneManager.instance.ButtonPressAfter();
@@ -182,6 +183,14 @@ public class EquipManager : MonoBehaviour
         await UpdateEquipped();
         RoomSceneManager.instance.ButtonPressAfter();
         selectedPrice = 0;
+
+        StartCoroutine(Fade());
+    }
+
+    private IEnumerator Fade()
+    {
+        LeanTween.alphaCanvas(shopPanel.GetComponent<CanvasGroup>(), 0, 0.1f);
+        yield return new WaitForSeconds(0.1f);
         Destroy(catDisplay);
         shopPanel.SetActive(false);
     }

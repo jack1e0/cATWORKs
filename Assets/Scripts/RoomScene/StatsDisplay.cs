@@ -116,21 +116,15 @@ public class StatsDisplay : MonoBehaviour
         lvlText.text = currLvl.ToString();
 
         currXP = 0;
-        maxXP += 3;
+        maxXP += 2;
         if (reward <= 20)
         {
             reward += 2;
         }
 
         string congrats;
-        // if (currLvl == 2)
-        // {
-        //     SceneTransition.instance.user.unlockedAccessoryDict.Add("CLIP", 1);
-        //     congrats = $"Levelled up, gained {reward} catfood!/nP.S. Check the closet :D";
-        //     await UpdateUnlockedAccessories();
-        // }
 
-        if (currLvl == 3)
+        if (currLvl == 2)
         {
             SceneTransition.instance.user.unlockedAccessoryDict.Add("SPROUT", 1);
             congrats = $"Levelled up, gained {reward} catfood!/nP.S. Check the closet :D";

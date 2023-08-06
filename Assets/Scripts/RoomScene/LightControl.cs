@@ -18,7 +18,6 @@ public class LightControl : MonoBehaviour
 
     public void Switch()
     {
-        Debug.Log("switch");
         if (isSwitchedOn)
         {
             // switch off

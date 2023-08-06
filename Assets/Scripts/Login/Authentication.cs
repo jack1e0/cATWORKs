@@ -150,8 +150,8 @@ public class Authentication : MonoBehaviour
             user.currHappiness = int.Parse(snapshot.Child("currHappiness").Value.ToString());
             user.prevExitTime = JsonConvert.DeserializeObject<System.DateTime>(snapshot.Child("prevExitTime").Value.ToString());
             user.alarmId = int.Parse(snapshot.Child("alarmId").Value.ToString());
-            // user.firstTime = bool.Parse(snapshot.Child("firstTime").Value.ToString());
-            user.firstTime = false;
+            user.firstTime = bool.Parse(snapshot.Child("firstTime").Value.ToString());
+            // user.firstTime = false;
             user.equippedAccessory = JsonConvert.DeserializeObject<string>(snapshot.Child("equippedAccessory").Value.ToString());
             user.unlockedAccessoryDict = JsonConvert.DeserializeObject<Dictionary<string, int>>(snapshot.Child("unlockedAccessoryDict").Value.ToString());
             Debug.Log("here");

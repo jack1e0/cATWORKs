@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 808c2bc1997411b42a96d3fd9f0eb175
+guid: bf5e5c3de6b961846a7f136a859af58c
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -129,13 +129,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: glasses_0
+      name: IMG-8375_0
       rect:
         serializedVersion: 2
-        x: 397
-        y: 486
-        width: 252
-        height: 252
+        x: 1104
+        y: 720
+        width: 95
+        height: 102
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -143,8 +143,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c5f920b85da44f746a86a90e595aa565
-      internalID: 2050980658
+      spriteID: e1f61c8a09af9b349aa2788def34c4fa
+      internalID: -1283876555
       vertices: []
       indices: 
       edges: []
@@ -160,7 +160,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      glasses_0: 2050980658
+      IMG-8375_0: -1283876555
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
