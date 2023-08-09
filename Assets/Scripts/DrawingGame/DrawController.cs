@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class DrawController : MonoBehaviour {
+public class DrawController : MonoBehaviour
+{
     float brushSize;
     Color selectedColor;
 
@@ -38,7 +39,8 @@ public class DrawController : MonoBehaviour {
     private int fileCounter;
 
 
-    private void Awake() {
+    private void Awake()
+    {
         sorting = 0;
         drawnLines = new Stack<GameObject>();
         notif.enabled = false;
@@ -63,13 +65,15 @@ public class DrawController : MonoBehaviour {
         Mid();
     }
 
-    void Update() {
-
-        if (Input.touchCount > 0) {
+    void Update()
+    {
+        if (Input.touchCount > 0)
+        {
             Touch touch = Input.GetTouch(0);
             Debug.Log(touch.position);
             Ray ray = Camera.main.ScreenPointToRay(touch.position);
-            if (touch.phase == TouchPhase.Began && Raycast(ray)) {
+            if (touch.phase == TouchPhase.Began && Raycast(ray))
+            {
                 Debug.Log("within bounds");
                 lastDrawn = Instantiate(linePrefab);
                 activeLine = lastDrawn.GetComponent<LineRender>();
@@ -78,39 +82,47 @@ public class DrawController : MonoBehaviour {
                 lastDrawn.GetComponent<LineRenderer>().sortingOrder = sorting;
                 sorting++;
             }
-            if (activeLine != null) {
+            if (activeLine != null)
+            {
                 Vector2 worldPos = Camera.main.ScreenPointToRay(touch.position).GetPoint(40);
                 activeLine.UpdatePoint(worldPos);
             }
-            if (touch.phase == TouchPhase.Ended && activeLine != null) {
+            if (touch.phase == TouchPhase.Ended && activeLine != null)
+            {
                 activeLine = null;
                 drawnLines.Push(lastDrawn);
             }
         }
     }
 
-    private bool Raycast(Ray ray) {
+    private bool Raycast(Ray ray)
+    {
         int layerMask = LayerMask.GetMask("Widgets");
         RaycastHit2D hit = Physics2D.Raycast(ray.origin, ray.direction, 200, layerMask);
-        if (hit.collider == null) {
+        if (hit.collider == null)
+        {
             Debug.Log("can draw");
             return true;
         }
         return false;
     }
 
-    private void Undo() {
-        if (drawnLines.Count > 0) {
+    private void Undo()
+    {
+        if (drawnLines.Count > 0)
+        {
             Destroy(drawnLines.Pop());
         }
     }
 
-    private void Save() {
+    private void Save()
+    {
         StartCoroutine(Notif());
         Capture();
     }
 
-    IEnumerator Notif() {
+    IEnumerator Notif()
+    {
         notif.enabled = true;
         notif.color = new Color(notif.color.r, notif.color.g, notif.color.b, 0);
         LeanTween.alpha(notif.GetComponent<RectTransform>(), 0.5f, 0.3f);
@@ -124,7 +136,8 @@ public class DrawController : MonoBehaviour {
         notif.enabled = false;
     }
 
-    public void Capture() {
+    public void Capture()
+    {
         RenderTexture activeRenderTexture = RenderTexture.active;
         Camera.main.targetTexture = rt;
         RenderTexture.active = Camera.main.targetTexture;
@@ -140,61 +153,65 @@ public class DrawController : MonoBehaviour {
         byte[] bytes = image.EncodeToPNG();
         Destroy(image);
 
-        // string path = Application.dataPath + "/Drawings/" + fileCounter + ".png";
-        // Debug.Log(path);
-        // File.WriteAllBytes(Application.dataPath + "/Drawings/" + fileCounter + ".png", bytes);
-        // fileCounter++;
-
         // Save the screenshot to Gallery/Photos
         string name = string.Format("{0}_Capture{1}_{2}.png", Application.productName, "{0}", System.DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss"));
         Debug.Log("Permission result: " + NativeGallery.SaveImageToGallery(bytes, Application.productName + " Captures", name));
     }
 
-    private void Cross() {
+    private void Cross()
+    {
         SceneTransition.instance.ChangeScene("RoomScene");
     }
 
-    private void Red() {
+    private void Red()
+    {
         ResetButtonSize();
         SetButtonSize(red);
         selectedColor = red.GetComponent<Image>().color;
     }
 
-    private void Green() {
+    private void Green()
+    {
         ResetButtonSize();
         SetButtonSize(green);
         selectedColor = green.GetComponent<Image>().color;
     }
 
-    private void Blue() {
+    private void Blue()
+    {
         ResetButtonSize();
         SetButtonSize(blue);
         selectedColor = blue.GetComponent<Image>().color;
     }
 
-    private void Yellow() {
+    private void Yellow()
+    {
         ResetButtonSize();
         SetButtonSize(yellow);
         selectedColor = yellow.GetComponent<Image>().color;
     }
 
-    private void Black() {
+    private void Black()
+    {
         ResetButtonSize();
         SetButtonSize(black);
         selectedColor = black.GetComponent<Image>().color;
     }
 
-    private void White() {
+    private void White()
+    {
         ResetButtonSize();
         SetButtonSize(white);
         selectedColor = white.GetComponent<Image>().color;
     }
 
-    private void SetButtonSize(GameObject active) {
+    private void SetButtonSize(GameObject active)
+    {
         active.GetComponent<RectTransform>().localScale = new Vector3(activeButtonSize, activeButtonSize, activeButtonSize);
     }
 
-    private void ResetButtonSize() {
+    private void ResetButtonSize()
+    {
         red.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
         green.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
         blue.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
@@ -203,29 +220,34 @@ public class DrawController : MonoBehaviour {
         white.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
     }
 
-    private void Small() {
+    private void Small()
+    {
         ResetButtonColor();
         SetButtonColor(small);
         brushSize = 0.1f;
     }
 
-    private void Mid() {
+    private void Mid()
+    {
         ResetButtonColor();
         SetButtonColor(mid);
         brushSize = 0.35f;
     }
 
-    private void Big() {
+    private void Big()
+    {
         ResetButtonColor();
         SetButtonColor(big);
         brushSize = 1.25f;
     }
 
-    private void SetButtonColor(GameObject active) {
+    private void SetButtonColor(GameObject active)
+    {
         active.GetComponent<Image>().color = Color.gray;
     }
 
-    private void ResetButtonColor() {
+    private void ResetButtonColor()
+    {
         small.GetComponent<Image>().color = Color.black;
         mid.GetComponent<Image>().color = Color.black;
         big.GetComponent<Image>().color = Color.black;
