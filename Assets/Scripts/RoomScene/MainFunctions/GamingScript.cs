@@ -6,9 +6,8 @@ using UnityEngine.UI;
 public class GamingScript : MonoBehaviour
 {
     private Button button;
-    [SerializeField]
-    private GameObject gameMenu;
-
+    [SerializeField] private GameObject gameMenu;
+    [SerializeField] private Button cross;
     [SerializeField] private Button drawing;
     [SerializeField] private Button flappy;
 
@@ -19,13 +18,15 @@ public class GamingScript : MonoBehaviour
         button.onClick.AddListener(GameMenu);
         drawing.onClick.AddListener(Draw);
         flappy.onClick.AddListener(Flap);
+        cross.onClick.AddListener(Cross);
     }
 
     private void GameMenu()
     {
         RoomSceneManager.instance.ButtonPressBefore(CatState.NONE);
         gameMenu.SetActive(true);
-        //SceneTransition.instance.ChangeScene("DrawingGame");
+        gameMenu.GetComponent<CanvasGroup>().alpha = 0;
+        LeanTween.alphaCanvas(gameMenu.GetComponent<CanvasGroup>(), 1, 0.1f);
     }
 
     private void Draw()
@@ -37,4 +38,18 @@ public class GamingScript : MonoBehaviour
     {
         SceneTransition.instance.ChangeScene("FlappycatScene");
     }
+
+    private void Cross()
+    {
+        RoomSceneManager.instance.ButtonPressAfter();
+        StartCoroutine(Fade());
+    }
+
+    IEnumerator Fade()
+    {
+        LeanTween.alphaCanvas(gameMenu.GetComponent<CanvasGroup>(), 0, 0.1f);
+        yield return new WaitForSeconds(0.1f);
+        gameMenu.SetActive(false);
+    }
 }
+
