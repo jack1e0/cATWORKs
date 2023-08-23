@@ -76,7 +76,7 @@ public class StatsDisplay : MonoBehaviour
         }
         else
         { // TODO: not completely implemented yet
-            if (currHappy + amt >= 0)
+            if (currHappy + (int)amt >= 0)
             {
                 currHappy += (int)amt;
             }
