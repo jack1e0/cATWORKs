@@ -9,11 +9,13 @@ public class BirdScript : MonoBehaviour
     public LogicScript logic;
     private bool birdIsAlive = true;
     public bool startGame;
+    [SerializeField] private GameObject instructions;
 
     private void Start()
     {
         startGame = false;
         myRigidbody.gravityScale = 0;
+        instructions.SetActive(true);
     }
 
     void Update()
@@ -23,6 +25,7 @@ public class BirdScript : MonoBehaviour
         {
             startGame = true;
             myRigidbody.gravityScale = 6;
+            instructions.SetActive(false);
         }
         if (startGame && birdIsAlive && Input.touchCount > 0)
         {
