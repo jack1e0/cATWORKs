@@ -20,7 +20,6 @@ public class TutorialManager : MonoBehaviour
     {
         if (SceneTransition.instance.user.firstTime)
         {
-            SceneTransition.instance.firstEnteredRoom = false;
             texts = new List<string> {
                 "Hi " + SceneTransition.instance.user.username + ", I'm your new study buddy!",
                 "I will earn you rewards while you work, so do take care of me :)",

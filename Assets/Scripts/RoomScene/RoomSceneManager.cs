@@ -64,6 +64,7 @@ public class RoomSceneManager : MonoBehaviour
             if (!SceneTransition.instance.user.firstTime)
             {
                 InstantiateCats();
+                Debug.Log("instantiated cats");
             }
 
             if (justStudied)
