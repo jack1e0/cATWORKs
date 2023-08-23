@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 252edd118286e9b4aa791ad8a9f9ad9f
+guid: 201596f0fa1bb5841868ee044703960c
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -113,17 +113,29 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: IMG-8273_0
+      name: scarf_front_0
       rect:
         serializedVersion: 2
-        x: 1020
-        y: 243
-        width: 117
-        height: 77
+        x: 939
+        y: 194
+        width: 142
+        height: 116
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -131,8 +143,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: aa413ebfbac83b24eaee0f36a8759feb
-      internalID: 1917324437
+      spriteID: 59d9d8d1639a42b4ba596010c3eb121e
+      internalID: -741349204
       vertices: []
       indices: 
       edges: []
@@ -148,7 +160,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      IMG-8273_0: 1917324437
+      scarf_front_0: -741349204
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

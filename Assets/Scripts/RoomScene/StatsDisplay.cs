@@ -7,7 +7,8 @@ using Newtonsoft.Json;
 using Firebase.Database;
 using System.Threading.Tasks;
 
-public class StatsDisplay : MonoBehaviour {
+public class StatsDisplay : MonoBehaviour
+{
     [SerializeField] private Image XPFill;
     [SerializeField] private TMP_Text lvlText;
     [SerializeField] private Image happyFill;
@@ -19,7 +20,8 @@ public class StatsDisplay : MonoBehaviour {
     [SerializeField] private TMP_Text textDisplay;
     private AudioSource aud;
 
-    private void Start() {
+    private void Start()
+    {
         aud = GetComponent<AudioSource>();
         this.currXP = SceneTransition.instance.user.currXP;
         this.currHappy = SceneTransition.instance.user.currHappiness;
@@ -35,38 +37,51 @@ public class StatsDisplay : MonoBehaviour {
         StatsManager.instance.onHappyChange += HandleHappyChange;
     }
 
-    private void OnDisable() {
+    private void OnDisable()
+    {
         StatsManager.instance.OnXPChange -= HandleXPChange;
         StatsManager.instance.onHappyChange -= HandleHappyChange;
     }
 
-    private async void HandleXPChange(int amt) {
+    private async void HandleXPChange(int amt)
+    {
         StartCoroutine(ChangeFill(XPFill, (float)currXP, (float)amt, (float)this.maxXP));
 
-        if (currXP + amt < maxXP) {
+        if (currXP + amt < maxXP)
+        {
             currXP += amt;
         }
 
         await UpdateXP();
     }
 
-    private async void HandleHappyChange(double amt) {
-        if (amt > 0) {
-            if (currHappy < maxHappy) {
+    private async void HandleHappyChange(double amt)
+    {
+        if (amt > 0)
+        {
+            if (currHappy < maxHappy)
+            {
                 StatsManager.instance.happinessFull = false;
                 StartCoroutine(ChangeFill(happyFill, (float)currHappy, (float)amt, (float)this.maxHappy));
                 currHappy += Mathf.Min((int)amt, maxHappy - currHappy);
                 StatsManager.instance.happinessPercent = (float)currHappy / (float)maxHappy;
-            } else {
+            }
+            else
+            {
                 StatsManager.instance.happinessFull = true;
             }
             SceneTransition.instance.user.prevExitTime = System.DateTime.Now;
             await UpdatePrevTime();
 
-        } else { // TODO: not completely implemented yet
-            if (currHappy + amt >= 0) {
+        }
+        else
+        { // TODO: not completely implemented yet
+            if (currHappy + amt >= 0)
+            {
                 currHappy += (int)amt;
-            } else {
+            }
+            else
+            {
                 currHappy = 0;
             }
             SetFill(happyFill, currHappy, maxHappy);
@@ -76,40 +91,63 @@ public class StatsDisplay : MonoBehaviour {
         await UpdateHappiness();
     }
 
-    IEnumerator ChangeFill(Image fill, float init, float amt, float max) {
+    IEnumerator ChangeFill(Image fill, float init, float amt, float max)
+    {
         aud.Play();
         float i = 0;
-        while (i <= 1) {
+        while (i <= 1)
+        {
             fill.fillAmount = Mathf.Lerp(init / max, Mathf.Min(1, (init + amt) / max), i);
             i += 0.05f;
             yield return null;
         }
 
-        if (fill == XPFill && init + amt >= max) {
+        if (fill == XPFill && init + amt >= max)
+        {
             yield return new WaitForSeconds(0.1f);
             LevelUp();
         }
     }
 
-    async void LevelUp() {
+    async void LevelUp()
+    {
         SetFill(XPFill, 0, maxXP);
         currLvl++;
         lvlText.text = currLvl.ToString();
 
         currXP = 0;
-        maxXP += 3;
-        if (reward <= 20) {
+        maxXP += 2;
+        if (reward <= 20)
+        {
             reward += 2;
         }
 
         string congrats;
-        if (currLvl == 4 || currLvl == 7 || currLvl == 10) {
+
+        if (currLvl == 2)
+        {
+            SceneTransition.instance.user.unlockedAccessoryDict.Add("SPROUT", 1);
+            congrats = $"Levelled up, gained {reward} catfood!/nP.S. Check the closet :D";
+            await UpdateUnlockedAccessories();
+        }
+
+        if (currLvl == 5)
+        {
+            SceneTransition.instance.user.unlockedAccessoryDict.Add("GLASSES", 1);
+            congrats = $"Levelled up, gained {reward} catfood!/nP.S. Check the closet :D";
+            await UpdateUnlockedAccessories();
+        }
+
+        if (currLvl == 4 || currLvl == 7 || currLvl == 10)
+        {
             SceneTransition.instance.user.growth = Mathf.Min(2, SceneTransition.instance.user.growth + 1);
             Debug.Log("growth: " + SceneTransition.instance.user.growth);
             await UpdateGrowth();
             RoomSceneManager.instance.catControl.Initialize();
-            congrats = $"Levelling up! Your cat has grown as well! Gained {reward} catfood";
-        } else {
+            congrats = $"Levelled up! Your cat has grown as well! Gained {reward} catfood";
+        }
+        else
+        {
             congrats = $"Congrats! You levelled up! Gained {reward} catfood";
         }
         StartCoroutine(RoomSceneManager.instance.DisplayNotifs(congrats));
@@ -118,11 +156,13 @@ public class StatsDisplay : MonoBehaviour {
 
     }
 
-    void SetFill(Image fill, float amt, float max) {
+    void SetFill(Image fill, float amt, float max)
+    {
         fill.fillAmount = amt / max;
     }
 
-    private async Task UpdateHappiness() {
+    private async Task UpdateHappiness()
+    {
         SceneTransition.instance.user.currHappiness = currHappy;
 
         string currHap = JsonConvert.SerializeObject(SceneTransition.instance.user.currHappiness);
@@ -131,7 +171,8 @@ public class StatsDisplay : MonoBehaviour {
         await DBreference.Child("users").Child(SceneTransition.instance.user.userId).Child("currHappiness").SetValueAsync(currHap);
     }
 
-    private async Task UpdateXP() {
+    private async Task UpdateXP()
+    {
         SceneTransition.instance.user.currXP = currXP;
         SceneTransition.instance.user.maxXP = maxXP;
         SceneTransition.instance.user.level = currLvl;
@@ -146,17 +187,27 @@ public class StatsDisplay : MonoBehaviour {
         await DBreference.Child("users").Child(SceneTransition.instance.user.userId).Child("level").SetValueAsync(lvl);
     }
 
-    private async Task UpdateGrowth() {
+    private async Task UpdateGrowth()
+    {
         string grow = JsonConvert.SerializeObject(SceneTransition.instance.user.growth);
 
         DatabaseReference DBreference = FirebaseDatabase.DefaultInstance.RootReference;
         await DBreference.Child("users").Child(SceneTransition.instance.user.userId).Child("growth").SetValueAsync(grow);
     }
 
-    private async Task UpdatePrevTime() {
+    private async Task UpdatePrevTime()
+    {
         string prev = JsonConvert.SerializeObject(SceneTransition.instance.user.prevExitTime);
 
         DatabaseReference DBreference = FirebaseDatabase.DefaultInstance.RootReference;
         await DBreference.Child("users").Child(SceneTransition.instance.user.userId).Child("prevExitTime").SetValueAsync(prev);
+    }
+
+    private async Task UpdateUnlockedAccessories()
+    {
+        string unlocked = JsonConvert.SerializeObject(SceneTransition.instance.user.unlockedAccessoryDict);
+
+        DatabaseReference DBreference = FirebaseDatabase.DefaultInstance.RootReference;
+        await DBreference.Child("users").Child(SceneTransition.instance.user.userId).Child("unlockedAccessoryDict").SetValueAsync(unlocked);
     }
 }

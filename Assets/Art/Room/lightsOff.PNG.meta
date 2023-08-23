@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 0529aa8053c374ae8ad23b425caa256e
+guid: b03f631695d767c4fbb00a83ab0f774d
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -113,17 +113,29 @@ TextureImporter:
     overridden: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Calendar_0
+      name: lightsOff_0
       rect:
         serializedVersion: 2
-        x: 574
-        y: 774
-        width: 81
-        height: 80
+        x: 269
+        y: 1055
+        width: 249
+        height: 168
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -131,8 +143,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7a74d94f235ef994d83d826c6faa0a6c
-      internalID: -1017157586
+      spriteID: 97812218bead6e843b017bfaa54b6874
+      internalID: -778973093
       vertices: []
       indices: 
       edges: []
@@ -148,7 +160,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Calendar_0: -1017157586
+      lightsOff_0: -778973093
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

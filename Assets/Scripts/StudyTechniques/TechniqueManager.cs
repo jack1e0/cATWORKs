@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-public class TechniqueManager : MonoBehaviour {
+public class TechniqueManager : MonoBehaviour
+{
 
     public static TechniqueManager instance;
     public TechniqueDetails techniqueData;
@@ -12,17 +13,22 @@ public class TechniqueManager : MonoBehaviour {
     private GameObject[] techniques;
     private Button infoButton;
 
-    private void Awake() {
-        if (instance == null) {
+    private void Awake()
+    {
+        if (instance == null)
+        {
             instance = this;
             DontDestroyOnLoad(this);
-        } else {
+        }
+        else
+        {
             Destroy(this);
             instance = GameObject.FindGameObjectWithTag("Manager").GetComponent<TechniqueManager>();
         }
     }
 
-    public void Instantiate() {
+    public void Instantiate()
+    {
         techniques = new GameObject[4] {
             GameObject.FindGameObjectWithTag("Technique1"),
             GameObject.FindGameObjectWithTag("Technique2"),
@@ -40,7 +46,8 @@ public class TechniqueManager : MonoBehaviour {
         infoButton.onClick.AddListener(Info);
     }
 
-    public void Custom() {
+    public void Custom()
+    {
         // Load respective scriptable object
         TechniqueDetails obj = Resources.Load<TechniqueDetails>("Custom");
         techniqueData = Instantiate(obj);
@@ -48,25 +55,29 @@ public class TechniqueManager : MonoBehaviour {
         SceneTransition.instance.ChangeScene("StudySceneCustom");
     }
 
-    public void Pomodoro() {
+    public void Pomodoro()
+    {
         TechniqueDetails obj = Resources.Load<TechniqueDetails>("Pomodoro");
         techniqueData = Instantiate(obj);
 
         SceneTransition.instance.ChangeScene("StudyScene");
     }
 
-    public void Info() {
+    public void Info()
+    {
         TechniqueDetails obj = Resources.Load<TechniqueDetails>("Pomodoro");
         techniqueData = Instantiate(obj);
 
         SceneTransition.instance.ChangeScene("PomodoroScene");
     }
 
-    public void Timeblocking() {
+    public void Timeblocking()
+    {
 
     }
 
-    public void Eisenhower() {
+    public void Eisenhower()
+    {
 
     }
 }
